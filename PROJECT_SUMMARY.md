@@ -27,13 +27,12 @@ dbt-certification-quiz/
 ├── 📁 docs/
 │   └── 📄 DEPLOYMENT.md             # Deployment guide
 ├── 📄 main.py                       # Local development entry point
-├── 📄 start_server.bat              # Windows startup script
 ├── 📄 requirements.txt              # Python dependencies
 ├── 📄 render.yaml                   # Render deployment config
-├── 📄 Procfile                      # Heroku deployment config
 ├── 📄 .gitignore                    # Git ignore rules
 ├── 📄 LICENSE                       # MIT License
 ├── 📄 CONTRIBUTING.md               # Contribution guidelines
+├── 📄 PROJECT_SUMMARY.md            # Project overview
 └── 📄 README.md                     # Main documentation
 ```
 
@@ -46,7 +45,7 @@ dbt-certification-quiz/
 - **Self-Contained Questions**: Each question is complete and independent
 
 ## 🚀 **Quick Start**
-1. **Local Development**: `python main.py` or `.\start_server.bat`
+1. **Local Development**: `python main.py`
 2. **Live Demo**: https://dbt-certification-quiz.onrender.com/
 3. **Question Management**: Edit `data/questions.md` directly
 

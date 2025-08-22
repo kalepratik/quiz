@@ -1,0 +1,28 @@
+"""
+dbt Certification Quiz Application Factory
+"""
+from flask import Flask
+from .config import config_from_env
+from .routes import ui_bp, api_bp
+
+
+def create_app():
+    """Application factory pattern"""
+    app = Flask(
+        __name__, 
+        static_folder="../../static", 
+        template_folder="../../templates"
+    )
+    
+    # Load configuration
+    app.config.from_object(config_from_env())
+    
+    # Register blueprints
+    app.register_blueprint(ui_bp)
+    app.register_blueprint(api_bp)
+    
+    # Initialize extensions and services
+    from .services.quiz_service import QuizService
+    app.quiz_service = QuizService()
+    
+    return app

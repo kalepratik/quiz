@@ -1,73 +1,48 @@
 # 🎯 dbt Certification Quiz Application
 
-A comprehensive web-based quiz application designed to help users prepare for dbt (data build tool) certification exams. Features a modern, interactive interface with rich text formatting, flexible question selection, and detailed explanations.
+A **production-ready**, modern web-based dbt certification quiz application with comprehensive question coverage, beautiful formatting, and enterprise-grade architecture.
 
 ## ✨ Features
 
-### 🎨 **Modern Web Interface**
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
-- **Rich Text Formatting**: Beautiful rendering of questions with:
-  - ASCII diagrams for DAG representations
-  - Code blocks and inline code highlighting
-  - Bold text and section formatting
-  - Clean typography and spacing
-
-### 🎯 **Flexible Quiz Configuration**
-- **Question Count Selection**: Choose from 5, 10, 15, 20, or 30 questions, or enter a custom number
-- **Difficulty Levels**: 
-  - Easy: Basic concepts and commands
-  - Medium: Intermediate concepts and scenarios
-  - Difficult: Advanced concepts and edge cases
-  - Critical: Complex scenarios and troubleshooting
-  - **No Preference**: Random questions from all difficulty levels
-
-### 🧠 **Smart Question Selection**
-- **Primary Selection**: Gets as many questions as possible from the selected difficulty level
-- **Fallback Selection**: Automatically fills remaining slots with random questions from other difficulty levels
-- **No Limitations**: Request more questions than available in a single difficulty
-
-### 📊 **Comprehensive Review System**
-- **Detailed Results**: Shows each question with your answer and the correct answer
-- **Explanations**: Provides detailed explanations for all questions
-- **Score Tracking**: Displays your final score and performance
-- **Review Mode**: Review all questions after completion
-
-### 📚 **Rich Question Bank**
-- **45+ Questions**: Comprehensive coverage of dbt topics
-- **Markdown Format**: Human-readable question format with rich formatting
-- **Topics Covered**:
-  - DAG Execution and Dependencies
-  - Commands and Flags (`--full-refresh`, `--defer`, `--state`)
-  - State Management and CI/CD
-  - Incremental Models and Snapshots
-  - Data Quality and Production Scenarios
+- **45+ Questions**: Comprehensive dbt certification coverage
+- **Rich Text Formatting**: ASCII diagrams, code highlighting, bold text
+- **Smart Question Selection**: Flexible difficulty and count options with intelligent fallback
+- **Modern UI**: Beautiful, responsive web interface with React-style components
+- **Comprehensive Review**: Detailed feedback after quiz completion
+- **Self-Contained Questions**: Each question is complete and independent
+- **Production-Ready**: App factory pattern, proper configuration management, health checks
+- **Testing**: Comprehensive test coverage for routes and repository
+- **Tooling**: Code formatting, linting, and type checking
 
 ## 🚀 Quick Start
-
-### Prerequisites
-- Python 3.7 or higher
-- Modern web browser
 
 ### Local Development
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/dbt-certification-quiz.git
-   cd dbt-certification-quiz
+   git clone https://github.com/kalepratik/quiz.git
+   cd quiz
    ```
 
-2. **Run the application**
+2. **Install dependencies**
    ```bash
-   # Option 1: Use the batch file (Windows)
-   .\start_server.bat
-   
-   # Option 2: Run directly with Python
-   python src/core/fast_quiz_server.py
+   pip install -r requirements.txt
    ```
 
-3. **Open your browser**
-   - Navigate to: `http://localhost:8000`
-   - The application will open automatically in your default browser
+3. **Run the application**
+   ```bash
+   python main.py
+   ```
+   Choose option 1 to start the development server
+
+4. **Run tests**
+   ```bash
+   python main.py
+   ```
+   Choose option 2 to run the test suite
+
+5. **Open your browser**
+   Navigate to `http://localhost:8000`
 
 ### 🌐 Live Demo
 
@@ -76,137 +51,143 @@ A comprehensive web-based quiz application designed to help users prepare for db
 
 *Your fully functional dbt certification quiz application with 45+ questions, rich text formatting, and comprehensive review system.*
 
-## 📖 Usage Guide
+## 🏗️ Production-Ready Architecture
 
-### 1. **Configure Your Quiz**
-- Select the number of questions you want to attempt
-- Choose your preferred difficulty level
-- Click "Start Quiz" to begin
+### App Factory Pattern
+- Clean separation of concerns
+- Environment-based configuration
+- Blueprint-based routing
+- Service layer for business logic
 
-### 2. **Take the Quiz**
-- Read each question carefully
-- Select your answer from the multiple-choice options
-- Use the navigation buttons to move between questions
-- Submit when you're ready to see your results
+### Configuration Management
+- Environment-specific configs (Development, Production, Testing)
+- Secure secret management
+- Configurable application settings
 
-### 3. **Review Your Results**
-- See your final score and performance
-- Review each question with explanations
-- Understand where you went wrong
-- Learn from detailed explanations
+### Health Monitoring
+- `/healthz` endpoint for monitoring
+- Structured logging throughout
+- Error handling and validation
 
-## 🏗️ Project Structure
+## 📚 Usage Guide
+
+### Quiz Configuration
+
+1. **Select Number of Questions**: Choose from 5, 10, 15, 20, or enter a custom number (up to 45)
+2. **Choose Difficulty Level**:
+   - **Easy**: Basic dbt concepts and commands
+   - **Medium**: Intermediate scenarios and workflows
+   - **Difficult**: Advanced concepts and edge cases
+   - **Critical**: Complex troubleshooting scenarios
+   - **No Preference**: Random questions from all difficulty levels
+
+### Smart Question Selection
+
+The application intelligently handles question selection:
+- If you request more questions than available in your chosen difficulty, it will:
+  1. Take all available questions from your selected difficulty
+  2. Fill the remaining slots with random questions from other difficulties
+- This ensures you always get the requested number of questions
+
+### Question Format
+
+Questions are stored in Markdown format (`data/questions.md`) with:
+- **Scenario**: Detailed context and setup
+- **Question**: Clear, specific question
+- **Options**: 5 multiple-choice options
+- **Explanation**: Detailed explanation of the correct answer
+- **ASCII Diagrams**: Visual DAG representations
+- **Code Blocks**: Properly formatted dbt commands and syntax
+
+## 🏗️ Clean Project Structure
 
 ```
-dbt certification/
-├── data/
-│   ├── questions.md          # Main question bank in Markdown format
-│   └── questions.csv         # Legacy CSV format (for reference)
-├── src/
-│   └── core/
-│       ├── fast_quiz_server.py           # Main Flask server
-│       └── markdown_question_repository.py # Question repository logic
-├── templates/
-│   └── index.html            # Web interface template
-├── static/                   # Static assets
-├── docs/                     # Documentation
-├── main.py                   # Entry point for CLI mode
-├── start_server.bat          # Windows batch file for easy startup
-└── README.md                 # This file
+dbt-certification-quiz/
+├── 📁 data/
+│   └── 📄 questions.md              # 45+ dbt certification questions
+├── 📁 src/
+│   └── 📁 quiz_app/
+│       ├── 📄 __init__.py           # App factory
+│       ├── 📄 config.py             # Configuration management
+│       ├── 📄 routes.py             # Blueprint routes
+│       ├── 📁 repo/
+│       │   ├── 📄 __init__.py
+│       │   └── 📄 markdown_repository.py
+│       └── 📁 services/
+│           ├── 📄 __init__.py
+│           ├── 📄 quiz_service.py
+│           └── 📄 scoring_service.py
+├── 📁 tests/
+│   ├── 📄 __init__.py
+│   ├── 📄 test_routes.py
+│   └── 📄 test_repo.py
+├── 📁 templates/
+│   └── 📄 index.html                # Main web interface
+├── 📁 static/
+│   └── 📄 android-chrome-512x512.png # App favicon
+├── 📁 docs/
+│   └── 📄 DEPLOYMENT.md             # Deployment guide
+├── 📄 wsgi.py                       # Production entry point
+├── 📄 main.py                       # Development entry point
+├── 📄 pyproject.toml                # Tooling & packaging
+├── 📄 requirements.txt              # Dependencies
+├── 📄 render.yaml                   # Production deployment
+├── 📄 env.example                   # Environment template
+├── 📄 .gitignore                    # Git ignore rules
+├── 📄 LICENSE                       # MIT License
+├── 📄 CONTRIBUTING.md               # Contribution guidelines
+├── 📄 PROJECT_SUMMARY.md            # Project overview
+└── 📄 README.md                     # Main documentation
 ```
 
-## 🛠️ Technical Details
+## 🔧 Technical Stack
 
-### **Backend**
-- **Framework**: Flask (Python)
-- **Question Repository**: Custom Markdown parser with flexible selection logic
-- **API Endpoints**: RESTful API for quiz configuration and data retrieval
+### Backend
+- **Python 3.7+**: Core application logic
+- **Flask 2.3.3**: Web server framework with app factory pattern
+- **Gunicorn**: Production WSGI server
+- **Markdown**: Question storage format
+- **Python-dotenv**: Environment management
 
-### **Frontend**
+### Frontend
 - **HTML5/CSS3**: Modern, responsive design
-- **Vanilla JavaScript**: No external dependencies
-- **Rich Text Rendering**: Custom formatting for questions and explanations
+- **JavaScript**: Interactive quiz functionality
+- **Rich Text Formatting**: Custom CSS for code blocks and diagrams
 
-### **Question Format**
-Questions are stored in Markdown format with the following structure:
-```markdown
-# Question X
-**Topic:** [Topic Name]
-**Difficulty:** [1-4] ([Easy/Medium/Difficult/Critical])
+### Development & Testing
+- **Pytest**: Testing framework
+- **Black**: Code formatting
+- **Ruff**: Fast Python linter
+- **MyPy**: Static type checking
+- **Pre-commit**: Git hooks for code quality
 
-**Scenario:**
-[Question scenario with ASCII diagrams]
-
-**Question:**
-[The actual question]
-
-**Options:**
-A. [Option A]
-B. [Option B]
-C. [Option C]
-D. [Option D]
-E. [Option E]
-
-**Correct Answer:** [A-E]
-
-**Explanation:**
-[Detailed explanation of the correct answer]
-```
+### Data Management
+- **Repository Pattern**: Clean data access layer
+- **Service Layer**: Business logic separation
+- **Flexible Selection**: Smart question distribution across difficulties
+- **Self-Contained**: Each question includes full context
 
 ## 🎯 Question Categories
 
-### **DAG Execution & Dependencies**
-- Understanding dependency chains
-- Model execution order
-- Failure handling and cascading effects
+### Easy (Level 1)
+- Basic dbt commands (`dbt run`, `dbt test`)
+- Simple model concepts
+- Basic DAG understanding
 
-### **Commands & Flags**
-- `dbt build` variations
-- `--full-refresh` behavior
-- `--defer` and `--state` usage
-- `--fail-fast` and other flags
+### Medium (Level 2)
+- Intermediate commands (`dbt build`, `--select`)
+- Model dependencies
+- State management basics
 
-### **State Management & CI/CD**
-- State artifacts and comparison
-- Slim CI implementation
-- Production deployment strategies
+### Difficult (Level 3)
+- Advanced state management (`state:modified+`)
+- Complex DAG scenarios
+- Performance optimization
 
-### **Advanced Topics**
-- Incremental models and logic
-- Snapshots and historical tracking
-- Data quality and production scenarios
-- Model contracts and cross-project references
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how you can help:
-
-### **Adding Questions**
-1. Edit `data/questions.md`
-2. Follow the existing question format
-3. Include ASCII diagrams for DAG scenarios
-4. Provide clear explanations
-
-### **Improving Features**
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-### **Reporting Issues**
-- Use GitHub Issues to report bugs
-- Include steps to reproduce
-- Provide system information
-
-## 📝 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🙏 Acknowledgments
-
-- Built for dbt certification preparation
-- Inspired by the dbt community
-- Designed for practical learning and assessment
+### Critical (Level 4)
+- Troubleshooting complex issues
+- Production deployment scenarios
+- Advanced debugging techniques
 
 ## 🚀 Deployment
 
@@ -214,40 +195,73 @@ This project is open source and available under the [MIT License](LICENSE).
 
 Your application is now live and fully functional at [https://dbt-certification-quiz.onrender.com](https://dbt-certification-quiz.onrender.com)
 
-**Previous Issue**: GitHub Pages only supports static websites, but this is a Flask Python application that requires a server to run.
+### Production Deployment
+
+The application uses a production-ready deployment configuration:
+
+- **WSGI Entry Point**: `wsgi.py` with proper logging
+- **Gunicorn Server**: Production-grade WSGI server
+- **Environment Configuration**: Production settings with proper secret management
+- **Health Checks**: `/healthz` endpoint for monitoring
+- **Structured Logging**: Proper log formatting for production
 
 ### Deployment Options
 
-#### **Option 1: Deploy to Render (Recommended - Free)**
-1. Go to [render.com](https://render.com)
-2. Sign up with your GitHub account
-3. Click "New +" → "Web Service"
-4. Connect your GitHub repository
-5. Configure:
-   - **Name**: `dbt-certification-quiz`
-   - **Environment**: `Python 3`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `python src/core/fast_quiz_server.py`
-   - **Port**: `8000`
+#### **Option 1: Render (Current - Free)**
+- **Build Command**: `pip install -r requirements.txt`
+- **Start Command**: `gunicorn wsgi:app`
+- **Environment**: Production with proper configuration
 
-#### **Option 2: Deploy to Railway**
-1. Go to [railway.app](https://railway.app)
-2. Sign up with GitHub
-3. Deploy from GitHub repository
-
-#### **Option 3: Deploy to Heroku**
-1. Go to [heroku.com](https://heroku.com)
-2. Create a new app
-3. Connect your GitHub repository
-4. Deploy
-
-### Local Development
-For the best experience, run the application locally:
+#### **Option 2: Heroku**
 ```bash
-git clone https://github.com/yourusername/dbt-certification-quiz.git
-cd dbt-certification-quiz
-python src/core/fast_quiz_server.py
+heroku create your-app-name
+git push heroku main
+heroku open
 ```
+
+#### **Option 3: Other Cloud Providers**
+- AWS Elastic Beanstalk
+- Google App Engine
+- Azure App Service
+- DigitalOcean App Platform
+
+## 🧪 Testing
+
+### Run Tests
+```bash
+python main.py
+# Choose option 2 to run tests
+```
+
+Or directly:
+```bash
+pytest tests/ -v
+```
+
+### Test Coverage
+- **Routes**: API endpoints and UI routes
+- **Repository**: Data access layer
+- **Services**: Business logic
+- **Configuration**: Environment settings
+
+## 🔧 Development
+
+### Code Quality
+```bash
+# Format code
+black src/ tests/
+
+# Lint code
+ruff check src/ tests/
+
+# Type checking
+mypy src/
+```
+
+### Environment Setup
+1. Copy `env.example` to `.env`
+2. Update environment variables as needed
+3. Set `FLASK_ENV=development` for local development
 
 ## 📞 Support
 
@@ -255,9 +269,12 @@ If you have questions or need help:
 - Open an issue on GitHub
 - Check the documentation in the `docs/` folder
 - Review the question bank in `data/questions.md`
+- Check the test suite for usage examples
 
----
+## 🤝 Contributing
 
-**Happy Learning! 🎓**
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-*This application is designed to help you prepare for dbt certification exams. Use it as a study tool to reinforce your understanding of dbt concepts and best practices.*
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

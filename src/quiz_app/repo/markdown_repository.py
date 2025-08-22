@@ -12,7 +12,12 @@ from pathlib import Path
 from datetime import datetime
 
 class MarkdownQuestionRepository:
-    def __init__(self, md_file='data/questions.md', csv_file='data/questions.csv'):
+    def __init__(self, md_file=None, csv_file=None):
+        # Use default paths if not provided
+        if md_file is None:
+            md_file = Path(__file__).parent.parent.parent.parent / 'data' / 'questions.md'
+        if csv_file is None:
+            csv_file = Path(__file__).parent.parent.parent.parent / 'data' / 'questions.csv'
         self.md_file = md_file
         self.csv_file = csv_file
         self.questions = self.load_questions_from_markdown()
