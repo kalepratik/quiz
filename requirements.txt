@@ -1,20 +1,3 @@
 # Core dependencies for the dbt Certification Quiz Application
-# Note: This application primarily uses Python standard library
-# Flask is used for the web server functionality
-
 Flask==2.3.3
 Werkzeug==2.3.7
-
-# Optional: For enhanced development experience
-# Uncomment if you want to use these tools
-
-# For code formatting and linting
-# black==23.7.0
-# flake8==6.0.0
-
-# For testing
-# pytest==7.4.0
-# pytest-cov==4.1.0
-
-# For development server with auto-reload
-# python-dotenv==1.0.0
