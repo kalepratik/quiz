@@ -48,7 +48,7 @@ A comprehensive web-based quiz application designed to help users prepare for db
 - Python 3.7 or higher
 - Modern web browser
 
-### Installation
+### Local Development
 
 1. **Clone the repository**
    ```bash
@@ -68,6 +68,13 @@ A comprehensive web-based quiz application designed to help users prepare for db
 3. **Open your browser**
    - Navigate to: `http://localhost:8000`
    - The application will open automatically in your default browser
+
+### 🌐 Live Demo
+
+**The application is now deployed and available at:**
+- **Live Demo**: [https://dbt-certification-quiz.onrender.com](https://dbt-certification-quiz.onrender.com)
+
+*Your fully functional dbt certification quiz application with 45+ questions, rich text formatting, and comprehensive review system.*
 
 ## 📖 Usage Guide
 
@@ -200,6 +207,47 @@ This project is open source and available under the [MIT License](LICENSE).
 - Built for dbt certification preparation
 - Inspired by the dbt community
 - Designed for practical learning and assessment
+
+## 🚀 Deployment
+
+### ✅ **Successfully Deployed!**
+
+Your application is now live and fully functional at [https://dbt-certification-quiz.onrender.com](https://dbt-certification-quiz.onrender.com)
+
+**Previous Issue**: GitHub Pages only supports static websites, but this is a Flask Python application that requires a server to run.
+
+### Deployment Options
+
+#### **Option 1: Deploy to Render (Recommended - Free)**
+1. Go to [render.com](https://render.com)
+2. Sign up with your GitHub account
+3. Click "New +" → "Web Service"
+4. Connect your GitHub repository
+5. Configure:
+   - **Name**: `dbt-certification-quiz`
+   - **Environment**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `python src/core/fast_quiz_server.py`
+   - **Port**: `8000`
+
+#### **Option 2: Deploy to Railway**
+1. Go to [railway.app](https://railway.app)
+2. Sign up with GitHub
+3. Deploy from GitHub repository
+
+#### **Option 3: Deploy to Heroku**
+1. Go to [heroku.com](https://heroku.com)
+2. Create a new app
+3. Connect your GitHub repository
+4. Deploy
+
+### Local Development
+For the best experience, run the application locally:
+```bash
+git clone https://github.com/yourusername/dbt-certification-quiz.git
+cd dbt-certification-quiz
+python src/core/fast_quiz_server.py
+```
 
 ## 📞 Support
 

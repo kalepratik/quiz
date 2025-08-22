@@ -1255,28 +1255,29 @@ def main():
     print(f"⚡ Instant loading - no generation time!")
     print()
     
-    # Find available port
-    port = find_available_port(PORT)
-    if port is None:
-        print(f"❌ Error: No available ports found in range {PORT}-{PORT+10}")
-        return
-    
-    if port != PORT:
-        print(f"⚠️  Port {PORT} is in use, using port {port} instead")
+    # Get port from environment variable (for production) or use default
+    import os
+    port = int(os.environ.get('PORT', PORT))
+    host = '0.0.0.0' if os.environ.get('PORT') else 'localhost'
     
     # Start server with quiz configuration
     def handler_factory(*args, **kwargs):
         return CustomHTTPRequestHandler(*args, quiz_server=quiz_server, **kwargs)
     
     try:
-        with socketserver.TCPServer(("", port), handler_factory) as httpd:
+        with socketserver.TCPServer((host, port), handler_factory) as httpd:
             print(f"🚀 Starting Enhanced dbt Quiz server...")
-            print(f"📱 Server running at: http://localhost:{port}")
-            print(f"🌐 Opening browser automatically...")
-            print(f"⏹️  Press Ctrl+C to stop the server")
-            print("-" * 50)
-
-            webbrowser.open(f'http://localhost:{port}')
+            print(f"📱 Server running at: http://{host}:{port}")
+            
+            # Only open browser locally
+            if host == 'localhost':
+                print(f"🌐 Opening browser automatically...")
+                print(f"⏹️  Press Ctrl+C to stop the server")
+                print("-" * 50)
+                webbrowser.open(f'http://localhost:{port}')
+            else:
+                print(f"🌐 Production server running on port {port}")
+                print("-" * 50)
 
             try:
                 httpd.serve_forever()

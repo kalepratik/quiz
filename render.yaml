@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: dbt-certification-quiz
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python src/core/fast_quiz_server.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+    plan: free
