@@ -41,7 +41,7 @@ We welcome various types of contributions:
 
 3. **Run the application**
    ```bash
-   python src/core/fast_quiz_server.py
+   python main.py
    ```
 
 4. **Create a branch**
@@ -184,7 +184,7 @@ We're looking for questions in these areas:
 
 3. **Test your changes**
    ```bash
-   python src/core/fast_quiz_server.py
+   python main.py
    # Test the functionality manually
    ```
 

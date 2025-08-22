@@ -16,10 +16,17 @@ dbt-certification-quiz/
 ├── 📁 data/
 │   └── 📄 questions.md              # 45+ dbt certification questions
 ├── 📁 src/
-│   └── 📁 core/
-│       ├── 📄 __init__.py           # Package initialization
-│       ├── 📄 fast_quiz_server.py   # Main Flask server
-│       └── 📄 markdown_question_repository.py # Question loader
+│   └── 📁 quiz_app/
+│       ├── 📄 __init__.py           # App factory
+│       ├── 📄 config.py             # Configuration management
+│       ├── 📄 routes.py             # Blueprint routes
+│       ├── 📁 repo/
+│       │   ├── 📄 __init__.py
+│       │   └── 📄 markdown_repository.py
+│       └── 📁 services/
+│           ├── 📄 __init__.py
+│           ├── 📄 quiz_service.py
+│           └── 📄 scoring_service.py
 ├── 📁 templates/
 │   └── 📄 index.html                # Main web interface
 ├── 📁 static/
