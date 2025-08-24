@@ -560,7 +560,7 @@
                             <button type="button" class="question-pill" data-value="20">20</button>
                             <button type="button" class="question-pill" data-value="30">30</button>
                             <div class="custom-input-container">
-                                <input type="number" id="customQuestionCount" min="1" max="45" class="custom-input" placeholder="custom">
+                                <input type="number" id="customQuestionCount" min="1" max="15" class="custom-input" placeholder="custom">
                                 <span class="custom-label">custom</span>
                             </div>
                         </div>
@@ -647,9 +647,33 @@
              document.getElementById('quiz').style.display = 'none';
              document.getElementById('results').style.display = 'none';
              
-             // Initialize configuration interactions
-             initializeConfig();
+             // Load question stats and initialize configuration
+             loadQuestionStats().then(() => {
+                 initializeConfig();
+             });
          };
+
+         async function loadQuestionStats() {
+             try {
+                 const response = await fetch('/api/question-stats');
+                 const stats = await response.json();
+                 
+                 // Update the total count display
+                 document.getElementById('totalCount').textContent = stats.total;
+                 
+                 // Update max values for custom input and validation
+                 const customInput = document.getElementById('customQuestionCount');
+                 customInput.max = stats.total;
+                 
+                 // Update validation logic
+                 window.maxQuestions = stats.total;
+                 
+             } catch (error) {
+                 console.error('Error loading question stats:', error);
+                 // Keep default value of 15 if API fails
+                 document.getElementById('totalCount').textContent = '15';
+             }
+         }
 
          function initializeConfig() {
              // Question pill interactions
@@ -671,7 +695,8 @@
              // Custom input interactions
              customInput.addEventListener('input', function() {
                  const value = parseInt(this.value);
-                 if (value > 0 && value <= 45) {
+                 const maxQuestions = window.maxQuestions || 15;
+                 if (value > 0 && value <= maxQuestions) {
                      // Remove active class from all pills
                      questionPills.forEach(p => p.classList.remove('active'));
                      updateStartButton();
@@ -709,7 +734,8 @@
              }
              
              // Validate question count - allow up to total available questions
-             const canStart = questionCount > 0 && questionCount <= 45;
+             const maxQuestions = window.maxQuestions || 15;
+        const canStart = questionCount > 0 && questionCount <= maxQuestions;
              
              startBtn.disabled = !canStart;
              if (canStart) {
@@ -775,12 +801,12 @@
             const container = document.getElementById('question-container');
             
             document.getElementById('progress').textContent = 
-                `Question ${currentQuestion + 1} of ${quizData.questions.length} (${quizData.difficultyName})`;
+                `Question ${question.id} of ${quizData.questions.length} (${quizData.difficultyName})`;
             
             container.innerHTML = `
                 <div class="question">
                     <div class="question-header">
-                        <span class="question-number">Question ${currentQuestion + 1}</span>
+                        <span class="question-number">Question ${question.id}</span>
                         <span class="question-topic">${question.topic}</span>
                     </div>
                     
@@ -992,7 +1018,7 @@
                 
                 reviewQuestion.innerHTML = `
                     <div class="review-question-header">
-                        <span class="review-question-number">Question ${index + 1}</span>
+                        <span class="review-question-number">Question ${question.id}</span>
                         <span class="review-status ${isCorrect ? 'correct' : 'incorrect'}">
                             ${isCorrect ? 'Correct' : 'Incorrect'}
                         </span>

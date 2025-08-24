@@ -98,15 +98,39 @@ E. [Option E]
 
 ### Question Categories
 
-We're looking for questions in these areas:
+We're looking for questions in these areas. For a quick overview of current coverage and priority areas, see the [Question Coverage & Topics section in README.md](README.md#-question-coverage--topics).
 
-- **DAG Execution**: Dependency chains, execution order
-- **Commands & Flags**: `dbt build`, `--full-refresh`, `--defer`, etc.
-- **State Management**: State artifacts, CI/CD scenarios
-- **Incremental Models**: Logic, configuration, behavior
-- **Snapshots**: Historical tracking, behavior
-- **Data Quality**: Production scenarios, troubleshooting
-- **Model Contracts**: Cross-project references, validation
+For a detailed breakdown of all 80+ dbt certification topics and their coverage status, see [docs/TOPICS.md](docs/TOPICS.md).
+
+**Current Coverage:** 25/80+ topics (31% complete)
+
+**🔥 High Priority Areas (Need Questions):**
+- **dbt Cloud Setup and Configuration** (4 topics)
+- **Advanced Testing** (Custom Tests, Test Configurations - 13 topics)
+- **Advanced Deployment and Job Structures** (9 topics)
+- **Continuous Integration and Orchestration** (8 topics)
+- **Environment Management and Variables** (5 topics)
+
+**⚡ Medium Priority Areas:**
+- **dbt Mesh and Multi-Project Collaboration** (10 topics)
+- **Model Versions and Governance** (4 topics)
+- **Advanced Jinja and Macros** (3 topics)
+- **Cross-Project References and Orchestration** (9 topics)
+- **Advanced Materialization Strategies** (11 topics)
+
+**📚 Lower Priority Areas:**
+- **Introduction to Analytics Engineer** (4 topics)
+- **Refactoring Process** (8 topics)
+- **Python Models** (1 topic)
+- **Database Grants and Security** (1 topic)
+
+**✅ Well Covered Areas (25 topics):**
+- Models, Sources, Tests, Documentation, Deployment
+- Snapshots, Materializations, Incremental Models
+- State Management, Model Contracts, Packages
+- Seeds, Jinja, Macros, Variables, Hooks, Profiles
+- Exposures, Metrics, Semantic Layer, Audit
+- Performance, Security, Version Control, Monitoring
 
 ## 🐛 Reporting Bugs
 
