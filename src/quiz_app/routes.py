@@ -63,3 +63,21 @@ def configure_quiz():
 def quiz_config():
     """Legacy endpoint for backward compatibility"""
     return configure_quiz()
+
+
+@api_bp.route('/question-stats')
+def question_stats():
+    """API endpoint for question statistics"""
+    try:
+        # Get quiz service
+        quiz_service = current_app.quiz_service
+        
+        # Get question statistics
+        stats = quiz_service.get_question_stats()
+        
+        logger.info(f"Question stats requested: {stats}")
+        return jsonify(stats)
+        
+    except Exception as e:
+        logger.error(f"Error getting question stats: {e}")
+        return jsonify({'error': 'Failed to get question stats'}), 500
