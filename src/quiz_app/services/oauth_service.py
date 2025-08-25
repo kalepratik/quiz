@@ -17,15 +17,16 @@ class OAuthService:
         try:
             # Debug logging
             logger.info(f"Client ID: {current_app.config['GOOGLE_CLIENT_ID']}")
-            # Get redirect URI (handle both string and property)
-            redirect_uri = current_app.config['GOOGLE_REDIRECT_URI']
-            if hasattr(redirect_uri, '__call__'):
-                redirect_uri = redirect_uri()
-            elif hasattr(redirect_uri, 'fget'):
-                # Handle property objects
-                redirect_uri = redirect_uri.fget(current_app.config)
             
+            # Get config instance to access properties
+            from ..config import config_from_env
+            config_class = config_from_env()
+            config_instance = config_class()
+            
+            # Get redirect URI from config instance
+            redirect_uri = config_instance.GOOGLE_REDIRECT_URI
             logger.info(f"Redirect URI: {redirect_uri}")
+            logger.info(f"Scopes: {current_app.config['GOOGLE_SCOPES']}")
             logger.info(f"Scopes: {current_app.config['GOOGLE_SCOPES']}")
             
             params = {
@@ -49,13 +50,13 @@ class OAuthService:
     def exchange_code_for_token(auth_code):
         """Exchange authorization code for access token"""
         try:
-            # Get redirect URI (handle both string and property)
-            redirect_uri = current_app.config['GOOGLE_REDIRECT_URI']
-            if hasattr(redirect_uri, '__call__'):
-                redirect_uri = redirect_uri()
-            elif hasattr(redirect_uri, 'fget'):
-                # Handle property objects
-                redirect_uri = redirect_uri.fget(current_app.config)
+            # Get config instance to access properties
+            from ..config import config_from_env
+            config_class = config_from_env()
+            config_instance = config_class()
+            
+            # Get redirect URI from config instance
+            redirect_uri = config_instance.GOOGLE_REDIRECT_URI
             
             token_data = {
                 'client_id': current_app.config['GOOGLE_CLIENT_ID'],

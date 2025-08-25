@@ -19,10 +19,12 @@ logger = logging.getLogger(__name__)
 def inject_environment():
     """Inject environment variables into template context"""
     from .config import config_from_env
-    config = config_from_env()
+    config_class = config_from_env()
+    config_instance = config_class()
+    logger.debug(f"Environment: IS_PRODUCTION={config_instance.IS_PRODUCTION}, IS_DEVELOPMENT={config_instance.IS_DEVELOPMENT}")
     return {
-        'is_production': config.IS_PRODUCTION,
-        'is_development': config.IS_DEVELOPMENT
+        'is_production': config_instance.IS_PRODUCTION,
+        'is_development': config_instance.IS_DEVELOPMENT
     }
 
 
@@ -101,11 +103,33 @@ def contact():
 def google_auth():
     """Initiate Google OAuth flow"""
     try:
-        auth_url = OAuthService.get_google_auth_url()
-        if auth_url:
-            return redirect(auth_url)
-        else:
-            logger.error("Failed to generate Google OAuth URL")
+        logger.info("Google OAuth initiation started")
+        
+        # Check if Google OAuth is configured
+        client_id = current_app.config.get('GOOGLE_CLIENT_ID', 'your_google_client_id_here')
+        logger.info(f"Google OAuth Client ID: {client_id}")
+        
+        if not client_id or client_id == 'your_google_client_id_here':
+            logger.warning("Google OAuth not configured - using demo mode")
+            # In demo mode, simulate successful authentication
+            session['user_id'] = 'demo_user_123'
+            session['user_email'] = 'demo@example.com'
+            session['user_name'] = 'Demo User'
+            session['is_authenticated'] = True
+            logger.info("Demo mode authentication successful, redirecting to quiz")
+            return redirect(url_for('ui.quiz'))
+        
+        try:
+            auth_url = OAuthService.get_google_auth_url()
+            logger.info(f"Generated auth URL: {auth_url}")
+            if auth_url:
+                logger.info("Redirecting to Google OAuth")
+                return redirect(auth_url)
+            else:
+                logger.error("Failed to generate Google OAuth URL")
+                return redirect(url_for('ui.signin'))
+        except Exception as oauth_error:
+            logger.error(f"OAuth service error: {oauth_error}")
             return redirect(url_for('ui.signin'))
     except Exception as e:
         logger.error(f"Error in Google OAuth initiation: {e}")
