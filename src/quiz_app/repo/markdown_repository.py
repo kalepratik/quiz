@@ -101,9 +101,29 @@ class MarkdownQuestionRepository:
         scenario_text = self.extract_section(lines, '**Scenario:**', '**Question:**')
         question_text = self.extract_section(lines, '**Question:**', '**Options:**')
         
-        # Combine scenario and question for the full question text
-        # The question_text already contains the actual question content
-        full_question = f"{scenario_text.strip()}\n\n{question_text.strip()}"
+        # If there's no separate Question section, use the scenario text as the question
+        if not question_text.strip():
+            # The scenario contains the question text - extract only the question part
+            # Look for the actual question in the scenario text
+            scenario_lines = scenario_text.strip().split('\n')
+            question_lines = []
+            for line in scenario_lines:
+                line_stripped = line.strip()
+                # Stop when we hit the Options section
+                if line_stripped.startswith('**Options:**'):
+                    break
+                # Stop when we hit the Correct Answer section
+                if line_stripped.startswith('**Correct Answer:**'):
+                    break
+                # Stop when we hit the Explanation section
+                if line_stripped.startswith('**Explanation:**'):
+                    break
+                question_lines.append(line)
+            
+            full_question = '\n'.join(question_lines).strip()
+        else:
+            # Combine scenario and question for the full question text
+            full_question = f"{scenario_text.strip()}\n\n{question_text.strip()}"
         
         # Extract options
         options_text = self.extract_section(lines, '**Options:**', '**Correct Answer:**')
@@ -139,10 +159,14 @@ class MarkdownQuestionRepository:
         in_section = False
         
         for line in lines:
-            if start_marker in line:
+            line_stripped = line.strip()
+            
+            # Check for start marker (contains the marker)
+            if start_marker in line_stripped:
                 in_section = True
                 continue
-            elif end_marker and end_marker in line:
+            # Check for end marker (contains the marker)
+            elif end_marker and end_marker in line_stripped:
                 break
             elif in_section:
                 content.append(line)
