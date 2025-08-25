@@ -4,15 +4,17 @@ A **production-ready**, modern web-based dbt certification quiz application with
 
 ## ✨ Features
 
-- **45+ Questions**: Comprehensive dbt certification coverage
-- **Rich Text Formatting**: ASCII diagrams, code highlighting, bold text
+- **🎨 Modern Homepage**: Professional landing page with dark/light mode, responsive design, and SEO optimization
+- **35+ Questions**: Comprehensive dbt certification coverage with realistic scenarios
+- **Rich Text Formatting**: ASCII diagrams, code highlighting, bold text, and proper formatting
 - **Smart Question Selection**: Flexible difficulty and count options with intelligent fallback
 - **Modern UI**: Beautiful, responsive web interface with React-style components
-- **Comprehensive Review**: Detailed feedback after quiz completion
+- **Comprehensive Review**: Detailed feedback after quiz completion with explanations
 - **Self-Contained Questions**: Each question is complete and independent
 - **Production-Ready**: App factory pattern, proper configuration management, health checks
 - **Testing**: Comprehensive test coverage for routes and repository
 - **Tooling**: Code formatting, linting, and type checking
+- **Render Optimized**: Optimized for Render hosting with caching, performance, and SEO
 
 ## 🚀 Quick Start
 
@@ -42,14 +44,40 @@ A **production-ready**, modern web-based dbt certification quiz application with
    Choose option 2 to run the test suite
 
 5. **Open your browser**
-   Navigate to `http://localhost:8000`
+   - **Homepage**: `http://localhost:8000` - Modern landing page with features and pricing
+   - **Quiz Interface**: `http://localhost:8000/quiz` - Direct access to the quiz
+   - **Health Check**: `http://localhost:8000/healthz` - Application health status
 
 ### 🌐 Live Demo
 
 **The application is now deployed and available at:**
 - **Live Demo**: [https://dbt-certification-quiz.onrender.com](https://dbt-certification-quiz.onrender.com)
 
-*Your fully functional dbt certification quiz application with 45+ questions, rich text formatting, and comprehensive review system.*
+*Your fully functional dbt certification quiz application with 35+ questions, modern homepage, rich text formatting, and comprehensive review system.*
+
+## 🚀 Deployment
+
+### Render Hosting (Recommended)
+
+The application is optimized for Render hosting with:
+
+#### **Performance Optimizations**
+- **Caching Headers**: Static assets cached for 1 year, templates for 1 hour
+- **CDN Resources**: External CSS/JS libraries served from CDN
+- **Health Checks**: `/healthz` endpoint for monitoring
+- **Auto-scaling**: Handles traffic spikes automatically
+
+#### **SEO & Accessibility**
+- **Meta Tags**: Complete SEO optimization
+- **Social Cards**: Open Graph and Twitter Card support
+- **Accessibility**: ARIA labels, focus management, reduced motion
+- **Mobile Optimized**: Responsive design for all devices
+
+#### **Deployment Configuration**
+- **render.yaml**: Optimized configuration file included
+- **Environment Variables**: Production-ready settings
+- **Error Handling**: Graceful fallbacks and logging
+- **Zero-downtime**: Automatic deployments with health checks
 
 ## 🏗️ Production-Ready Architecture
 
@@ -68,6 +96,33 @@ A **production-ready**, modern web-based dbt certification quiz application with
 - `/healthz` endpoint for monitoring
 - Structured logging throughout
 - Error handling and validation
+
+## 🎨 Modern Homepage
+
+The application now features a **professional landing page** that showcases the quiz capabilities:
+
+### 🌟 Homepage Features
+- **Dark/Light Mode Toggle**: Persistent theme switching with localStorage
+- **Responsive Design**: Perfect on desktop, tablet, and mobile devices
+- **SEO Optimized**: Meta tags, descriptions, and social media cards
+- **Performance Optimized**: CDN resources, preloading, and caching
+- **Accessibility**: ARIA labels, focus management, and reduced motion support
+- **Interactive Elements**: Smooth animations, hover effects, and FAQ accordions
+- **Professional Branding**: Modern design with dbt-themed styling
+
+### 🎯 Homepage Sections
+1. **Hero Section**: Compelling headline with sample question preview
+2. **Features Grid**: 6 feature cards highlighting key benefits
+3. **Pricing Section**: Free vs Pro plan comparison
+4. **FAQ Section**: Expandable questions with smooth animations
+5. **Professional Footer**: Complete with links and branding
+
+### 🚀 Performance Features
+- **CDN Resources**: Tailwind CSS and Font Awesome from CDN
+- **Preloading**: DNS prefetch and preconnect for faster loading
+- **Caching**: Optimized cache headers for static assets
+- **Error Handling**: Graceful fallbacks for theme and localStorage
+- **Loading States**: Smooth page transitions and loading animations
 
 ## 📚 Usage Guide
 

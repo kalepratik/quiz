@@ -2,8 +2,12 @@
 dbt Certification Quiz Application Factory
 """
 from flask import Flask
+from dotenv import load_dotenv
 from .config import config_from_env
 from .routes import ui_bp, api_bp
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 def create_app():
