@@ -136,7 +136,7 @@ def google_auth_callback():
         user_info = OAuthService.authenticate_user(auth_code)
         if user_info:
             logger.info(f"User authenticated successfully: {user_info['email']}")
-            return redirect(url_for('ui.quiz'))
+            return redirect(url_for('ui.index'))
         else:
             logger.error("Authentication failed")
             return redirect(url_for('ui.signin'))
