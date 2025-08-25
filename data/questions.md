@@ -69,7 +69,7 @@ You have a DAG defined as:
 +---------------+   +------------------+   +-------------+   +------------------+
 ```
 
-You run `dbt build --select state:modified+ --state prod_artifacts/ --defer`. If only `A_stg_customers` changed, what runs?
+You run `dbt build --select state:modified+ --state prod_artifacts/ --defer`. If only `A_stg_customers` changed.
 
 **Question:**
 Which models will run?
