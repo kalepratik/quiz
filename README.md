@@ -5,12 +5,14 @@ A **production-ready**, modern web-based dbt certification quiz application with
 ## ✨ Features
 
 - **🎨 Modern Homepage**: Professional landing page with dark/light mode, responsive design, and SEO optimization
+- **🔐 OAuth Authentication**: Google OAuth integration for secure user authentication
+- **💳 Payment Integration**: PRO plan upgrade flow with conditional redirection
 - **35+ Questions**: Comprehensive dbt certification coverage with realistic scenarios
 - **Rich Text Formatting**: ASCII diagrams, code highlighting, bold text, and proper formatting
 - **Smart Question Selection**: Flexible difficulty and count options with intelligent fallback
 - **Modern UI**: Beautiful, responsive web interface with React-style components
-- **Comprehensive Review**: Detailed feedback after quiz completion with explanations
-- **Self-Contained Questions**: Each question is complete and independent
+- **Comprehensive Review**: Detailed feedback after quiz completion with 2-decimal percentage display
+- **Self-Contained Questions**: Each question is complete and independent with no redundant phrasing
 - **Production-Ready**: App factory pattern, proper configuration management, health checks
 - **Testing**: Comprehensive test coverage for routes and repository
 - **Tooling**: Code formatting, linting, and type checking
@@ -124,6 +126,33 @@ The application now features a **professional landing page** that showcases the 
 - **Error Handling**: Graceful fallbacks for theme and localStorage
 - **Loading States**: Smooth page transitions and loading animations
 
+## 🔐 OAuth Authentication & PRO Features
+
+The application now includes **enterprise-grade authentication** and **PRO plan features**:
+
+### 🌟 Authentication Features
+- **Google OAuth Integration**: Real GCP OAuth 2.0 authentication
+- **Secure Session Management**: Flask session-based authentication
+- **Conditional Redirection**: Smart routing based on authentication status
+- **User State Persistence**: Maintains user authentication across sessions
+
+### 💳 PRO Plan Features
+- **Unlimited Quizzes**: No restrictions on quiz attempts
+- **Correct Answers with Explanations**: Detailed feedback for learning
+- **Practice Tests**: Additional practice modes and features
+- **Advanced Analytics**: Detailed performance tracking (coming soon)
+
+### 🔧 OAuth Setup
+The application includes comprehensive OAuth setup documentation:
+- **GOOGLE_OAUTH_SETUP.md**: Step-by-step GCP OAuth configuration guide
+- **Environment Variables**: Secure configuration management
+- **Production Ready**: Optimized for production deployment
+
+### 🎯 User Flow
+1. **Free Users**: Can take limited quizzes with basic feedback
+2. **PRO Upgrade**: Seamless upgrade flow with OAuth authentication
+3. **Authenticated Users**: Access to PRO features and unlimited content
+
 ## 📚 Usage Guide
 
 ### Quiz Configuration
@@ -148,11 +177,20 @@ The application intelligently handles question selection:
 
 Questions are stored in Markdown format (`data/questions.md`) with:
 - **Scenario**: Detailed context and setup
-- **Question**: Clear, specific question
+- **Question**: Clear, specific question (no redundant phrasing)
 - **Options**: 5 multiple-choice options
 - **Explanation**: Detailed explanation of the correct answer
 - **ASCII Diagrams**: Visual DAG representations
 - **Code Blocks**: Properly formatted dbt commands and syntax
+
+### 🎯 Latest Quiz Improvements
+
+The quiz interface has been enhanced with:
+- **2-Decimal Percentage Display**: Precise score reporting (e.g., "85.00%")
+- **Improved Question Formatting**: Better handling of bold text, code snippets, and ASCII diagrams
+- **Enhanced Navigation**: "Back to Home" button and improved user flow
+- **PRO Plan Promotion**: Integrated upgrade prompts in results section
+- **Better Error Handling**: Graceful handling of edge cases and loading states
 
 ## 🏗️ Complete Project Structure & File Purposes
 
@@ -173,7 +211,8 @@ dbt-certification-quiz/
 │       └── 📁 services/              # Business logic layer
 │           ├── 📄 __init__.py        # Services package initialization
 │           ├── 📄 quiz_service.py    # Quiz business logic - question selection and management
-│           └── 📄 scoring_service.py # Scoring logic - calculates results and statistics
+│           ├── 📄 scoring_service.py # Scoring logic - calculates results and statistics
+│           └── 📄 oauth_service.py   # OAuth authentication service - Google OAuth integration
 │
 ├── 📁 tests/                         # Test suite directory
 │   ├── 📄 __init__.py                # Test package initialization
@@ -181,14 +220,20 @@ dbt-certification-quiz/
 │   └── 📄 test_repo.py               # Tests for repository layer and data parsing
 │
 ├── 📁 templates/                     # HTML templates directory
-│   └── 📄 index.html                 # Main web interface - quiz UI with JavaScript functionality
+│   ├── 📄 index.html                 # Main web interface - quiz UI with JavaScript functionality
+│   ├── 📄 homepage.html              # Modern landing page with features and pricing
+│   ├── 📄 signin.html                # OAuth sign-in page with Google authentication
+│   └── 📄 payment.html               # PRO plan payment and upgrade page
 │
 ├── 📁 static/                        # Static assets directory
-│   └── 📄 android-chrome-512x512.png # App favicon - displayed in browser tabs
+│   ├── 📄 android-chrome-512x512.png # App favicon - displayed in browser tabs
+│   └── 📄 dbt-bit-standalone.png     # dbt logo for branding and navigation
 │
 ├── 📁 docs/                          # Documentation directory
 │   ├── 📄 DEPLOYMENT.md              # Deployment guide - production deployment instructions
 │   └── 📄 TOPICS.md                  # Complete dbt certification topics tracking (80+ topics)
+│
+├── 📄 GOOGLE_OAUTH_SETUP.md          # OAuth setup guide - step-by-step GCP OAuth configuration
 │
 ├── 📄 wsgi.py                        # Production entry point - WSGI application for deployment
 ├── 📄 main.py                        # Development entry point - CLI interface for local development

@@ -167,6 +167,8 @@ config.ini
 secrets.json
 .env.local
 .env.production
+client_secret_*.json
+*.json
 
 # Node modules (if any frontend dependencies)
 node_modules/

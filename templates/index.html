@@ -214,7 +214,7 @@
               border-radius: 12px;
               background: var(--bg-primary);
               color: var(--text-primary);
-              font-size: 1rem;
+            font-size: 1rem;
               font-weight: 500;
               text-align: center;
               outline: none;
@@ -350,9 +350,9 @@
          }
          
                    .question-header {
-              display: flex;
+            display: flex;
               justify-content: space-between;
-              align-items: center;
+            align-items: center;
               margin-bottom: 1.5rem;
           }
           
@@ -385,7 +385,7 @@
           }
           
           .section-header {
-              font-size: 1rem;
+            font-size: 1rem;
               font-weight: 700;
               color: var(--accent-color);
               margin-bottom: 1rem;
@@ -395,7 +395,7 @@
               font-size: 1rem;
               color: var(--text-primary);
               margin-bottom: 1rem;
-              line-height: 1.6;
+            line-height: 1.6;
           }
           
                      .question-text {
@@ -430,12 +430,12 @@
              font-size: 0.9rem;
              color: var(--text-primary);
              margin: 1rem 0 0.5rem 0;
-         }
-         
-                   .ascii-diagram {
-              background: #f8fafc;
-              border: 1px solid #e2e8f0;
-              border-radius: 8px;
+        }
+        
+        .ascii-diagram {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
               padding: 1.5rem;
               margin: 1rem 0;
               font-family: 'Courier New', monospace;
@@ -450,10 +450,10 @@
           
                      .ascii-diagram pre {
                margin: 0;
-               font-family: 'Courier New', monospace;
-               font-size: 0.9rem;
-               line-height: 1.4;
-               white-space: pre;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            white-space: pre;
                color: var(--text-primary);
                background: transparent;
                border: none;
@@ -472,61 +472,61 @@
               white-space: pre;
               display: block;
               margin: 1rem 0;
-              overflow-x: auto;
-          }
+            overflow-x: auto;
+        }
         
                  /* Options Styling - Matching Homepage Format */
-         .options {
-             display: flex;
-             flex-direction: column;
+        .options {
+            display: flex;
+            flex-direction: column;
              gap: 0.75rem;
-         }
+        }
          
-         .option {
-             display: flex;
-             align-items: center;
+        .option {
+            display: flex;
+            align-items: center;
              padding: 1rem 1.5rem;
              border: 2px solid var(--border-color);
-             border-radius: 12px;
+            border-radius: 12px;
              background: var(--bg-secondary);
-             cursor: pointer;
+            cursor: pointer;
              transition: all 0.3s ease;
-             text-align: left;
+            text-align: left;
              font-weight: 500;
-         }
+        }
          
-         .option:hover {
+        .option:hover {
              border-color: var(--accent-color);
              background: var(--bg-primary);
-             transform: translateY(-1px);
+            transform: translateY(-1px);
              box-shadow: var(--shadow-sm);
-         }
+        }
          
-         .option.selected {
+        .option.selected {
              border-color: var(--accent-color);
              background: var(--accent-color);
              color: white;
              box-shadow: var(--shadow-md);
          }
          
-         .option-letter {
-             font-weight: 600;
+        .option-letter {
+            font-weight: 600;
              color: var(--text-secondary);
              margin-right: 1rem;
              min-width: 20px;
-             text-align: center;
-         }
+            text-align: center;
+        }
          
          .option.selected .option-letter {
              color: white;
          }
          
-         .option-text {
-             flex: 1;
-             font-size: 1rem;
+        .option-text {
+            flex: 1;
+            font-size: 1rem;
              color: var(--text-primary);
-             line-height: 1.5;
-         }
+            line-height: 1.5;
+        }
          
          .option.selected .option-text {
              color: white;
@@ -602,7 +602,7 @@
         
         /* Results Section */
         .results {
-            text-align: center;
+             text-align: center;
             padding: 2rem;
         }
         
@@ -620,20 +620,20 @@
         }
         
         .result-buttons {
-            display: flex;
+                 display: flex;
             gap: 1rem;
             justify-content: center;
-            flex-wrap: wrap;
+                 flex-wrap: wrap;
         }
         
         .restart-btn, .pro-btn {
             padding: 1rem 2rem;
-            border-radius: 12px;
+             border-radius: 12px;
             font-weight: 600;
             text-decoration: none;
             transition: all 0.3s ease;
             display: inline-flex;
-            align-items: center;
+             align-items: center;
             gap: 0.5rem;
         }
         
@@ -652,9 +652,9 @@
         
         .pro-btn {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            border: none;
-            cursor: pointer;
+             color: white;
+             border: none;
+             cursor: pointer;
         }
         
                 .pro-btn:hover {
@@ -756,7 +756,7 @@
             <div class="logo-section">
                 <img src="/static/dbt-bit-standalone.png" alt="dbt Logo">
                 <h1>dbt Certification Quiz</h1>
-            </div>
+        </div>
             <a href="/" class="back-home-btn">
                 <i class="fas fa-arrow-left"></i>
                 Back to Home
@@ -776,15 +776,15 @@
                 <div class="config-section">
                     <div class="config-group">
                         <label class="config-label">Number of Questions</label>
-                                                 <div class="question-pills">
+                        <div class="question-pills">
                              <div class="question-pill active" data-value="5">5 Questions</div>
                              <div class="question-pill" data-value="10">10 Questions</div>
                              <div class="question-pill" data-value="15">15 Questions</div>
                              <div class="question-pill" data-value="20">20 Questions</div>
                              <div class="question-pill" data-value="25">25 Questions</div>
                                                            <input type="number" id="customQuestionCount" class="question-pill custom-input-pill" placeholder="Custom" data-value="custom" min="1" max="35">
-                         </div>
-                    </div>
+                            </div>
+                        </div>
                     
                     <div class="config-group">
                         <label class="config-label">Difficulty Level</label>
@@ -793,7 +793,7 @@
                             <div class="difficulty-btn" data-difficulty="2">Intermediate</div>
                             <div class="difficulty-btn" data-difficulty="3">Advanced</div>
                         </div>
-                    </div>
+                            </div>
                     
                                          <button class="start-btn" id="startBtn" disabled>Start Quiz</button>
                 </div>
@@ -855,7 +855,7 @@
                         <i class="fas fa-crown"></i>
                         Upgrade to PRO
                     </button>
-                </div>
+            </div>
                 
                 <!-- PRO Plan Promotion -->
                 <div class="pro-promotion">
@@ -895,14 +895,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded, initializing...');
             
-            // Show configuration screen by default
-            document.getElementById('config').style.display = 'block';
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('quiz').style.display = 'none';
-            document.getElementById('results').style.display = 'none';
-            
+             // Show configuration screen by default
+             document.getElementById('config').style.display = 'block';
+             document.getElementById('loading').style.display = 'none';
+             document.getElementById('quiz').style.display = 'none';
+             document.getElementById('results').style.display = 'none';
+             
             // Initialize configuration immediately
-            initializeConfig();
+             initializeConfig();
             
             // Load question stats
             loadQuestionStats();
@@ -940,13 +940,13 @@
             }
         }
 
-        function initializeConfig() {
+         function initializeConfig() {
             console.log('Initializing configuration...');
             
                          // Question pill interactions (excluding the input)
              const questionPills = document.querySelectorAll('.question-pill:not(.custom-input-pill)');
              const customInput = document.getElementById('customQuestionCount');
-            
+             
             console.log('Found question pills:', questionPills.length);
             
                                                                                                        questionPills.forEach((pill, index) => {
@@ -955,33 +955,33 @@
                        e.preventDefault();
                        e.stopPropagation();
                        console.log('Question pill clicked:', this.dataset.value, this.textContent);
-                       // Remove active class from all pills
-                       questionPills.forEach(p => p.classList.remove('active'));
+                     // Remove active class from all pills
+                     questionPills.forEach(p => p.classList.remove('active'));
                        // Remove active class from custom input
                        customInput.classList.remove('active');
-                       // Add active class to clicked pill
-                       this.classList.add('active');
+                     // Add active class to clicked pill
+                     this.classList.add('active');
                        // Update custom input value (but only if it's not the input itself)
                        if (this !== customInput) {
-                           customInput.value = this.dataset.value;
+                     customInput.value = this.dataset.value;
                        }
-                       updateStartButton();
-                   });
-               });
-            
+                     updateStartButton();
+                 });
+             });
+             
                                                                                // Custom input interactions - simplified
-               customInput.addEventListener('input', function() {
+             customInput.addEventListener('input', function() {
                    console.log('Custom input changed:', this.value);
                    
                    // Only allow numbers
                    this.value = this.value.replace(/[^0-9]/g, '');
                    
-                   const value = parseInt(this.value);
+                 const value = parseInt(this.value);
                    const maxQuestions = window.maxQuestions || 35;
                    
                    if (value > 0 && value <= maxQuestions) {
-                       // Remove active class from all pills
-                       questionPills.forEach(p => p.classList.remove('active'));
+                     // Remove active class from all pills
+                     questionPills.forEach(p => p.classList.remove('active'));
                        // Add active class to custom input
                        this.classList.add('active');
                    } else if (value === 0 || isNaN(value)) {
@@ -989,7 +989,7 @@
                        this.classList.remove('active');
                    }
                    
-                   updateStartButton();
+                     updateStartButton();
                });
               
                                                            // Handle spinner button clicks and value changes
@@ -1045,11 +1045,11 @@
                                 updateStartButton();
                             }
                         }, 50);
-                    }
-                });
-            
-            // Difficulty button interactions
-            const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+                 }
+             });
+             
+             // Difficulty button interactions
+             const difficultyBtns = document.querySelectorAll('.difficulty-btn');
             console.log('Found difficulty buttons:', difficultyBtns.length);
             
             difficultyBtns.forEach((btn, index) => {
@@ -1058,13 +1058,13 @@
                     e.preventDefault();
                     e.stopPropagation();
                     console.log('Difficulty button clicked:', this.dataset.difficulty, this.textContent);
-                    // Remove active class from all buttons
-                    difficultyBtns.forEach(b => b.classList.remove('active'));
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                    updateStartButton();
-                });
-            });
+                     // Remove active class from all buttons
+                     difficultyBtns.forEach(b => b.classList.remove('active'));
+                     // Add active class to clicked button
+                     this.classList.add('active');
+                     updateStartButton();
+                 });
+             });
             
             // Start button interaction
             const startBtn = document.getElementById('startBtn');
@@ -1074,19 +1074,19 @@
                 console.log('Start button clicked!');
                 startQuiz();
             });
-            
-                              // Initialize start button state
-         updateStartButton();
+             
+             // Initialize start button state
+             updateStartButton();
             console.log('Configuration initialized');
-        }
-
-                                                                       function updateStartButton() {
-               const customInput = document.getElementById('customQuestionCount');
+         }
+         
+         function updateStartButton() {
+             const customInput = document.getElementById('customQuestionCount');
                const value = parseInt(customInput.value);
                const maxQuestions = window.maxQuestions || 35;
-               
+             
                // Check if any question pill is active (including the default "5 Questions")
-               const activePill = document.querySelector('.question-pill.active');
+                 const activePill = document.querySelector('.question-pill.active');
                const isCustomActive = customInput.classList.contains('active');
                
                const startBtn = document.getElementById('startBtn');
@@ -1097,20 +1097,20 @@
                if ((value > 0 && value <= maxQuestions) || (activePill && !isCustomActive)) {
                    startBtn.disabled = false;
                    startBtn.style.opacity = '1';
-               } else {
+             } else {
                    startBtn.disabled = true;
                    startBtn.style.opacity = '0.6';
-               }
-           }
-
-                 async function startQuiz() {
+             }
+         }
+         
+         async function startQuiz() {
              const questionCount = parseInt(document.getElementById('customQuestionCount').value) || 5;
              const difficulty = document.querySelector('.difficulty-btn.active').dataset.difficulty;
-            
-            // Show loading screen
-            document.getElementById('config').style.display = 'none';
-            document.getElementById('loading').style.display = 'block';
-            
+             
+             // Show loading screen
+             document.getElementById('config').style.display = 'none';
+             document.getElementById('loading').style.display = 'block';
+             
             try {
                 const response = await fetch('/api/configure-quiz', {
                     method: 'POST',
@@ -1126,23 +1126,23 @@
                 if (response.ok) {
                     quizData = await response.json();
                     currentQuestion = 0;
-                    answers = new Array(quizData.questions.length).fill(null);
-                    
+                 answers = new Array(quizData.questions.length).fill(null);
+                 
                     // Hide loading, show quiz
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('quiz').style.display = 'block';
-                    
+                 document.getElementById('loading').style.display = 'none';
+                 document.getElementById('quiz').style.display = 'block';
+                 
                     displayQuestion();
                 } else {
                     throw new Error('Failed to configure quiz');
                 }
-            } catch (error) {
+             } catch (error) {
                 console.error('Error starting quiz:', error);
                 alert('Failed to start quiz. Please try again.');
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('config').style.display = 'block';
-            }
-        }
+                 document.getElementById('loading').style.display = 'none';
+                 document.getElementById('config').style.display = 'block';
+             }
+         }
 
                  function formatQuestionText(text) {
              // Handle code blocks (```...```)
@@ -1178,7 +1178,7 @@
                    <div class="question-header">
                        <div class="question-label">Question ${currentQuestion + 1}</div>
                        <div class="question-topic">${question.topic || 'General'}</div>
-                   </div>
+                            </div>
                    <div class="question-content">
                `;
               
@@ -1198,8 +1198,8 @@
                     <div class="option ${isSelected ? 'selected' : ''}" onclick="selectOption(${index})">
                         <div class="option-letter">${letter}</div>
                         <div class="option-text">${option}</div>
-                    </div>
-                `;
+                        </div>
+                    `;
             });
             questionHTML += '</div>';
             
@@ -1346,7 +1346,7 @@
                     // Fallback to sign in page
                     window.location.href = '/signin';
                 });
-        }
+         }
     </script>
 </body>
 </html>
