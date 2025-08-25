@@ -15,6 +15,10 @@ class BaseConfig:
     TESTING = False
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
     
+    # Environment detection
+    IS_PRODUCTION = os.environ.get('FLASK_ENV') == 'production' or os.environ.get('RENDER') == 'true'
+    IS_DEVELOPMENT = not IS_PRODUCTION
+    
     # Application paths
     BASE_DIR = Path(__file__).parent.parent.parent
     DATA_DIR = BASE_DIR / 'data'

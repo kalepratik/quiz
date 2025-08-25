@@ -14,6 +14,17 @@ api_bp = Blueprint('api', __name__, url_prefix='/api')
 # Setup logging
 logger = logging.getLogger(__name__)
 
+# Context processor to pass environment info to all templates
+@ui_bp.context_processor
+def inject_environment():
+    """Inject environment variables into template context"""
+    from .config import config_from_env
+    config = config_from_env()
+    return {
+        'is_production': config.IS_PRODUCTION,
+        'is_development': config.IS_DEVELOPMENT
+    }
+
 
 @ui_bp.route('/')
 def index():

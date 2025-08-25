@@ -201,21 +201,26 @@
              <div class="text-center mb-8">
                  <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Welcome Back</h1>
                  <p class="text-gray-600 dark:text-gray-300">Sign in to continue your dbt certification journey</p>
+
+             </div>
+            
+            <!-- Sign In Card -->
+            <div class="card-hover bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+                                                  <!-- Google Sign In -->
+                  <a href="/auth/google" class="w-full mb-4 px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center space-x-3">
+                      <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="w-5 h-5">
+                      <span class="text-gray-700 dark:text-gray-300 font-medium">Continue with Google</span>
+                  </a>
+                 
+                 <!-- Demo Mode Notice (Development Only) -->
+                 {% if is_development %}
                  <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
                      <p class="text-sm text-blue-700 dark:text-blue-300">
                          <i class="fas fa-info-circle mr-1"></i>
                          Demo Mode: This simulates OAuth authentication. In production, you would be redirected to Google/Microsoft for actual sign-in.
                      </p>
                  </div>
-             </div>
-            
-            <!-- Sign In Card -->
-            <div class="card-hover bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
-                                 <!-- Google Sign In -->
-                 <a href="/auth/google" class="w-full mb-4 px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center space-x-3">
-                     <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="w-5 h-5">
-                     <span class="text-gray-700 dark:text-gray-300 font-medium">Continue with Google</span>
-                 </a>
+                 {% endif %}
                 
 
                 
