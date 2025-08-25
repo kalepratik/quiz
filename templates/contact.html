@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - dbt Certification Quiz</title>
+    <link rel="icon" type="image/png" href="/static/android-chrome-512x512.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/static/android-chrome-512x512.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .logo img {
+            height: 3rem;
+            width: auto;
+        }
+        
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .contact-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            padding: 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .contact-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .contact-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+        
+        .contact-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        .contact-info {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .contact-info h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .contact-method i {
+            font-size: 1.25rem;
+            color: var(--primary);
+            width: 1.5rem;
+        }
+        
+        .contact-method div h4 {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+        
+        .contact-method div p {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .contact-card {
+                padding: 2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
+        
+                 <div class="header">
+             <div class="logo">
+                 <img src="/static/android-chrome-512x512.png" alt="dbt logo">
+                 <h1>Contact Us</h1>
+             </div>
+            <p class="subtitle">Get in touch with us for any questions or support</p>
+        </div>
+        
+        <div class="contact-card">
+            <div class="contact-header">
+                <h2>Send us a Message</h2>
+                <p>We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.</p>
+            </div>
+            
+            {% if success %}
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                Thank you for your message! We'll get back to you soon.
+            </div>
+            {% endif %}
+            
+            {% if error %}
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ error }}
+            </div>
+            {% endif %}
+            
+            <form class="contact-form" method="POST" action="/contact">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">Subject *</label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Select a subject</option>
+                        <option value="General Inquiry">General Inquiry</option>
+                        <option value="Technical Support">Technical Support</option>
+                        <option value="Payment Issue">Payment Issue</option>
+                        <option value="Feature Request">Feature Request</option>
+                        <option value="Bug Report">Bug Report</option>
+                        <option value="Partnership">Partnership</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea id="message" name="message" placeholder="Please describe your inquiry in detail..." required></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    Send Message
+                </button>
+            </form>
+            
+            <div class="contact-info">
+                <h3>Other Ways to Reach Us</h3>
+                <div class="contact-methods">
+                                         <div class="contact-method">
+                         <i class="fas fa-envelope"></i>
+                         <div>
+                             <h4>Email Support</h4>
+                             <p>mail@kalepratik.in</p>
+                         </div>
+                     </div>
+                    <div class="contact-method">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Response Time</h4>
+                            <p>Within 24-48 hours</p>
+                        </div>
+                    </div>
+                    <div class="contact-method">
+                        <i class="fas fa-globe"></i>
+                        <div>
+                            <h4>Available</h4>
+                            <p>Monday - Friday, 9 AM - 6 PM EST</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Form submission handling
+        document.querySelector('.contact-form').addEventListener('submit', function(e) {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        });
+        
+        // Auto-resize textarea
+        const textarea = document.getElementById('message');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 300) + 'px';
+        });
+    </script>
+</body>
+</html>
