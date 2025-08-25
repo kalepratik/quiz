@@ -12,6 +12,9 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
+    <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
     <!-- Performance optimizations -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -236,26 +239,10 @@
                     </div>
                 </div>
                 
-                <!-- Payment Form -->
-                <form class="space-y-4">
-                    <div>
-                        <label for="card-number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Card Number</label>
-                        <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label for="expiry" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Expiry Date</label>
-                            <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white">
-                        </div>
-                        <div>
-                            <label for="cvc" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">CVC</label>
-                            <input type="text" id="cvc" name="cvc" placeholder="123" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white">
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors font-medium">
-                        <i class="fas fa-lock mr-2"></i>Complete Purchase
-                    </button>
-                </form>
+                <!-- Payment Button -->
+                <button id="payButton" class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors font-medium">
+                    <i class="fas fa-lock mr-2"></i>Complete Purchase
+                </button>
                 
                 <!-- Security Notice -->
                 <div class="mt-6 text-center">
@@ -343,12 +330,89 @@
             }
         });
         
-        // Handle form submission
-        document.querySelector('form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            // For now, just show a success message (placeholder for actual payment processing)
-            alert('Payment processed successfully! You now have access to Pro features.');
-            window.location.href = '/quiz';
+        // Razorpay Integration
+        const payButton = document.getElementById('payButton');
+        
+        payButton.addEventListener('click', async () => {
+            try {
+                // Disable button to prevent double clicks
+                payButton.disabled = true;
+                payButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
+                
+                // Create payment order
+                const response = await fetch('/api/create-payment-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: 300 // ₹300
+                    })
+                });
+                
+                const orderData = await response.json();
+                
+                if (!orderData.success) {
+                    throw new Error(orderData.error || 'Failed to create payment order');
+                }
+                
+                                 // Configure Razorpay options
+                 const options = {
+                     key: 'rzp_live_R9ggKgYfDqDKUS', // Live Razorpay Key
+                    amount: orderData.amount,
+                    currency: orderData.currency,
+                    name: 'dbt Quiz Pro',
+                    description: 'Pro Upgrade - 200+ Questions',
+                    order_id: orderData.order_id,
+                    handler: async function (response) {
+                        try {
+                            // Verify payment on server
+                            const verifyResponse = await fetch('/api/verify-payment', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_signature: response.razorpay_signature
+                                })
+                            });
+                            
+                            const verifyData = await verifyResponse.json();
+                            
+                            if (verifyData.success) {
+                                alert('Payment successful! You now have access to Pro features.');
+                                window.location.href = '/';
+                            } else {
+                                alert('Payment verification failed. Please contact support.');
+                            }
+                        } catch (error) {
+                            console.error('Payment verification error:', error);
+                            alert('Payment verification failed. Please contact support.');
+                        }
+                    },
+                    prefill: {
+                        name: 'User Name', // Will be filled from user session
+                        email: 'user@example.com' // Will be filled from user session
+                    },
+                    theme: {
+                        color: '#6366f1'
+                    }
+                };
+                
+                // Initialize Razorpay
+                const rzp = new Razorpay(options);
+                rzp.open();
+                
+            } catch (error) {
+                console.error('Payment error:', error);
+                alert('Payment failed. Please try again.');
+            } finally {
+                // Re-enable button
+                payButton.disabled = false;
+                payButton.innerHTML = '<i class="fas fa-lock mr-2"></i>Complete Purchase';
+            }
         });
     </script>
 </body>
