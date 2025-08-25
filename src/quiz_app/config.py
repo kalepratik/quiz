@@ -53,6 +53,10 @@ class BaseConfig:
         'https://www.googleapis.com/auth/userinfo.email',
         'https://www.googleapis.com/auth/userinfo.profile'
     ]
+    
+    # Razorpay Configuration
+    RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', 'your_razorpay_key_id_here')
+    RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', 'your_razorpay_key_secret_here')
 
 
 class DevelopmentConfig(BaseConfig):

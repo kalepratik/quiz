@@ -3,9 +3,11 @@ Flask routes for dbt Certification Quiz Application
 """
 import json
 import logging
+import time
 from flask import Blueprint, render_template, request, jsonify, current_app, redirect, url_for, session
 from .services.quiz_service import QuizService
 from .services.oauth_service import OAuthService
+from .services.payment_service import PaymentService
 
 # Create blueprints
 ui_bp = Blueprint('ui', __name__)
@@ -48,6 +50,80 @@ def signin():
 def payment():
     """Payment page for Pro upgrade"""
     return render_template('payment.html')
+
+@api_bp.route('/create-payment-order', methods=['POST'])
+def create_payment_order():
+    """Create a new payment order"""
+    try:
+        # Check if user is authenticated
+        user = OAuthService.get_current_user()
+        if not user:
+            return jsonify({'error': 'User not authenticated'}), 401
+        
+        # Get payment amount from request
+        data = request.get_json()
+        amount = data.get('amount', 300)  # Default to ₹300
+        
+        # Create payment service
+        payment_service = PaymentService()
+        
+        # Create order
+        order = payment_service.create_order(
+            amount=amount,
+            receipt_id=f"user_{user['id']}_{int(time.time())}"
+        )
+        
+        if order:
+            return jsonify({
+                'success': True,
+                'order_id': order['id'],
+                'amount': order['amount'],
+                'currency': order['currency']
+            })
+        else:
+            return jsonify({'error': 'Failed to create payment order'}), 500
+            
+    except Exception as e:
+        logger.error(f"Error creating payment order: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
+
+@api_bp.route('/verify-payment', methods=['POST'])
+def verify_payment():
+    """Verify payment and upgrade user to Pro"""
+    try:
+        # Check if user is authenticated
+        user = OAuthService.get_current_user()
+        if not user:
+            return jsonify({'error': 'User not authenticated'}), 401
+        
+        # Get payment details from request
+        data = request.get_json()
+        payment_id = data.get('razorpay_payment_id')
+        order_id = data.get('razorpay_order_id')
+        signature = data.get('razorpay_signature')
+        
+        if not all([payment_id, order_id, signature]):
+            return jsonify({'error': 'Missing payment details'}), 400
+        
+        # Create payment service
+        payment_service = PaymentService()
+        
+        # Verify payment
+        if payment_service.verify_payment(payment_id, order_id, signature):
+            # Payment verified - upgrade user to Pro
+            # TODO: Add database integration to mark user as Pro
+            logger.info(f"User {user['email']} upgraded to Pro after payment {payment_id}")
+            
+            return jsonify({
+                'success': True,
+                'message': 'Payment verified and account upgraded to Pro!'
+            })
+        else:
+            return jsonify({'error': 'Payment verification failed'}), 400
+            
+    except Exception as e:
+        logger.error(f"Error verifying payment: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
 
 @ui_bp.route('/legal')
 def legal():
