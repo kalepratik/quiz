@@ -72,7 +72,7 @@ You have a DAG defined as:
 You run `dbt build --select state:modified+ --state prod_artifacts/ --defer`. If only `A_stg_customers` changed, what runs?
 
 **Question:**
-What will happen?
+Which models will run?
 
 **Options:**
 A. Only A_stg_customers runs
@@ -103,7 +103,7 @@ You have a DAG defined as:
 If `S_customers` fails during `dbt build`, what happens to `B_customer_dim`?
 
 **Question:**
-What will happen?
+What happens to B_customer_dim?
 
 **Options:**
 A. B_customer_dim runs normally
@@ -149,9 +149,6 @@ Snapshots ignore --full-refresh and run normally comparing current data vs histo
 **Scenario:**
 What is the primary purpose of the `--defer` flag in dbt?
 
-**Question:**
-What will happen?
-
 **Options:**
 A. To delay model execution
 B. To use production models for references instead of building locally
@@ -172,9 +169,6 @@ The --defer flag uses production models for references instead of building them 
 **Scenario:**
 What happens when you run `dbt build --fail-fast` and a model fails?
 
-**Question:**
-What will happen?
-
 **Options:**
 A. dbt continues with other models
 B. dbt aborts immediately on first failure
@@ -194,9 +188,6 @@ The --fail-fast flag stops execution immediately when the first failure occurs p
 
 **Scenario:**
 What is the purpose of the `--state` flag in dbt?
-
-**Question:**
-What will happen?
 
 **Options:**
 A. To specify the target environment
@@ -226,9 +217,6 @@ You have a DAG defined as:
 
 If `S_customers` is a snapshot, what happens when `A_stg_customers` changes?
 
-**Question:**
-What will happen?
-
 **Options:**
 A. S_customers detects changes and updates history
 B. S_customers ignores changes
@@ -248,9 +236,6 @@ When a snapshot's source model changes the snapshot detects differences and upda
 
 **Scenario:**
 What is the execution order for tests in `dbt build`?
-
-**Question:**
-What will happen?
 
 **Options:**
 A. Tests run before models
@@ -316,10 +301,10 @@ When data quality issues cause foreign key violations in upstream models, the mo
 **Difficulty:** 4 (Critical)
 
 **Scenario:**
-Your dbt project uses cross-project references with model contracts. During a deployment you discover that a referenced model has breaking schema changes. What is the MOST critical action?
+Your dbt project uses cross-project references with model contracts. During a deployment you discover that a referenced model has breaking schema changes.
 
 **Question:**
-What will happen?
+What is the MOST critical action?
 
 **Options:**
 A. Deploy immediately to fix the issue
@@ -339,10 +324,10 @@ When model contracts are violated the most critical action is to check violation
 **Difficulty:** 4 (Critical)
 
 **Scenario:**
-You have incremental models with complex business logic that process millions of records daily. During a routine deployment you discover that the incremental logic has a bug causing data duplication. What is the MOST critical action?
+You have incremental models with complex business logic that process millions of records daily. During a routine deployment you discover that the incremental logic has a bug causing data duplication.
 
 **Question:**
-What will happen?
+What is the MOST critical action?
 
 **Options:**
 A. Continue with the deployment
@@ -362,10 +347,10 @@ When incremental logic bugs cause data duplication the most critical action is t
 **Difficulty:** 4 (Critical)
 
 **Scenario:**
-Your dbt project uses `--defer` in CI/CD with production state artifacts. During a deployment you discover that the production state artifacts are corrupted or missing. What is the MOST critical action?
+Your dbt project uses `--defer` in CI/CD with production state artifacts. During a deployment you discover that the production state artifacts are corrupted or missing.
 
 **Question:**
-What will happen?
+What is the MOST critical action?
 
 **Options:**
 A. Continue with the deployment
@@ -386,9 +371,6 @@ When production state artifacts are corrupted the most critical action is to sto
 
 **Scenario:**
 What is the execution order when running plain `dbt build`?
-
-**Question:**
-What will happen?
 
 **Options:**
 A. Seeds → Models → Snapshots → Tests
