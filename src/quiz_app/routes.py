@@ -40,6 +40,51 @@ def payment():
     """Payment page for Pro upgrade"""
     return render_template('payment.html')
 
+@ui_bp.route('/legal')
+def legal():
+    """Legal information page with Privacy Policy, Terms & Conditions, and Cancellation Policy"""
+    return render_template('legal.html')
+
+@ui_bp.route('/contact', methods=['GET', 'POST'])
+def contact():
+    """Contact form page"""
+    if request.method == 'POST':
+        try:
+            # Get form data
+            name = request.form.get('name', '').strip()
+            email = request.form.get('email', '').strip()
+            subject = request.form.get('subject', '').strip()
+            message = request.form.get('message', '').strip()
+            
+            # Validate required fields
+            if not all([name, email, subject, message]):
+                return render_template('contact.html', error='All fields are required.')
+            
+            # Basic email validation
+            if '@' not in email or '.' not in email:
+                return render_template('contact.html', error='Please enter a valid email address.')
+            
+            # Import email service
+            from .services.email_service import EmailService
+            email_service = EmailService()
+            
+            # Send email to admin
+            admin_email_sent = email_service.send_contact_form_email(name, email, subject, message)
+            
+            # Send auto-reply to user
+            auto_reply_sent = email_service.send_auto_reply(email, name)
+            
+            if admin_email_sent:
+                return render_template('contact.html', success=True)
+            else:
+                return render_template('contact.html', error='Failed to send message. Please try again later.')
+                
+        except Exception as e:
+            logger.error(f"Error processing contact form: {str(e)}")
+            return render_template('contact.html', error='An error occurred. Please try again later.')
+    
+    return render_template('contact.html')
+
 # OAuth Routes
 @ui_bp.route('/auth/google')
 def google_auth():

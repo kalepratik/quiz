@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Information - dbt Certification Quiz</title>
+    <link rel="icon" type="image/png" href="/static/android-chrome-512x512.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/static/android-chrome-512x512.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #4299e1;
+            --success-color: #48bb78;
+            --warning-color: #ed8936;
+            --error-color: #f56565;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .legal-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo-section img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+        
+        .logo-section h1 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .back-home-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .back-home-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .legal-content {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .legal-header-content {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .legal-header-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .legal-header-content p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .legal-body {
+            padding: 3rem 2rem;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .section h2 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section h3 {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem 0;
+        }
+        
+        .section p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .section ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        
+        .section li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .highlight-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .highlight-box h4 {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .warning-box {
+            background: #fef5e7;
+            border-left: 4px solid var(--warning-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning-box h4 {
+            color: var(--warning-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .last-updated {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+            
+            .legal-header-content {
+                padding: 2rem 1rem;
+            }
+            
+            .legal-header-content h1 {
+                font-size: 2rem;
+            }
+            
+            .legal-body {
+                padding: 2rem 1rem;
+            }
+            
+            .section h2 {
+                font-size: 1.5rem;
+            }
+            
+            .header-content {
+                padding: 0 1rem;
+            }
+        }
+        
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .nav-tab.active {
+            background: white;
+            color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .nav-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        .section-content {
+            display: none;
+        }
+        
+        .section-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="legal-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="/static/dbt-bit-standalone.png" alt="dbt Logo">
+                <h1>Legal Information</h1>
+            </div>
+            <a href="/" class="back-home-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="legal-content">
+            <div class="legal-header-content">
+                <h1>Legal Information</h1>
+                <p>Privacy Policy, Terms & Conditions, and Cancellation Policy</p>
+            </div>
+            
+            <div class="legal-body">
+                <!-- Navigation Tabs -->
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="showSection('privacy')">
+                        <i class="fas fa-shield-alt"></i> Privacy Policy
+                    </button>
+                    <button class="nav-tab" onclick="showSection('terms')">
+                        <i class="fas fa-file-contract"></i> Terms & Conditions
+                    </button>
+                    <button class="nav-tab" onclick="showSection('cancellation')">
+                        <i class="fas fa-undo"></i> Cancellation & Refunds
+                    </button>
+                </div>
+
+                <!-- Privacy Policy Section -->
+                <div id="privacy" class="section-content active">
+                    <div class="section">
+                        <h2><i class="fas fa-shield-alt"></i> Privacy Policy</h2>
+                        
+                        <p><strong>Last Updated:</strong> December 2024</p>
+                        
+                        <h3>1. Information We Collect</h3>
+                        <p>We are committed to protecting your privacy and maintaining the security of your personal information. We collect only the minimal information necessary to provide our services:</p>
+                        
+                        <ul>
+                            <li><strong>Email Address:</strong> We collect your email address through Google OAuth authentication for account management and service delivery.</li>
+                            <li><strong>Payment Information:</strong> For security purposes, we store only the last 4 digits of your payment card. We do not store full card numbers, CVV codes, or any other sensitive payment information.</li>
+                            <li><strong>Usage Data:</strong> We collect basic usage statistics to improve our service quality and user experience.</li>
+                        </ul>
+                        
+                        <div class="highlight-box">
+                            <h4><i class="fas fa-info-circle"></i> Important Security Note</h4>
+                            <p>We do not capture, store, or process any personal information beyond your email address and the last 4 digits of your payment card. All sensitive payment information is handled securely by our payment gateway partners and is never stored on our servers.</p>
+                        </div>
+                        
+                        <h3>2. How We Use Your Information</h3>
+                        <ul>
+                            <li>To provide and maintain our dbt certification quiz service</li>
+                            <li>To process payments and manage your subscription</li>
+                            <li>To send important service updates and notifications</li>
+                            <li>To improve our service quality and user experience</li>
+                            <li>To comply with legal obligations</li>
+                        </ul>
+                        
+                        <h3>3. Information Sharing</h3>
+                        <p>We do not sell, trade, or otherwise transfer your personal information to third parties except:</p>
+                        <ul>
+                            <li>To trusted payment gateway partners for payment processing</li>
+                            <li>When required by law or to protect our rights and safety</li>
+                            <li>With your explicit consent</li>
+                        </ul>
+                        
+                        <h3>4. Data Security</h3>
+                        <p>We implement industry-standard security measures to protect your information:</p>
+                        <ul>
+                            <li>Encryption of data in transit and at rest</li>
+                            <li>Secure payment processing through certified payment gateways</li>
+                            <li>Regular security audits and updates</li>
+                            <li>Limited access to personal information on a need-to-know basis</li>
+                        </ul>
+                        
+                        <h3>5. Your Rights</h3>
+                        <p>You have the right to:</p>
+                        <ul>
+                            <li>Access your personal information</li>
+                            <li>Request correction of inaccurate information</li>
+                            <li>Request deletion of your account and associated data</li>
+                            <li>Opt-out of non-essential communications</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Terms & Conditions Section -->
+                <div id="terms" class="section-content">
+                    <div class="section">
+                        <h2><i class="fas fa-file-contract"></i> Terms and Conditions</h2>
+                        
+                        <p><strong>Last Updated:</strong> December 2024</p>
+                        
+                        <h3>1. Acceptance of Terms</h3>
+                        <p>By accessing and using the dbt Certification Quiz service, you agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use our service.</p>
+                        
+                        <h3>2. Service Description</h3>
+                        <p>We provide an online platform for dbt (data build tool) certification practice quizzes. Our service includes:</p>
+                        <ul>
+                            <li>Free practice quizzes with limited features</li>
+                            <li>Premium PRO subscription with unlimited access and detailed explanations</li>
+                            <li>Educational content related to dbt concepts</li>
+                        </ul>
+                        
+                        <h3>3. User Accounts and Authentication</h3>
+                        <ul>
+                            <li>You must authenticate using Google OAuth to access our services</li>
+                            <li>You are responsible for maintaining the security of your account</li>
+                            <li>You must provide accurate and complete information during registration</li>
+                            <li>You are responsible for all activities that occur under your account</li>
+                        </ul>
+                        
+                        <h3>4. Acceptable Use Policy</h3>
+                        <p>You agree not to:</p>
+                        <ul>
+                            <li>Use the service for any illegal or unauthorized purpose</li>
+                            <li>Attempt to gain unauthorized access to our systems or other users' accounts</li>
+                            <li>Interfere with or disrupt the service or servers</li>
+                            <li>Share your account credentials with others</li>
+                            <li>Use automated tools or bots to access the service</li>
+                            <li>Attempt to reverse engineer or copy our proprietary technology</li>
+                            <li>Use the service to transmit malware, viruses, or other harmful code</li>
+                        </ul>
+                        
+                        <div class="warning-box">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Strict Usage Policy</h4>
+                            <p>Violation of our acceptable use policy may result in immediate account suspension or termination without refund. We reserve the right to take appropriate legal action against users who violate these terms.</p>
+                        </div>
+                        
+                        <h3>5. Payment Terms</h3>
+                        <ul>
+                            <li>PRO subscription is a one-time purchase with lifetime access</li>
+                            <li>All payments are processed securely through certified payment gateways</li>
+                            <li>Prices are subject to change with notice</li>
+                            <li>Payment is required before access to PRO features</li>
+                        </ul>
+                        
+                        <h3>6. Intellectual Property</h3>
+                        <p>All content, including but not limited to questions, explanations, and educational materials, is protected by copyright and other intellectual property laws. You may not:</p>
+                        <ul>
+                            <li>Copy, reproduce, or distribute our content without permission</li>
+                            <li>Create derivative works based on our content</li>
+                            <li>Use our content for commercial purposes</li>
+                        </ul>
+                        
+                        <h3>7. Disclaimers</h3>
+                        <p>Our service is provided "as is" without warranties of any kind. We do not guarantee:</p>
+                        <ul>
+                            <li>That the service will be uninterrupted or error-free</li>
+                            <li>That quiz results will guarantee certification success</li>
+                            <li>The accuracy or completeness of educational content</li>
+                        </ul>
+                        
+                        <h3>8. Limitation of Liability</h3>
+                        <p>In no event shall we be liable for any indirect, incidental, special, or consequential damages arising from your use of the service.</p>
+                        
+                        <h3>9. Termination</h3>
+                        <p>We may terminate or suspend your account at any time for violation of these terms. Upon termination, your right to use the service ceases immediately.</p>
+                        
+                        <h3>10. Changes to Terms</h3>
+                        <p>We reserve the right to modify these terms at any time. Continued use of the service after changes constitutes acceptance of the new terms.</p>
+                    </div>
+                </div>
+
+                <!-- Cancellation & Refunds Section -->
+                <div id="cancellation" class="section-content">
+                    <div class="section">
+                        <h2><i class="fas fa-undo"></i> Cancellation and Refunds Policy</h2>
+                        
+                        <p><strong>Last Updated:</strong> December 2024</p>
+                        
+                        <h3>1. No Cancellation Policy</h3>
+                        <div class="highlight-box">
+                            <h4><i class="fas fa-info-circle"></i> One-Time Purchase</h4>
+                            <p>Our PRO subscription is a one-time purchase that provides lifetime access to premium features. As such, there is no cancellation policy since you are not charged recurring fees.</p>
+                        </div>
+                        
+                        <h3>2. Refund Policy</h3>
+                        <p>We understand that sometimes purchases don't meet expectations. Our refund policy is designed to be fair and transparent:</p>
+                        
+                        <h4>Eligible for Refund:</h4>
+                        <ul>
+                            <li><strong>Payment Processing Errors:</strong> If your payment was processed but you did not receive access to PRO features</li>
+                            <li><strong>Technical Issues:</strong> If you are unable to access the service due to technical problems on our end</li>
+                            <li><strong>Duplicate Charges:</strong> If you were charged multiple times for the same purchase</li>
+                        </ul>
+                        
+                        <h4>Not Eligible for Refund:</h4>
+                        <ul>
+                            <li>Change of mind after accessing PRO features</li>
+                            <li>Failure to achieve desired quiz scores</li>
+                            <li>Disagreement with quiz content or difficulty</li>
+                            <li>Account suspension due to terms violation</li>
+                        </ul>
+                        
+                        <h3>3. Payment Failure Refunds</h3>
+                        <div class="highlight-box">
+                            <h4><i class="fas fa-credit-card"></i> Automatic Refund Process</h4>
+                            <p>In case of payment failure or processing errors, the amount will be automatically refunded to your original payment method according to your payment gateway's or bank's refund policy. This typically takes 3-7 business days.</p>
+                        </div>
+                        
+                        <h3>4. How to Request a Refund</h3>
+                        <p>If you believe you are eligible for a refund:</p>
+                        <ol>
+                            <li>Contact our support team with your purchase details</li>
+                            <li>Provide evidence of the issue (screenshots, error messages, etc.)</li>
+                            <li>Include your email address used for the purchase</li>
+                            <li>Allow 2-3 business days for review and response</li>
+                        </ol>
+                        
+                        <h3>5. Refund Processing</h3>
+                        <ul>
+                            <li>Refunds are processed within 5-7 business days of approval</li>
+                            <li>Refunds are issued to the original payment method</li>
+                            <li>You will receive email confirmation when the refund is processed</li>
+                            <li>Access to PRO features will be revoked upon refund approval</li>
+                        </ul>
+                        
+                        <h3>6. Contact Information</h3>
+                        <p>For refund requests or questions about this policy, please contact us through our support channels. We are committed to resolving issues fairly and promptly.</p>
+                    </div>
+                </div>
+                
+                <div class="last-updated">
+                    <p><strong>Last Updated:</strong> December 2024</p>
+                    <p>This document is regularly reviewed and updated to ensure compliance with legal requirements and best practices.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

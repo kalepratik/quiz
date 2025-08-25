@@ -17,6 +17,8 @@ A **production-ready**, modern web-based dbt certification quiz application with
 - **Testing**: Comprehensive test coverage for routes and repository
 - **Tooling**: Code formatting, linting, and type checking
 - **Render Optimized**: Optimized for Render hosting with caching, performance, and SEO
+- **📧 Contact Form**: Professional contact form with email notifications and auto-replies
+- **📋 Legal Pages**: Complete Privacy Policy, Terms & Conditions, and Cancellation Policy
 
 ## 🚀 Quick Start
 
@@ -48,6 +50,8 @@ A **production-ready**, modern web-based dbt certification quiz application with
 5. **Open your browser**
    - **Homepage**: `http://localhost:8000` - Modern landing page with features and pricing
    - **Quiz Interface**: `http://localhost:8000/quiz` - Direct access to the quiz
+   - **Contact Form**: `http://localhost:8000/contact` - Contact form with email notifications
+   - **Legal Pages**: `http://localhost:8000/legal` - Privacy Policy, Terms & Conditions
    - **Health Check**: `http://localhost:8000/healthz` - Application health status
 
 ### 🌐 Live Demo
@@ -80,6 +84,44 @@ The application is optimized for Render hosting with:
 - **Environment Variables**: Production-ready settings
 - **Error Handling**: Graceful fallbacks and logging
 - **Zero-downtime**: Automatic deployments with health checks
+
+## 📧 Email Configuration (Contact Form)
+
+The application includes a professional contact form that sends emails to your specified email address. To set up email functionality:
+
+### Gmail Setup (Recommended)
+
+1. **Enable 2-Step Verification** on your Google Account
+2. **Generate App Password**:
+   - Go to Google Account settings → Security
+   - Click "App passwords" under 2-Step Verification
+   - Select "Mail" and generate a password
+3. **Configure Environment Variables**:
+   ```bash
+   # Copy env.example to .env and update:
+   SMTP_SERVER=smtp.gmail.com
+   SMTP_PORT=587
+   SMTP_USERNAME=your-email@gmail.com
+   SMTP_PASSWORD=your-app-password
+   FROM_EMAIL=your-email@gmail.com
+   FROM_NAME=dbt Quiz Support
+   TO_EMAIL=mail@kalepratik.in
+   ```
+
+### Other Email Providers
+
+You can use any SMTP provider by updating the configuration:
+- **Outlook/Hotmail**: `smtp-mail.outlook.com:587`
+- **Yahoo**: `smtp.mail.yahoo.com:587`
+- **Custom SMTP**: Use your provider's SMTP settings
+
+### Features
+
+- **Admin Notifications**: Receive detailed emails when someone submits the contact form
+- **Auto-Reply**: Users receive a professional thank-you email
+- **HTML Formatting**: Beautiful, branded email templates
+- **Error Handling**: Graceful fallbacks if email fails
+- **Validation**: Form validation and spam protection
 
 ## 🏗️ Production-Ready Architecture
 
