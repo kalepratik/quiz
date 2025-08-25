@@ -106,14 +106,8 @@ def google_auth():
         logger.info(f"Google OAuth Client ID: {client_id}")
         
         if not client_id or client_id == 'your_google_client_id_here':
-            logger.warning("Google OAuth not configured - using demo mode")
-            # Simple demo mode fallback
-            session['user_id'] = 'demo_user_123'
-            session['user_email'] = 'demo@example.com'
-            session['user_name'] = 'Demo User'
-            session['is_authenticated'] = True
-            logger.info("Demo mode authentication successful, redirecting to quiz")
-            return redirect(url_for('ui.quiz'))
+            logger.error("Google OAuth not configured")
+            return redirect(url_for('ui.signin'))
         
         # Generate OAuth URL
         auth_url = OAuthService.get_google_auth_url()
