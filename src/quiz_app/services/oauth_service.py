@@ -1,6 +1,7 @@
 """
 OAuth Service for Google Authentication
 """
+import os
 import requests
 import logging
 from urllib.parse import urlencode
@@ -23,8 +24,17 @@ class OAuthService:
             config_class = config_from_env()
             config_instance = config_class()
             
-            # Get redirect URI from config instance
-            redirect_uri = config_instance.GOOGLE_REDIRECT_URI
+            # Check if we're in production or development
+            is_production = getattr(config_instance, 'IS_PRODUCTION', False)
+            
+            # Get redirect URI based on environment
+            if is_production:
+                # In production, use the production URL
+                base_url = os.environ.get('RENDER_EXTERNAL_URL', 'https://quiz.kalepratik.in')
+                redirect_uri = f"{base_url}/auth/google/callback"
+            else:
+                # In development, use localhost
+                redirect_uri = "http://localhost:8000/auth/google/callback"
             logger.info(f"Redirect URI: {redirect_uri}")
             logger.info(f"Scopes: {current_app.config['GOOGLE_SCOPES']}")
             logger.info(f"Scopes: {current_app.config['GOOGLE_SCOPES']}")
@@ -55,8 +65,17 @@ class OAuthService:
             config_class = config_from_env()
             config_instance = config_class()
             
-            # Get redirect URI from config instance
-            redirect_uri = config_instance.GOOGLE_REDIRECT_URI
+            # Check if we're in production or development
+            is_production = getattr(config_instance, 'IS_PRODUCTION', False)
+            
+            # Get redirect URI based on environment
+            if is_production:
+                # In production, use the production URL
+                base_url = os.environ.get('RENDER_EXTERNAL_URL', 'https://quiz.kalepratik.in')
+                redirect_uri = f"{base_url}/auth/google/callback"
+            else:
+                # In development, use localhost
+                redirect_uri = "http://localhost:8000/auth/google/callback"
             
             token_data = {
                 'client_id': current_app.config['GOOGLE_CLIENT_ID'],
