@@ -17,12 +17,17 @@ class OAuthService:
         try:
             # Debug logging
             logger.info(f"Client ID: {current_app.config['GOOGLE_CLIENT_ID']}")
-            logger.info(f"Redirect URI: {current_app.config['GOOGLE_REDIRECT_URI']}")
+            # Get redirect URI (handle both string and property)
+            redirect_uri = current_app.config['GOOGLE_REDIRECT_URI']
+            if hasattr(redirect_uri, '__call__'):
+                redirect_uri = redirect_uri()
+            
+            logger.info(f"Redirect URI: {redirect_uri}")
             logger.info(f"Scopes: {current_app.config['GOOGLE_SCOPES']}")
             
             params = {
                 'client_id': current_app.config['GOOGLE_CLIENT_ID'],
-                'redirect_uri': current_app.config['GOOGLE_REDIRECT_URI'],
+                'redirect_uri': redirect_uri,
                 'scope': ' '.join(current_app.config['GOOGLE_SCOPES']),
                 'response_type': 'code',
                 'access_type': 'offline',
@@ -41,12 +46,17 @@ class OAuthService:
     def exchange_code_for_token(auth_code):
         """Exchange authorization code for access token"""
         try:
+            # Get redirect URI (handle both string and property)
+            redirect_uri = current_app.config['GOOGLE_REDIRECT_URI']
+            if hasattr(redirect_uri, '__call__'):
+                redirect_uri = redirect_uri()
+            
             token_data = {
                 'client_id': current_app.config['GOOGLE_CLIENT_ID'],
                 'client_secret': current_app.config['GOOGLE_CLIENT_SECRET'],
                 'code': auth_code,
                 'grant_type': 'authorization_code',
-                'redirect_uri': current_app.config['GOOGLE_REDIRECT_URI']
+                'redirect_uri': redirect_uri
             }
             
             response = requests.post(

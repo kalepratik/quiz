@@ -32,7 +32,16 @@ class BaseConfig:
     # Google OAuth Configuration
     GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', 'your_google_client_id_here')
     GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET', 'your_google_client_secret_here')
-    GOOGLE_REDIRECT_URI = os.environ.get('GOOGLE_REDIRECT_URI', 'http://localhost:8000/auth/google/callback')
+    
+    # Dynamic redirect URI based on environment
+    @property
+    def GOOGLE_REDIRECT_URI(self):
+        if self.IS_PRODUCTION:
+            # Get the production URL from environment or use a default
+            base_url = os.environ.get('RENDER_EXTERNAL_URL', 'https://your-app-name.onrender.com')
+            return f"{base_url}/auth/google/callback"
+        else:
+            return os.environ.get('GOOGLE_REDIRECT_URI', 'http://localhost:8000/auth/google/callback')
     
     # Google OAuth URLs
     GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/auth'

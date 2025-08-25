@@ -85,6 +85,48 @@ The application is optimized for Render hosting with:
 - **Error Handling**: Graceful fallbacks and logging
 - **Zero-downtime**: Automatic deployments with health checks
 
+## 🔐 Google OAuth Setup (Production)
+
+To enable Google Sign-In in production, you need to configure Google OAuth credentials:
+
+### 1. Create Google Cloud Project
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing one
+3. Enable the Google+ API
+
+### 2. Configure OAuth Consent Screen
+1. Go to "APIs & Services" > "OAuth consent screen"
+2. Choose "External" user type
+3. Fill in required information:
+   - App name: "dbt Quiz"
+   - User support email: your email
+   - Developer contact information: your email
+4. Add scopes: `email`, `profile`
+5. Add test users if needed
+
+### 3. Create OAuth Credentials
+1. Go to "APIs & Services" > "Credentials"
+2. Click "Create Credentials" > "OAuth 2.0 Client IDs"
+3. Choose "Web application"
+4. Add authorized redirect URIs:
+   - **Development**: `http://localhost:8000/auth/google/callback`
+   - **Production**: `https://your-app-name.onrender.com/auth/google/callback`
+5. Copy the Client ID and Client Secret
+
+### 4. Set Environment Variables in Render
+Add these to your Render environment variables:
+```bash
+GOOGLE_CLIENT_ID=your-client-id-from-google-console
+GOOGLE_CLIENT_SECRET=your-client-secret-from-google-console
+FLASK_ENV=production
+```
+
+### 5. Update OAuth Consent Screen (After First Deploy)
+1. Get your actual Render URL (e.g., `https://your-app-name.onrender.com`)
+2. Go back to Google Cloud Console > OAuth consent screen
+3. Add your production domain to authorized domains
+4. Update redirect URIs with your actual Render URL
+
 ## 📧 Email Configuration (Contact Form)
 
 The application includes a professional contact form that sends emails to your specified email address. To set up email functionality:
