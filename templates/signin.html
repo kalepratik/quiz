@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - dbt Certification Quiz</title>
+    <meta name="description" content="Sign in to access your dbt certification quiz progress and premium features.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/static/android-chrome-512x512.png">
+    <link rel="apple-touch-icon" href="/static/android-chrome-512x512.png">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <style>
+        /* Custom CSS for enhanced styling */
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark-glass {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .theme-toggle {
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Loading animation */
+        body:not(.loaded) {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        body.loaded {
+            opacity: 1;
+        }
+        
+        /* Focus styles for accessibility */
+        button:focus,
+        a:focus {
+            outline: 2px solid #6366f1;
+            outline-offset: 2px;
+        }
+        
+        /* Reduced motion for users who prefer it */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Dark mode specific styles */
+        .dark {
+            color-scheme: dark;
+        }
+        
+        /* Dark mode background and text colors */
+        .dark {
+            background-color: #111827 !important;
+            color: #f9fafb !important;
+        }
+        
+        .dark .bg-gray-50 {
+            background-color: #1f2937 !important;
+        }
+        
+        .dark .bg-white {
+            background-color: #1f2937 !important;
+        }
+        
+        .dark .text-gray-900 {
+            color: #f9fafb !important;
+        }
+        
+        .dark .text-gray-600 {
+            color: #d1d5db !important;
+        }
+        
+        .dark .text-gray-300 {
+            color: #d1d5db !important;
+        }
+        
+        .dark .text-gray-700 {
+            color: #e5e7eb !important;
+        }
+        
+        .dark .border-gray-200 {
+            border-color: #374151 !important;
+        }
+        
+        .dark .border-gray-600 {
+            border-color: #4b5563 !important;
+        }
+        
+        .dark .bg-gray-200 {
+            background-color: #374151 !important;
+        }
+        
+        .dark .bg-gray-700 {
+            background-color: #374151 !important;
+        }
+        
+        .dark .hover\:bg-gray-300:hover {
+            background-color: #4b5563 !important;
+        }
+        
+        .dark .hover\:bg-gray-600:hover {
+            background-color: #4b5563 !important;
+        }
+        
+        .dark .hover\:bg-gray-50:hover {
+            background-color: #1f2937 !important;
+        }
+        
+        .dark .hover\:bg-gray-800:hover {
+            background-color: #1f2937 !important;
+        }
+        
+        .dark .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Ensure dark mode toggle works properly */
+        .dark .theme-toggle {
+            background-color: rgba(55, 65, 81, 1);
+            border-color: rgba(75, 85, 99, 1);
+        }
+        
+        .dark .theme-toggle:hover {
+            background-color: rgba(75, 85, 99, 1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 glass-effect dark:dark-glass border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
+                    <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
+                </div>
+                
+                <!-- Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Theme Toggle -->
+                    <button id="themeToggle" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
+                        <i id="themeIcon" class="fas fa-moon text-gray-600 dark:text-gray-300" aria-hidden="true"></i>
+                    </button>
+                    
+                    <!-- Back to Home -->
+                    <a href="/" class="px-4 py-2 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sign In Section -->
+    <section class="min-h-screen flex items-center justify-center py-12 px-4">
+        <div class="max-w-md w-full fade-in">
+                         <!-- Header -->
+             <div class="text-center mb-8">
+                 <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Welcome Back</h1>
+                 <p class="text-gray-600 dark:text-gray-300">Sign in to continue your dbt certification journey</p>
+                 <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                     <p class="text-sm text-blue-700 dark:text-blue-300">
+                         <i class="fas fa-info-circle mr-1"></i>
+                         Demo Mode: This simulates OAuth authentication. In production, you would be redirected to Google/Microsoft for actual sign-in.
+                     </p>
+                 </div>
+             </div>
+            
+            <!-- Sign In Card -->
+            <div class="card-hover bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+                                 <!-- Google Sign In -->
+                 <a href="/auth/google" class="w-full mb-4 px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center space-x-3">
+                     <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="w-5 h-5">
+                     <span class="text-gray-700 dark:text-gray-300 font-medium">Continue with Google</span>
+                 </a>
+                
+
+                
+
+                
+                                 <!-- Links -->
+                 <div class="mt-6 text-center">
+                     <div class="text-sm text-gray-600 dark:text-gray-400">
+                         By continuing, you agree to our Terms of Service and Privacy Policy
+                     </div>
+                 </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="text-center mt-8">
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    By signing in, you agree to our 
+                    <a href="#" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">Terms of Service</a> 
+                    and 
+                    <a href="#" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">Privacy Policy</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script>
+        // Performance: Add loading state
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('loaded');
+        });
+        
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const body = document.body;
+        
+        // Check for saved theme preference
+        try {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.classList.add('dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                // Default to light theme
+                body.classList.remove('dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        } catch (error) {
+            console.warn('Could not load theme preference:', error);
+            // Default to light theme if localStorage fails
+            body.classList.remove('dark');
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            try {
+                body.classList.toggle('dark');
+                
+                if (body.classList.contains('dark')) {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                    localStorage.setItem('theme', 'light');
+                }
+            } catch (error) {
+                console.warn('Theme toggle failed:', error);
+                // Fallback: remove dark class if localStorage fails
+                body.classList.remove('dark');
+            }
+        });
+        
+
+        
+
+    </script>
+</body>
+</html>

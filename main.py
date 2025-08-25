@@ -26,7 +26,7 @@ def main():
             if choice == '1':
                 print("\n🚀 Starting Quiz Server for Local Development...")
                 print("   Live version available at: https://dbt-certification-quiz.onrender.com/")
-                from quiz_app import create_app
+                from src.quiz_app import create_app
                 app = create_app()
                 app.run(host='0.0.0.0', port=8000, debug=True)
                 break

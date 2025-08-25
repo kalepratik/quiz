@@ -4,15 +4,19 @@ A **production-ready**, modern web-based dbt certification quiz application with
 
 ## ✨ Features
 
-- **45+ Questions**: Comprehensive dbt certification coverage
-- **Rich Text Formatting**: ASCII diagrams, code highlighting, bold text
+- **🎨 Modern Homepage**: Professional landing page with dark/light mode, responsive design, and SEO optimization
+- **🔐 OAuth Authentication**: Google OAuth integration for secure user authentication
+- **💳 Payment Integration**: PRO plan upgrade flow with conditional redirection
+- **35+ Questions**: Comprehensive dbt certification coverage with realistic scenarios
+- **Rich Text Formatting**: ASCII diagrams, code highlighting, bold text, and proper formatting
 - **Smart Question Selection**: Flexible difficulty and count options with intelligent fallback
 - **Modern UI**: Beautiful, responsive web interface with React-style components
-- **Comprehensive Review**: Detailed feedback after quiz completion
-- **Self-Contained Questions**: Each question is complete and independent
+- **Comprehensive Review**: Detailed feedback after quiz completion with 2-decimal percentage display
+- **Self-Contained Questions**: Each question is complete and independent with no redundant phrasing
 - **Production-Ready**: App factory pattern, proper configuration management, health checks
 - **Testing**: Comprehensive test coverage for routes and repository
 - **Tooling**: Code formatting, linting, and type checking
+- **Render Optimized**: Optimized for Render hosting with caching, performance, and SEO
 
 ## 🚀 Quick Start
 
@@ -42,14 +46,40 @@ A **production-ready**, modern web-based dbt certification quiz application with
    Choose option 2 to run the test suite
 
 5. **Open your browser**
-   Navigate to `http://localhost:8000`
+   - **Homepage**: `http://localhost:8000` - Modern landing page with features and pricing
+   - **Quiz Interface**: `http://localhost:8000/quiz` - Direct access to the quiz
+   - **Health Check**: `http://localhost:8000/healthz` - Application health status
 
 ### 🌐 Live Demo
 
 **The application is now deployed and available at:**
 - **Live Demo**: [https://dbt-certification-quiz.onrender.com](https://dbt-certification-quiz.onrender.com)
 
-*Your fully functional dbt certification quiz application with 45+ questions, rich text formatting, and comprehensive review system.*
+*Your fully functional dbt certification quiz application with 35+ questions, modern homepage, rich text formatting, and comprehensive review system.*
+
+## 🚀 Deployment
+
+### Render Hosting (Recommended)
+
+The application is optimized for Render hosting with:
+
+#### **Performance Optimizations**
+- **Caching Headers**: Static assets cached for 1 year, templates for 1 hour
+- **CDN Resources**: External CSS/JS libraries served from CDN
+- **Health Checks**: `/healthz` endpoint for monitoring
+- **Auto-scaling**: Handles traffic spikes automatically
+
+#### **SEO & Accessibility**
+- **Meta Tags**: Complete SEO optimization
+- **Social Cards**: Open Graph and Twitter Card support
+- **Accessibility**: ARIA labels, focus management, reduced motion
+- **Mobile Optimized**: Responsive design for all devices
+
+#### **Deployment Configuration**
+- **render.yaml**: Optimized configuration file included
+- **Environment Variables**: Production-ready settings
+- **Error Handling**: Graceful fallbacks and logging
+- **Zero-downtime**: Automatic deployments with health checks
 
 ## 🏗️ Production-Ready Architecture
 
@@ -68,6 +98,60 @@ A **production-ready**, modern web-based dbt certification quiz application with
 - `/healthz` endpoint for monitoring
 - Structured logging throughout
 - Error handling and validation
+
+## 🎨 Modern Homepage
+
+The application now features a **professional landing page** that showcases the quiz capabilities:
+
+### 🌟 Homepage Features
+- **Dark/Light Mode Toggle**: Persistent theme switching with localStorage
+- **Responsive Design**: Perfect on desktop, tablet, and mobile devices
+- **SEO Optimized**: Meta tags, descriptions, and social media cards
+- **Performance Optimized**: CDN resources, preloading, and caching
+- **Accessibility**: ARIA labels, focus management, and reduced motion support
+- **Interactive Elements**: Smooth animations, hover effects, and FAQ accordions
+- **Professional Branding**: Modern design with dbt-themed styling
+
+### 🎯 Homepage Sections
+1. **Hero Section**: Compelling headline with sample question preview
+2. **Features Grid**: 6 feature cards highlighting key benefits
+3. **Pricing Section**: Free vs Pro plan comparison
+4. **FAQ Section**: Expandable questions with smooth animations
+5. **Professional Footer**: Complete with links and branding
+
+### 🚀 Performance Features
+- **CDN Resources**: Tailwind CSS and Font Awesome from CDN
+- **Preloading**: DNS prefetch and preconnect for faster loading
+- **Caching**: Optimized cache headers for static assets
+- **Error Handling**: Graceful fallbacks for theme and localStorage
+- **Loading States**: Smooth page transitions and loading animations
+
+## 🔐 OAuth Authentication & PRO Features
+
+The application now includes **enterprise-grade authentication** and **PRO plan features**:
+
+### 🌟 Authentication Features
+- **Google OAuth Integration**: Real GCP OAuth 2.0 authentication
+- **Secure Session Management**: Flask session-based authentication
+- **Conditional Redirection**: Smart routing based on authentication status
+- **User State Persistence**: Maintains user authentication across sessions
+
+### 💳 PRO Plan Features
+- **Unlimited Quizzes**: No restrictions on quiz attempts
+- **Correct Answers with Explanations**: Detailed feedback for learning
+- **Practice Tests**: Additional practice modes and features
+- **Advanced Analytics**: Detailed performance tracking (coming soon)
+
+### 🔧 OAuth Setup
+The application includes comprehensive OAuth setup documentation:
+- **GOOGLE_OAUTH_SETUP.md**: Step-by-step GCP OAuth configuration guide
+- **Environment Variables**: Secure configuration management
+- **Production Ready**: Optimized for production deployment
+
+### 🎯 User Flow
+1. **Free Users**: Can take limited quizzes with basic feedback
+2. **PRO Upgrade**: Seamless upgrade flow with OAuth authentication
+3. **Authenticated Users**: Access to PRO features and unlimited content
 
 ## 📚 Usage Guide
 
@@ -93,11 +177,20 @@ The application intelligently handles question selection:
 
 Questions are stored in Markdown format (`data/questions.md`) with:
 - **Scenario**: Detailed context and setup
-- **Question**: Clear, specific question
+- **Question**: Clear, specific question (no redundant phrasing)
 - **Options**: 5 multiple-choice options
 - **Explanation**: Detailed explanation of the correct answer
 - **ASCII Diagrams**: Visual DAG representations
 - **Code Blocks**: Properly formatted dbt commands and syntax
+
+### 🎯 Latest Quiz Improvements
+
+The quiz interface has been enhanced with:
+- **2-Decimal Percentage Display**: Precise score reporting (e.g., "85.00%")
+- **Improved Question Formatting**: Better handling of bold text, code snippets, and ASCII diagrams
+- **Enhanced Navigation**: "Back to Home" button and improved user flow
+- **PRO Plan Promotion**: Integrated upgrade prompts in results section
+- **Better Error Handling**: Graceful handling of edge cases and loading states
 
 ## 🏗️ Complete Project Structure & File Purposes
 
@@ -118,7 +211,8 @@ dbt-certification-quiz/
 │       └── 📁 services/              # Business logic layer
 │           ├── 📄 __init__.py        # Services package initialization
 │           ├── 📄 quiz_service.py    # Quiz business logic - question selection and management
-│           └── 📄 scoring_service.py # Scoring logic - calculates results and statistics
+│           ├── 📄 scoring_service.py # Scoring logic - calculates results and statistics
+│           └── 📄 oauth_service.py   # OAuth authentication service - Google OAuth integration
 │
 ├── 📁 tests/                         # Test suite directory
 │   ├── 📄 __init__.py                # Test package initialization
@@ -126,14 +220,20 @@ dbt-certification-quiz/
 │   └── 📄 test_repo.py               # Tests for repository layer and data parsing
 │
 ├── 📁 templates/                     # HTML templates directory
-│   └── 📄 index.html                 # Main web interface - quiz UI with JavaScript functionality
+│   ├── 📄 index.html                 # Main web interface - quiz UI with JavaScript functionality
+│   ├── 📄 homepage.html              # Modern landing page with features and pricing
+│   ├── 📄 signin.html                # OAuth sign-in page with Google authentication
+│   └── 📄 payment.html               # PRO plan payment and upgrade page
 │
 ├── 📁 static/                        # Static assets directory
-│   └── 📄 android-chrome-512x512.png # App favicon - displayed in browser tabs
+│   ├── 📄 android-chrome-512x512.png # App favicon - displayed in browser tabs
+│   └── 📄 dbt-bit-standalone.png     # dbt logo for branding and navigation
 │
 ├── 📁 docs/                          # Documentation directory
 │   ├── 📄 DEPLOYMENT.md              # Deployment guide - production deployment instructions
 │   └── 📄 TOPICS.md                  # Complete dbt certification topics tracking (80+ topics)
+│
+├── 📄 GOOGLE_OAUTH_SETUP.md          # OAuth setup guide - step-by-step GCP OAuth configuration
 │
 ├── 📄 wsgi.py                        # Production entry point - WSGI application for deployment
 ├── 📄 main.py                        # Development entry point - CLI interface for local development

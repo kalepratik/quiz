@@ -102,7 +102,8 @@ class MarkdownQuestionRepository:
         question_text = self.extract_section(lines, '**Question:**', '**Options:**')
         
         # Combine scenario and question for the full question text
-        full_question = f"Scenario:\n{scenario_text.strip()}\n\nQuestion:\n{question_text.strip()}"
+        # The question_text already contains the actual question content
+        full_question = f"{scenario_text.strip()}\n\n{question_text.strip()}"
         
         # Extract options
         options_text = self.extract_section(lines, '**Options:**', '**Correct Answer:**')
@@ -146,7 +147,14 @@ class MarkdownQuestionRepository:
             elif in_section:
                 content.append(line)
         
-        return '\n'.join(content)
+        # Join content and clean up extra whitespace
+        result = '\n'.join(content).strip()
+        
+        # Remove leading/trailing empty lines
+        result = re.sub(r'^\n+', '', result)
+        result = re.sub(r'\n+$', '', result)
+        
+        return result
     
     def parse_options(self, options_text):
         """Parse options from text"""

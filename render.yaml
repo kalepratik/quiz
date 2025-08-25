@@ -2,11 +2,37 @@ services:
   - type: web
     name: dbt-certification-quiz
     env: python
+    plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn wsgi:app
+    startCommand: python main.py
     envVars:
       - key: PYTHON_VERSION
-        value: 3.9.0
+        value: 3.9
       - key: FLASK_ENV
         value: production
-    plan: free
+      - key: FLASK_DEBUG
+        value: false
+    headers:
+      - path: /static/*
+        name: Cache-Control
+        value: public, max-age=31536000
+      - path: /templates/*
+        name: Cache-Control
+        value: public, max-age=3600
+      - path: /*.css
+        name: Cache-Control
+        value: public, max-age=31536000
+      - path: /*.js
+        name: Cache-Control
+        value: public, max-age=31536000
+      - path: /*.png
+        name: Cache-Control
+        value: public, max-age=31536000
+      - path: /*.jpg
+        name: Cache-Control
+        value: public, max-age=31536000
+      - path: /*.ico
+        name: Cache-Control
+        value: public, max-age=31536000
+    healthCheckPath: /healthz
+    autoDeploy: true
