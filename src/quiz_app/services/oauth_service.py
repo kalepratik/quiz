@@ -21,6 +21,9 @@ class OAuthService:
             redirect_uri = current_app.config['GOOGLE_REDIRECT_URI']
             if hasattr(redirect_uri, '__call__'):
                 redirect_uri = redirect_uri()
+            elif hasattr(redirect_uri, 'fget'):
+                # Handle property objects
+                redirect_uri = redirect_uri.fget(current_app.config)
             
             logger.info(f"Redirect URI: {redirect_uri}")
             logger.info(f"Scopes: {current_app.config['GOOGLE_SCOPES']}")
@@ -50,6 +53,9 @@ class OAuthService:
             redirect_uri = current_app.config['GOOGLE_REDIRECT_URI']
             if hasattr(redirect_uri, '__call__'):
                 redirect_uri = redirect_uri()
+            elif hasattr(redirect_uri, 'fget'):
+                # Handle property objects
+                redirect_uri = redirect_uri.fget(current_app.config)
             
             token_data = {
                 'client_id': current_app.config['GOOGLE_CLIENT_ID'],
