@@ -18,13 +18,9 @@ logger = logging.getLogger(__name__)
 @ui_bp.context_processor
 def inject_environment():
     """Inject environment variables into template context"""
-    from .config import config_from_env
-    config_class = config_from_env()
-    config_instance = config_class()
-    logger.debug(f"Environment: IS_PRODUCTION={config_instance.IS_PRODUCTION}, IS_DEVELOPMENT={config_instance.IS_DEVELOPMENT}")
     return {
-        'is_production': config_instance.IS_PRODUCTION,
-        'is_development': config_instance.IS_DEVELOPMENT
+        'is_production': False,
+        'is_development': True
     }
 
 
@@ -110,51 +106,19 @@ def google_auth():
         logger.info(f"Google OAuth Client ID: {client_id}")
         
         if not client_id or client_id == 'your_google_client_id_here':
-            logger.warning("Google OAuth not configured - using demo mode")
-            # In demo mode, simulate successful authentication
-            session['user_id'] = 'demo_user_123'
-            session['user_email'] = 'demo@example.com'
-            session['user_name'] = 'Demo User'
-            session['is_authenticated'] = True
-            logger.info("Demo mode authentication successful, redirecting to quiz")
-            return redirect(url_for('ui.quiz'))
-        
-        # Also check if we're in production but OAuth is not properly configured
-        try:
-            from .config import config_from_env
-            config_class = config_from_env()
-            config_instance = config_class()
-            is_production = getattr(config_instance, 'IS_PRODUCTION', False)
-            
-            if is_production and (not client_id or client_id == 'your_google_client_id_here'):
-                logger.warning("Production environment but OAuth not configured - using demo mode")
-                session['user_id'] = 'demo_user_123'
-                session['user_email'] = 'demo@example.com'
-                session['user_name'] = 'Demo User'
-                session['is_authenticated'] = True
-                logger.info("Production demo mode authentication successful, redirecting to quiz")
-                return redirect(url_for('ui.quiz'))
-        except Exception as config_error:
-            logger.warning(f"Config error, using demo mode: {config_error}")
-            session['user_id'] = 'demo_user_123'
-            session['user_email'] = 'demo@example.com'
-            session['user_name'] = 'Demo User'
-            session['is_authenticated'] = True
-            logger.info("Demo mode authentication successful (config error), redirecting to quiz")
-            return redirect(url_for('ui.quiz'))
-        
-        try:
-            auth_url = OAuthService.get_google_auth_url()
-            logger.info(f"Generated auth URL: {auth_url}")
-            if auth_url:
-                logger.info("Redirecting to Google OAuth")
-                return redirect(auth_url)
-            else:
-                logger.error("Failed to generate Google OAuth URL")
-                return redirect(url_for('ui.signin'))
-        except Exception as oauth_error:
-            logger.error(f"OAuth service error: {oauth_error}")
+            logger.error("Google OAuth not configured")
             return redirect(url_for('ui.signin'))
+        
+        # Generate OAuth URL
+        auth_url = OAuthService.get_google_auth_url()
+        logger.info(f"Generated auth URL: {auth_url}")
+        if auth_url:
+            logger.info("Redirecting to Google OAuth")
+            return redirect(auth_url)
+        else:
+            logger.error("Failed to generate Google OAuth URL")
+            return redirect(url_for('ui.signin'))
+            
     except Exception as e:
         logger.error(f"Error in Google OAuth initiation: {e}")
         return redirect(url_for('ui.signin'))

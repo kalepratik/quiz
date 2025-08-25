@@ -266,15 +266,7 @@
                           <i class="fas fa-play mr-2"></i>Start Free
                       </a>
                      
-                     <!-- Development Notice (Development Only) -->
-                     {% if is_development %}
-                     <div class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900 rounded-lg">
-                         <p class="text-sm text-yellow-700 dark:text-yellow-300">
-                             <i class="fas fa-code mr-1"></i>
-                             Development Mode: This is a local development environment with demo features enabled.
-                         </p>
-                     </div>
-                     {% endif %}
+
                 </div>
             </div>
         </div>
@@ -738,11 +730,7 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
                   if (isSignedIn) {
                       signInBtn.classList.add('hidden');
                       userInfo.classList.remove('hidden');
-                      {% if is_development %}
-                      userName.textContent = 'Welcome, Demo User';
-                      {% else %}
                       userName.textContent = 'Welcome, User';
-                      {% endif %}
                   } else {
                       signInBtn.classList.remove('hidden');
                       userInfo.classList.add('hidden');

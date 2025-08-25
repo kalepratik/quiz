@@ -19,22 +19,8 @@ class OAuthService:
             # Debug logging
             logger.info(f"Client ID: {current_app.config['GOOGLE_CLIENT_ID']}")
             
-            # Get config instance to access properties
-            from ..config import config_from_env
-            config_class = config_from_env()
-            config_instance = config_class()
-            
-            # Check if we're in production or development
-            is_production = getattr(config_instance, 'IS_PRODUCTION', False)
-            
-            # Get redirect URI based on environment
-            if is_production:
-                # In production, use the production URL
-                base_url = os.environ.get('RENDER_EXTERNAL_URL', 'https://quiz.kalepratik.in')
-                redirect_uri = f"{base_url}/auth/google/callback"
-            else:
-                # In development, use localhost
-                redirect_uri = "http://localhost:8000/auth/google/callback"
+            # Simple redirect URI - use environment variable or default
+            redirect_uri = os.environ.get('GOOGLE_REDIRECT_URI', 'http://localhost:8000/auth/google/callback')
             logger.info(f"Redirect URI: {redirect_uri}")
             logger.info(f"Scopes: {current_app.config['GOOGLE_SCOPES']}")
             logger.info(f"Scopes: {current_app.config['GOOGLE_SCOPES']}")
@@ -60,22 +46,8 @@ class OAuthService:
     def exchange_code_for_token(auth_code):
         """Exchange authorization code for access token"""
         try:
-            # Get config instance to access properties
-            from ..config import config_from_env
-            config_class = config_from_env()
-            config_instance = config_class()
-            
-            # Check if we're in production or development
-            is_production = getattr(config_instance, 'IS_PRODUCTION', False)
-            
-            # Get redirect URI based on environment
-            if is_production:
-                # In production, use the production URL
-                base_url = os.environ.get('RENDER_EXTERNAL_URL', 'https://quiz.kalepratik.in')
-                redirect_uri = f"{base_url}/auth/google/callback"
-            else:
-                # In development, use localhost
-                redirect_uri = "http://localhost:8000/auth/google/callback"
+            # Simple redirect URI - use environment variable or default
+            redirect_uri = os.environ.get('GOOGLE_REDIRECT_URI', 'http://localhost:8000/auth/google/callback')
             
             token_data = {
                 'client_id': current_app.config['GOOGLE_CLIENT_ID'],
