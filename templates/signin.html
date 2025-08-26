@@ -174,8 +174,10 @@
             <div class="flex items-center justify-between">
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
-                    <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
-                    <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
+                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
+                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
+                    </a>
                 </div>
                 
                 <!-- Actions -->
@@ -184,11 +186,6 @@
                     <button id="themeToggle" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
                         <i id="themeIcon" class="fas fa-moon text-gray-600 dark:text-gray-300" aria-hidden="true"></i>
                     </button>
-                    
-                    <!-- Back to Home -->
-                    <a href="/" class="px-4 py-2 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">
-                        Back to Home
-                    </a>
                 </div>
             </div>
         </div>

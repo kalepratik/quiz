@@ -111,15 +111,48 @@ class OAuthService:
             if not user_info:
                 return None
             
-            # Store user data in session
-            session['user_id'] = user_info['id']
-            session['user_email'] = user_info['email']
-            session['user_name'] = user_info.get('name', user_info['email'])
-            session['user_picture'] = user_info.get('picture')
-            session['is_authenticated'] = True
+            # Get database service
+            db_service = current_app.database_service
             
-            logger.info(f"User authenticated: {user_info['email']}")
-            return user_info
+            # Check if user exists in database
+            user = db_service.get_user_by_google_id(user_info['id'])
+            if not user:
+                # Create new user
+                user = db_service.create_user(
+                    email=user_info['email'],
+                    name=user_info.get('name', user_info['email']),
+                    google_id=user_info['id'],
+                    profile_picture=user_info.get('picture')
+                )
+                if not user:
+                    logger.error(f"Failed to create user: {user_info['email']}")
+                    return None
+                logger.info(f"New user created: {user_info['email']}")
+            else:
+                # Update existing user info
+                db_service.update_user(
+                    user.id,
+                    name=user_info.get('name', user_info['email']),
+                    profile_picture=user_info.get('picture')
+                )
+                logger.info(f"Existing user updated: {user_info['email']}")
+            
+            # Store user data in session (use database user ID)
+            session['user_id'] = user.id
+            session['user_email'] = user.email
+            session['user_name'] = user.name
+            session['user_picture'] = user.profile_picture
+            session['is_authenticated'] = True
+            session['is_pro'] = user.is_pro
+            
+            logger.info(f"User authenticated: {user_info['email']} (PRO: {user.is_pro})")
+            return {
+                'id': user.id,
+                'email': user.email,
+                'name': user.name,
+                'picture': user.profile_picture,
+                'is_pro': user.is_pro
+            }
             
         except Exception as e:
             logger.error(f"Error in authentication flow: {e}")
@@ -149,6 +182,7 @@ class OAuthService:
                 'id': session.get('user_id'),
                 'email': session.get('user_email'),
                 'name': session.get('user_name'),
-                'picture': session.get('user_picture')
+                'picture': session.get('user_picture'),
+                'is_pro': session.get('is_pro', False)
             }
         return None

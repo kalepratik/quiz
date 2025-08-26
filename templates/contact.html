@@ -52,6 +52,20 @@
             width: auto;
         }
         
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            padding: 4px;
+        }
+        
+        .logo-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+        
         .logo h1 {
             font-size: 2rem;
             font-weight: 700;
@@ -267,14 +281,11 @@
 </head>
 <body>
     <div class="container">
-        <a href="/" class="back-link">
-            <i class="fas fa-arrow-left"></i>
-            Back to Home
-        </a>
-        
                  <div class="header">
              <div class="logo">
-                 <img src="/static/android-chrome-512x512.png" alt="dbt logo">
+                 <a href="/" class="logo-link" title="Go to Home">
+                     <img src="/static/android-chrome-512x512.png" alt="dbt logo">
+                 </a>
                  <h1>Contact Us</h1>
              </div>
             <p class="subtitle">Get in touch with us for any questions or support</p>

@@ -15,6 +15,16 @@ class BaseConfig:
     TESTING = False
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
     
+    # Database Configuration
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://postgres.rhmvdudvllcjdvkhjvul:DbtQuiz%401234@aws-1-ap-south-1.pooler.supabase.com:5432/postgres'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_size': 10,
+        'pool_timeout': 20,
+        'pool_recycle': 300,
+        'max_overflow': 20
+    }
+    
     # Environment detection
     IS_PRODUCTION = os.environ.get('FLASK_ENV') == 'production' or os.environ.get('RENDER') == 'true'
     IS_DEVELOPMENT = not IS_PRODUCTION

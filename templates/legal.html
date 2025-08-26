@@ -69,30 +69,24 @@
             border-radius: 8px;
         }
         
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            padding: 4px;
+        }
+        
+        .logo-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+        
         .logo-section h1 {
             color: white;
             font-size: 1.5rem;
             font-weight: 600;
-        }
-        
-        .back-home-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .back-home-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
         }
         
         /* Main Content */
@@ -290,13 +284,11 @@
     <header class="legal-header">
         <div class="header-content">
             <div class="logo-section">
-                <img src="/static/dbt-bit-standalone.png" alt="dbt Logo">
+                <a href="/" class="logo-link" title="Go to Home">
+                    <img src="/static/dbt-bit-standalone.png" alt="dbt Logo">
+                </a>
                 <h1>Legal Information</h1>
             </div>
-            <a href="/" class="back-home-btn">
-                <i class="fas fa-arrow-left"></i>
-                Back to Home
-            </a>
         </div>
     </header>
 
