@@ -3,7 +3,7 @@ Database models for dbt Certification Quiz Application
 """
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import func
+from sqlalchemy import func
 
 db = SQLAlchemy()
 
