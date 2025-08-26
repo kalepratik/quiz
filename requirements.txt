@@ -1,6 +1,6 @@
 # Core dependencies for the dbt Certification Quiz Application
-Flask==2.3.3
-Werkzeug==2.3.7
+Flask==3.0.0
+Werkzeug==3.0.1
 gunicorn==21.2.0
 python-dotenv==1.0.0
 markdown==3.5.1
@@ -11,8 +11,8 @@ google-auth-httplib2==0.1.1
 razorpay==1.4.1
 setuptools>=65.0.0
 
-# Database dependencies
-Flask-SQLAlchemy==3.0.5
-SQLAlchemy==2.0.23
-psycopg2==2.9.10
+# Database dependencies - Updated for Python 3.13 compatibility
+Flask-SQLAlchemy==3.1.1
+SQLAlchemy==2.0.27
+psycopg2-binary==2.9.9
 reportlab==4.0.4
