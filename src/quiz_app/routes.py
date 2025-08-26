@@ -8,6 +8,7 @@ from flask import Blueprint, render_template, request, jsonify, current_app, red
 from .services.quiz_service import QuizService
 from .services.oauth_service import OAuthService
 from .services.payment_service import PaymentService
+from .services.mock_payment_service import MockPaymentService
 
 # Create blueprints
 ui_bp = Blueprint('ui', __name__)
@@ -55,33 +56,48 @@ def payment():
 def create_payment_order():
     """Create a new payment order"""
     try:
-        # Check if user is authenticated
+        # Check if user is authenticated (allow test user in development)
         user = OAuthService.get_current_user()
         if not user:
-            return jsonify({'error': 'User not authenticated'}), 401
+            if current_app.config.get('FLASK_ENV') == 'development':
+                # Create a test user for development
+                user = {
+                    'id': 'test_user_123',
+                    'email': 'test@example.com',
+                    'name': 'Test User'
+                }
+                logger.info("Using test user for development payment testing")
+            else:
+                return jsonify({'error': 'User not authenticated'}), 401
         
         # Get payment amount from request
         data = request.get_json()
         amount = data.get('amount', 300)  # Default to ₹300
         
-        # Create payment service
-        payment_service = PaymentService()
+        # Create payment service (use mock for development)
+        if current_app.config.get('FLASK_ENV') == 'development':
+            payment_service = MockPaymentService()
+            logger.info("Using mock payment service for development")
+        else:
+            payment_service = PaymentService()
         
         # Create order
-        order = payment_service.create_order(
-            amount=amount,
-            receipt_id=f"user_{user['id']}_{int(time.time())}"
-        )
-        
-        if order:
+        try:
+            order = payment_service.create_order(
+                amount=amount,
+                receipt_id=f"user_{user['id']}_{int(time.time())}"
+            )
+            
             return jsonify({
                 'success': True,
                 'order_id': order['id'],
                 'amount': order['amount'],
-                'currency': order['currency']
+                'currency': order['currency'],
+                'razorpay_key': current_app.config.get('RAZORPAY_KEY_ID')
             })
-        else:
-            return jsonify({'error': 'Failed to create payment order'}), 500
+        except Exception as e:
+            logger.error(f"Payment service error: {e}")
+            return jsonify({'error': str(e)}), 500
             
     except Exception as e:
         logger.error(f"Error creating payment order: {e}")
@@ -91,10 +107,19 @@ def create_payment_order():
 def verify_payment():
     """Verify payment and upgrade user to Pro"""
     try:
-        # Check if user is authenticated
+        # Check if user is authenticated (allow test user in development)
         user = OAuthService.get_current_user()
         if not user:
-            return jsonify({'error': 'User not authenticated'}), 401
+            if current_app.config.get('FLASK_ENV') == 'development':
+                # Create a test user for development
+                user = {
+                    'id': 'test_user_123',
+                    'email': 'test@example.com',
+                    'name': 'Test User'
+                }
+                logger.info("Using test user for development payment verification")
+            else:
+                return jsonify({'error': 'User not authenticated'}), 401
         
         # Get payment details from request
         data = request.get_json()
@@ -105,8 +130,12 @@ def verify_payment():
         if not all([payment_id, order_id, signature]):
             return jsonify({'error': 'Missing payment details'}), 400
         
-        # Create payment service
-        payment_service = PaymentService()
+        # Create payment service (use mock for development)
+        if current_app.config.get('FLASK_ENV') == 'development':
+            payment_service = MockPaymentService()
+            logger.info("Using mock payment service for development")
+        else:
+            payment_service = PaymentService()
         
         # Verify payment
         if payment_service.verify_payment(payment_id, order_id, signature):
@@ -242,10 +271,22 @@ def user_info():
                 'user': user
             })
         else:
-            return jsonify({
-                'authenticated': False,
-                'user': None
-            })
+            # In development mode, return a test user
+            if current_app.config.get('FLASK_ENV') == 'development':
+                test_user = {
+                    'id': 'test_user_123',
+                    'email': 'test@example.com',
+                    'name': 'Test User'
+                }
+                return jsonify({
+                    'authenticated': True,
+                    'user': test_user
+                })
+            else:
+                return jsonify({
+                    'authenticated': False,
+                    'user': None
+                })
     except Exception as e:
         logger.error(f"Error getting user info: {e}")
         return jsonify({
@@ -260,7 +301,10 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'service': 'dbt-certification-quiz',
-        'version': '1.0.0'
+        'version': '1.0.0',
+        'environment': current_app.config.get('FLASK_ENV', 'unknown'),
+        'debug': current_app.config.get('DEBUG', False),
+        'is_development': current_app.config.get('FLASK_ENV') == 'development'
     }), 200
 
 

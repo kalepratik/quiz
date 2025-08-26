@@ -208,6 +208,19 @@
             
             <!-- Payment Card -->
             <div class="card-hover bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+                <!-- Authentication Notice -->
+                <div id="authNotice" class="hidden mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-triangle text-yellow-600 dark:text-yellow-400 mr-3"></i>
+                        <div>
+                            <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                                <strong>Sign in required:</strong> You need to be signed in to make a payment. 
+                                <a href="/signin" class="underline font-medium">Sign in here</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Plan Details -->
                 <div class="text-center mb-8">
                     <div class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">₹ 300</div>
@@ -330,11 +343,47 @@
             }
         });
         
+        // Check authentication status on page load
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/api/user-info');
+                const data = await response.json();
+                
+                const authNotice = document.getElementById('authNotice');
+                const payButton = document.getElementById('payButton');
+                
+                if (!data.authenticated) {
+                    authNotice.classList.remove('hidden');
+                    payButton.disabled = true;
+                    payButton.innerHTML = '<i class="fas fa-lock mr-2"></i>Sign in to Purchase';
+                } else {
+                    authNotice.classList.add('hidden');
+                    payButton.disabled = false;
+                    payButton.innerHTML = '<i class="fas fa-lock mr-2"></i>Complete Purchase';
+                }
+            } catch (error) {
+                console.error('Error checking auth status:', error);
+            }
+        }
+        
+        // Check auth status when page loads
+        checkAuthStatus();
+        
         // Razorpay Integration
         const payButton = document.getElementById('payButton');
         
         payButton.addEventListener('click', async () => {
             try {
+                // Check if user is authenticated first
+                const userResponse = await fetch('/api/user-info');
+                const userData = await userResponse.json();
+                
+                if (!userData.authenticated) {
+                    alert('Please sign in to make a payment. You will be redirected to the sign-in page.');
+                    window.location.href = '/signin';
+                    return;
+                }
+                
                 // Disable button to prevent double clicks
                 payButton.disabled = true;
                 payButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
@@ -356,58 +405,104 @@
                     throw new Error(orderData.error || 'Failed to create payment order');
                 }
                 
-                                 // Configure Razorpay options
-                 const options = {
-                     key: 'rzp_live_R9ggKgYfDqDKUS', // Live Razorpay Key
-                    amount: orderData.amount,
-                    currency: orderData.currency,
-                    name: 'dbt Quiz Pro',
-                    description: 'Pro Upgrade - 200+ Questions',
-                    order_id: orderData.order_id,
-                    handler: async function (response) {
-                        try {
-                            // Verify payment on server
-                            const verifyResponse = await fetch('/api/verify-payment', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    razorpay_payment_id: response.razorpay_payment_id,
-                                    razorpay_order_id: response.razorpay_order_id,
-                                    razorpay_signature: response.razorpay_signature
-                                })
-                            });
-                            
-                            const verifyData = await verifyResponse.json();
-                            
-                            if (verifyData.success) {
-                                alert('Payment successful! You now have access to Pro features.');
-                                window.location.href = '/';
-                            } else {
+                // For development: Use mock payment flow instead of Razorpay
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    // Mock payment flow for development
+                    console.log('Using mock payment flow for development');
+                    
+                    // Simulate payment verification with mock data
+                    const mockPaymentData = {
+                        razorpay_payment_id: 'mock_payment_' + Date.now(),
+                        razorpay_order_id: orderData.order_id,
+                        razorpay_signature: 'mock_signature_' + Date.now()
+                    };
+                    
+                    // Verify payment on server
+                    const verifyResponse = await fetch('/api/verify-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(mockPaymentData)
+                    });
+                    
+                    const verifyData = await verifyResponse.json();
+                    
+                    if (verifyData.success) {
+                        alert('🎉 Payment successful! You now have access to Pro features.');
+                        window.location.href = '/';
+                    } else {
+                        alert(`Payment verification failed: ${verifyData.error || 'Unknown error'}. Please contact support.`);
+                    }
+                } else {
+                    // Production: Use real Razorpay
+                    const options = {
+                        key: orderData.razorpay_key || 'rzp_test_R9rO3GehfCuunW',
+                        amount: orderData.amount,
+                        currency: orderData.currency,
+                        name: 'dbt Quiz Pro',
+                        description: 'Pro Upgrade - 200+ Questions',
+                        order_id: orderData.order_id,
+                        handler: async function (response) {
+                            try {
+                                const verifyResponse = await fetch('/api/verify-payment', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        razorpay_payment_id: response.razorpay_payment_id,
+                                        razorpay_order_id: response.razorpay_order_id,
+                                        razorpay_signature: response.razorpay_signature
+                                    })
+                                });
+                                
+                                const verifyData = await verifyResponse.json();
+                                
+                                if (verifyData.success) {
+                                    alert('Payment successful! You now have access to Pro features.');
+                                    window.location.href = '/';
+                                } else {
+                                    alert(`Payment verification failed: ${verifyData.error || 'Unknown error'}. Please contact support.`);
+                                }
+                            } catch (error) {
+                                console.error('Payment verification error:', error);
                                 alert('Payment verification failed. Please contact support.');
                             }
-                        } catch (error) {
-                            console.error('Payment verification error:', error);
-                            alert('Payment verification failed. Please contact support.');
+                        },
+                        prefill: {
+                            name: userData.user?.name || 'User Name',
+                            email: userData.user?.email || 'user@example.com'
+                        },
+                        theme: {
+                            color: '#6366f1'
+                        },
+                        modal: {
+                            ondismiss: function() {
+                                payButton.disabled = false;
+                                payButton.innerHTML = '<i class="fas fa-lock mr-2"></i>Complete Purchase';
+                            }
                         }
-                    },
-                    prefill: {
-                        name: 'User Name', // Will be filled from user session
-                        email: 'user@example.com' // Will be filled from user session
-                    },
-                    theme: {
-                        color: '#6366f1'
-                    }
-                };
-                
-                // Initialize Razorpay
-                const rzp = new Razorpay(options);
-                rzp.open();
+                    };
+                    
+                    const rzp = new Razorpay(options);
+                    rzp.open();
+                }
                 
             } catch (error) {
                 console.error('Payment error:', error);
-                alert('Payment failed. Please try again.');
+                let errorMessage = 'Payment failed. Please try again.';
+                
+                // Provide more specific error messages
+                if (error.message.includes('User not authenticated')) {
+                    errorMessage = 'Please sign in to make a payment.';
+                } else if (error.message.includes('Failed to create payment order')) {
+                    errorMessage = 'Unable to create payment order. Please check your internet connection and try again.';
+                } else if (error.message.includes('Razorpay')) {
+                    errorMessage = 'Payment service is currently unavailable. Please try again later.';
+                }
+                
+                alert(errorMessage);
             } finally {
                 // Re-enable button
                 payButton.disabled = false;
