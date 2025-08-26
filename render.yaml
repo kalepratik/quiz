@@ -5,6 +5,7 @@ services:
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn wsgi:app
+    pythonVersion: 3.11.18
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.18
