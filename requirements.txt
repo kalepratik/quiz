@@ -11,8 +11,8 @@ google-auth-httplib2==0.1.1
 razorpay==1.4.1
 setuptools>=65.0.0
 
-# Database dependencies - Updated for Python 3.13 compatibility
+# Database dependencies - Latest versions with Python 3.13 support
 Flask-SQLAlchemy==3.1.1
-SQLAlchemy==2.0.27
+SQLAlchemy==2.0.30
 psycopg2-binary==2.9.9
 reportlab==4.0.4
