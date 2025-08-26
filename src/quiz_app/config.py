@@ -16,7 +16,7 @@ class BaseConfig:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
     
     # Database Configuration
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql+psycopg://postgres.rhmvdudvllcjdvkhjvul:DbtQuiz%401234@aws-1-ap-south-1.pooler.supabase.com:5432/postgres'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://postgres.rhmvdudvllcjdvkhjvul:DbtQuiz%401234@aws-1-ap-south-1.pooler.supabase.com:5432/postgres'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
         'pool_size': 10,
