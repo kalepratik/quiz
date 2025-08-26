@@ -128,6 +128,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Application specific
+*.db
+*.sqlite
+*.sqlite3
+
 # IDE files
 .vscode/
 .idea/
@@ -144,46 +149,22 @@ dmypy.json
 ehthumbs.db
 Thumbs.db
 
-# Windows
-*.lnk
+# Logs
+logs/
+*.log
 
 # Temporary files
-*.tmp
-*.temp
+tmp/
+temp/
+
+# Backup files
 *.bak
 *.backup
 
-# Log files
-*.log
-logs/
+# Local configuration files
+config.local.py
+settings.local.py
 
-# Database files
-*.db
-*.sqlite
-*.sqlite3
-
-# Configuration files with sensitive data
-config.ini
-secrets.json
-.env.local
-.env.production
-client_secret_*.json
-*.json
-
-# Node modules (if any frontend dependencies)
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Build directories
-build/
-dist/
-out/
-
-# Coverage reports
-htmlcov/
-.coverage
-.coverage.*
-coverage.xml
-*.cover
+# Development files
+setup_env.py
+PAYMENT_SETUP.md

@@ -25,6 +25,11 @@ def create_app():
     app.register_blueprint(ui_bp)
     app.register_blueprint(api_bp)
     
+    # Suppress development server warning in production-like environments
+    if app.config.get('IS_PRODUCTION'):
+        import logging
+        logging.getLogger('werkzeug').setLevel(logging.ERROR)
+    
     # Initialize extensions and services
     from .services.quiz_service import QuizService
     app.quiz_service = QuizService()

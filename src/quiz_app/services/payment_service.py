@@ -29,7 +29,19 @@ class PaymentService:
         try:
             if not self.client:
                 logger.error("Razorpay client not initialized")
-                return None
+                raise Exception("Payment service not configured properly")
+            
+            # Check if Razorpay keys are configured
+            key_id = current_app.config.get('RAZORPAY_KEY_ID')
+            key_secret = current_app.config.get('RAZORPAY_KEY_SECRET')
+            
+            if not key_id or key_id == 'your_razorpay_key_id_here':
+                logger.error("Razorpay keys not configured")
+                raise Exception("Payment service not configured")
+            
+            if not key_secret or key_secret == 'your_razorpay_key_secret_here':
+                logger.error("Razorpay secret not configured")
+                raise Exception("Payment service not configured")
             
             order_data = {
                 'amount': amount * 100,  # Razorpay expects amount in paise
@@ -46,7 +58,7 @@ class PaymentService:
             
         except Exception as e:
             logger.error(f"Error creating Razorpay order: {e}")
-            return None
+            raise e
     
     def verify_payment(self, payment_id, order_id, signature):
         """Verify payment signature"""

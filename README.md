@@ -35,19 +35,25 @@ A **production-ready**, modern web-based dbt certification quiz application with
    pip install -r requirements.txt
    ```
 
-3. **Run the application**
+3. **Set up environment variables** (Optional but recommended):
+   ```bash
+   python setup_env.py
+   ```
+   Or manually create a `.env` file based on `env.example`
+
+4. **Run the application**
    ```bash
    python main.py
    ```
    Choose option 1 to start the development server
 
-4. **Run tests**
+5. **Run tests**
    ```bash
    python main.py
    ```
    Choose option 2 to run the test suite
 
-5. **Open your browser**
+6. **Open your browser**
    - **Homepage**: `http://localhost:8000` - Modern landing page with features and pricing
    - **Quiz Interface**: `http://localhost:8000/quiz` - Direct access to the quiz
    - **Contact Form**: `http://localhost:8000/contact` - Contact form with email notifications
@@ -164,6 +170,57 @@ You can use any SMTP provider by updating the configuration:
 - **HTML Formatting**: Beautiful, branded email templates
 - **Error Handling**: Graceful fallbacks if email fails
 - **Validation**: Form validation and spam protection
+
+## 💳 Payment Integration Setup
+
+The application includes a PRO plan upgrade system with Razorpay integration. To set up payment functionality:
+
+### 1. Razorpay Account Setup
+
+1. **Create Razorpay Account**:
+   - Go to [https://razorpay.com/](https://razorpay.com/)
+   - Sign up for a free account
+   - Complete KYC verification (required for live payments)
+
+2. **Get API Keys**:
+   - Login to Razorpay Dashboard
+   - Go to Settings > API Keys
+   - Generate new API keys
+   - Copy the Key ID and Key Secret
+
+3. **Test vs Live Keys**:
+   - **Development**: Use test keys (start with `rzp_test_`)
+   - **Production**: Use live keys (start with `rzp_live_`)
+
+### 2. Environment Configuration
+
+Add these to your `.env` file or environment variables:
+
+```bash
+# Razorpay Configuration
+RAZORPAY_KEY_ID=your-razorpay-key-id-here
+RAZORPAY_KEY_SECRET=your-razorpay-key-secret-here
+```
+
+### 3. Testing Payments
+
+For testing, use Razorpay's test card details:
+
+- **Card Number**: `4111 1111 1111 1111`
+- **Expiry**: Any future date (e.g., `12/25`)
+- **CVV**: Any 3 digits (e.g., `123`)
+- **Name**: Any name
+
+### 4. Common Payment Issues
+
+If you're experiencing payment failures:
+
+1. **Check Authentication**: Users must be signed in via Google OAuth
+2. **Verify API Keys**: Ensure Razorpay keys are correctly configured
+3. **Test Mode**: Use test keys for development, live keys for production
+4. **Check Logs**: Review application logs for specific error messages
+
+For detailed troubleshooting, see **[PAYMENT_SETUP.md](PAYMENT_SETUP.md)**.
 
 ## 🏗️ Production-Ready Architecture
 
