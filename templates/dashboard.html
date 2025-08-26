@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - dbt Certification Quiz PRO</title>
+    <link rel="icon" type="image/png" href="/static/android-chrome-512x512.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --pro-color: #8b5cf6;
+        }
+        
+        .pro-badge {
+            background: linear-gradient(135deg, var(--pro-color) 0%, #a855f7 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .weak-topic {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+        }
+        
+        .dark .weak-topic {
+            background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
+            border: 1px solid #f59e0b;
+        }
+        
+        .strong-topic {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 1px solid #10b981;
+        }
+        
+        .dark .strong-topic {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+            border: 1px solid #10b981;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 glass-effect dark:dark-glass border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
+                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
+                        <span class="pro-badge">PRO</span>
+                    </a>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="/dashboard" class="text-purple-600 dark:text-purple-400 font-semibold">Dashboard</a>
+                    <a href="/history" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">History</a>
+                </nav>
+                
+                <!-- Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- User Info -->
+                    <div id="userInfo" class="flex items-center space-x-3">
+                        <span id="userName" class="text-sm text-gray-700 dark:text-gray-300"></span>
+                        <button id="signOutBtn" class="px-4 py-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
+                            Sign Out
+                        </button>
+                    </div>
+                    
+                    <!-- PRO Quiz Button -->
+                    <a href="/quiz-pro" class="px-6 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all font-semibold flex items-center">
+                        <i class="fas fa-crown mr-2"></i>
+                        Start Quiz
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Your Dashboard</h1>
+            <p class="text-gray-600 dark:text-gray-400">Track your progress and identify areas for improvement</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Attempts</p>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white" id="totalAttempts">0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-chart-line text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Average Score</p>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white" id="averageScore">0%</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-percentage text-green-600 dark:text-green-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Best Score</p>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white" id="bestScore">0%</p>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-trophy text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Study Streak</p>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white" id="studyStreak">0 days</p>
+                    </div>
+                    <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-fire text-orange-600 dark:text-orange-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Performance Trend -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Performance Trend</h3>
+                <canvas id="performanceChart" width="400" height="200"></canvas>
+            </div>
+            
+            <!-- Topic Distribution -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Topic Performance</h3>
+                <canvas id="topicChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Weak Topics Section -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Areas for Improvement</h3>
+                <span class="text-sm text-gray-600 dark:text-gray-400">Focus on these topics to improve your score</span>
+            </div>
+            
+            <div id="weakTopicsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Weak topics will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Activity</h3>
+            <div id="recentActivity" class="space-y-4">
+                <!-- Recent activity will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load user info
+        async function loadUserInfo() {
+            try {
+                const response = await fetch('/api/user-info');
+                const data = await response.json();
+                
+                if (data.authenticated) {
+                    document.getElementById('userName').textContent = data.user.name || data.user.email;
+                } else {
+                    window.location.href = '/signin';
+                }
+            } catch (error) {
+                console.error('Error loading user info:', error);
+            }
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const [statsResponse, historyResponse] = await Promise.all([
+                    fetch('/api/user/stats'),
+                    fetch('/api/user/quiz-history')
+                ]);
+                
+                const statsData = await statsResponse.json();
+                const historyData = await historyResponse.json();
+                
+                if (statsData.success) {
+                    updateStats(statsData.stats);
+                }
+                
+                if (historyData.success && historyData.history) {
+                    updateCharts(historyData.history);
+                    updateWeakTopics(historyData.history);
+                    updateRecentActivity(historyData.history);
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        // Update stats
+        function updateStats(stats) {
+            document.getElementById('totalAttempts').textContent = stats.total_attempts || 0;
+            document.getElementById('averageScore').textContent = `${stats.average_score || 0}%`;
+            document.getElementById('bestScore').textContent = `${stats.best_score || 0}%`;
+            document.getElementById('studyStreak').textContent = `${stats.study_streak || 0} days`;
+        }
+
+        // Update charts
+        function updateCharts(history) {
+            // Performance trend chart
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            const performanceData = history.slice(-10).map((attempt, index) => ({
+                x: index + 1,
+                y: attempt.percentage
+            }));
+            
+            new Chart(performanceCtx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Score %',
+                        data: performanceData,
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Topic performance chart
+            const topicCtx = document.getElementById('topicChart').getContext('2d');
+            const topicData = getTopicPerformance(history);
+            
+            new Chart(topicCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: topicData.labels,
+                    datasets: [{
+                        data: topicData.data,
+                        backgroundColor: [
+                            '#10b981',
+                            '#3b82f6',
+                            '#f59e0b',
+                            '#ef4444',
+                            '#8b5cf6'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Get topic performance data
+        function getTopicPerformance(history) {
+            const topics = {};
+            
+            history.forEach(attempt => {
+                // Simulate topic data (in real app, this would come from the database)
+                const topic = attempt.topic || 'General';
+                if (!topics[topic]) {
+                    topics[topic] = { total: 0, correct: 0 };
+                }
+                topics[topic].total += attempt.total_questions;
+                topics[topic].correct += attempt.correct_answers;
+            });
+            
+            const labels = Object.keys(topics);
+            const data = labels.map(topic => {
+                const topicData = topics[topic];
+                return Math.round((topicData.correct / topicData.total) * 100);
+            });
+            
+            return { labels, data };
+        }
+
+        // Update weak topics
+        function updateWeakTopics(history) {
+            const weakTopics = identifyWeakTopics(history);
+            const container = document.getElementById('weakTopicsList');
+            
+            if (weakTopics.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <i class="fas fa-check-circle text-4xl text-green-500 mb-4"></i>
+                        <p class="text-gray-600 dark:text-gray-400">Great job! No weak topics identified.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = weakTopics.map(topic => `
+                <div class="weak-topic rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-semibold text-gray-900 dark:text-white">${topic.name}</h4>
+                        <span class="text-sm font-medium text-red-600">${topic.score}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div class="bg-red-500 h-2 rounded-full" style="width: ${topic.score}%"></div>
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">${topic.recommendation}</p>
+                </div>
+            `).join('');
+        }
+
+        // Identify weak topics
+        function identifyWeakTopics(history) {
+            const topics = {};
+            
+            history.forEach(attempt => {
+                const topic = attempt.topic || 'General';
+                if (!topics[topic]) {
+                    topics[topic] = { total: 0, correct: 0, attempts: 0 };
+                }
+                topics[topic].total += attempt.total_questions;
+                topics[topic].correct += attempt.correct_answers;
+                topics[topic].attempts += 1;
+            });
+            
+            const weakTopics = [];
+            Object.entries(topics).forEach(([topic, data]) => {
+                const score = Math.round((data.correct / data.total) * 100);
+                if (score < 70 && data.attempts >= 2) {
+                    weakTopics.push({
+                        name: topic,
+                        score: score,
+                        recommendation: getRecommendation(topic, score)
+                    });
+                }
+            });
+            
+            return weakTopics.sort((a, b) => a.score - b.score).slice(0, 6);
+        }
+
+        // Get recommendation for weak topic
+        function getRecommendation(topic, score) {
+            const recommendations = {
+                'General': 'Review basic dbt concepts and fundamentals',
+                'Models': 'Focus on model types, materializations, and best practices',
+                'Testing': 'Practice writing tests and understanding test types',
+                'Documentation': 'Learn about documentation and metadata',
+                'Deployment': 'Study deployment strategies and CI/CD',
+                'Performance': 'Understand optimization techniques'
+            };
+            
+            return recommendations[topic] || 'Review this topic thoroughly';
+        }
+
+        // Update recent activity
+        function updateRecentActivity(history) {
+            const container = document.getElementById('recentActivity');
+            const recentAttempts = history.slice(0, 5);
+            
+            if (recentAttempts.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-info-circle text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-600 dark:text-gray-400">No recent activity</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = recentAttempts.map(attempt => {
+                const date = new Date(attempt.created_at).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const scoreClass = getScoreClass(attempt.percentage);
+                
+                return `
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-question-circle text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900 dark:text-white">Quiz Attempt</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">${date} • ${attempt.question_count} questions</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold ${scoreClass}">${attempt.percentage}%</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">${attempt.correct_answers}/${attempt.total_questions}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Get score class for styling
+        function getScoreClass(percentage) {
+            if (percentage >= 90) return 'text-green-600';
+            if (percentage >= 80) return 'text-blue-600';
+            if (percentage >= 70) return 'text-yellow-600';
+            return 'text-red-600';
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+            loadDashboardData();
+            
+            // Sign out functionality
+            document.getElementById('signOutBtn').addEventListener('click', function() {
+                fetch('/api/signout', { method: 'POST' })
+                    .then(() => window.location.href = '/')
+                    .catch(error => console.error('Error signing out:', error));
+            });
+        });
+    </script>
+</body>
+</html>

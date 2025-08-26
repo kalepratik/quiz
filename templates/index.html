@@ -37,7 +37,7 @@
             line-height: 1.6;
         }
         
-        /* Header with Back to Home button */
+        /* Header with dbt logo as home button */
         .quiz-header {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -63,6 +63,20 @@
             gap: 1rem;
         }
         
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            padding: 4px;
+        }
+        
+        .logo-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+        
         .logo-section img {
             width: 40px;
             height: 40px;
@@ -73,26 +87,6 @@
             color: white;
             font-size: 1.5rem;
             font-weight: 600;
-        }
-        
-        .back-home-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .back-home-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
         }
         
         .container {
@@ -750,17 +744,15 @@
     </style>
 </head>
 <body>
-    <!-- Header with Back to Home button -->
+    <!-- Header with dbt logo as home button -->
     <header class="quiz-header">
         <div class="header-content">
             <div class="logo-section">
-                <img src="/static/dbt-bit-standalone.png" alt="dbt Logo">
+                <a href="/" class="logo-link" title="Go to Home">
+                    <img src="/static/dbt-bit-standalone.png" alt="dbt Logo">
+                </a>
                 <h1>dbt Certification Quiz</h1>
-        </div>
-            <a href="/" class="back-home-btn">
-                <i class="fas fa-arrow-left"></i>
-                Back to Home
-            </a>
+            </div>
         </div>
     </header>
 
@@ -1156,8 +1148,13 @@
              // Handle bold text (**text**) - convert to <strong> tags
              text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
              
-             // Remove duplicate "What will happen?" if it appears at the end
-             text = text.replace(/\n\nQuestion:\nWhat will happen\?\s*$/, '');
+             // Remove duplicate question endings and clean up formatting
+             text = text.replace(/\n\nQuestion:\s*\nWhat will happen\?\s*$/g, '');
+             text = text.replace(/\n\nWhat will happen\?\s*$/g, '');
+             text = text.replace(/\n\nWhat happens to [^?]+\?\s*$/g, '');
+             
+             // Clean up any extra whitespace at the end
+             text = text.trim();
              
              return text;
          }

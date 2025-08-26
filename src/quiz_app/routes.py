@@ -8,7 +8,6 @@ from flask import Blueprint, render_template, request, jsonify, current_app, red
 from .services.quiz_service import QuizService
 from .services.oauth_service import OAuthService
 from .services.payment_service import PaymentService
-from .services.mock_payment_service import MockPaymentService
 
 # Create blueprints
 ui_bp = Blueprint('ui', __name__)
@@ -29,13 +28,39 @@ def inject_environment():
 
 @ui_bp.route('/')
 def index():
-    """Landing page with modern UI"""
+    """Landing page with modern UI - redirects PRO users to PRO homepage"""
+    # Check if user is authenticated and is PRO
+    user = OAuthService.get_current_user()
+    if user and user.get('is_pro', False):
+        # Redirect PRO users to PRO dashboard
+        return redirect(url_for('ui.pro_dashboard'))
+    
     return render_template('homepage.html')
+
+@ui_bp.route('/pro-dashboard')
+def pro_dashboard():
+    """PRO dashboard for paid users"""
+    return render_template('pro-homepage.html')
 
 @ui_bp.route('/quiz')
 def quiz():
     """Main quiz interface"""
     return render_template('index.html')
+
+@ui_bp.route('/quiz-pro')
+def quiz_pro():
+    """PRO quiz interface for paid users"""
+    return render_template('quiz-pro.html')
+
+@ui_bp.route('/history')
+def history():
+    """Quiz history page for PRO users"""
+    return render_template('history.html')
+
+@ui_bp.route('/dashboard')
+def dashboard():
+    """Detailed dashboard with analytics for PRO users"""
+    return render_template('dashboard.html')
 
 @ui_bp.route('/homepage')
 def homepage():
@@ -74,12 +99,8 @@ def create_payment_order():
         data = request.get_json()
         amount = data.get('amount', 300)  # Default to ₹300
         
-        # Create payment service (use mock for development)
-        if current_app.config.get('FLASK_ENV') == 'development':
-            payment_service = MockPaymentService()
-            logger.info("Using mock payment service for development")
-        else:
-            payment_service = PaymentService()
+        # Create payment service
+        payment_service = PaymentService()
         
         # Create order
         try:
@@ -130,23 +151,53 @@ def verify_payment():
         if not all([payment_id, order_id, signature]):
             return jsonify({'error': 'Missing payment details'}), 400
         
-        # Create payment service (use mock for development)
-        if current_app.config.get('FLASK_ENV') == 'development':
-            payment_service = MockPaymentService()
-            logger.info("Using mock payment service for development")
-        else:
-            payment_service = PaymentService()
+        # Create payment service
+        payment_service = PaymentService()
         
-        # Verify payment
-        if payment_service.verify_payment(payment_id, order_id, signature):
+        # Verify payment (allow mock verification in development)
+        payment_verified = False
+        if current_app.config.get('FLASK_ENV') == 'development':
+            # In development, accept any payment for testing
+            payment_verified = True
+            logger.info("Development mode: Accepting payment for testing")
+        else:
+            # In production, verify payment properly
+            payment_verified = payment_service.verify_payment(payment_id, order_id, signature)
+        
+        if payment_verified:
             # Payment verified - upgrade user to Pro
-            # TODO: Add database integration to mark user as Pro
-            logger.info(f"User {user['email']} upgraded to Pro after payment {payment_id}")
-            
-            return jsonify({
-                'success': True,
-                'message': 'Payment verified and account upgraded to Pro!'
-            })
+            try:
+                # Get database service
+                db_service = current_app.database_service
+                
+                # Upgrade user to PRO
+                upgraded_user = db_service.upgrade_to_pro(
+                    user['id'],
+                    {
+                        'payment_id': payment_id,
+                        'order_id': order_id,
+                        'amount': 300,  # Default amount
+                        'currency': 'INR',
+                        'payment_method': 'razorpay'
+                    }
+                )
+                
+                if upgraded_user:
+                    # Update session with PRO status
+                    session['is_pro'] = True
+                    logger.info(f"User {user['email']} upgraded to Pro after payment {payment_id}")
+                    
+                    return jsonify({
+                        'success': True,
+                        'message': 'Payment verified and account upgraded to Pro!'
+                    })
+                else:
+                    logger.error(f"Failed to upgrade user {user['email']} to Pro")
+                    return jsonify({'error': 'Failed to upgrade account'}), 500
+                    
+            except Exception as e:
+                logger.error(f"Error upgrading user to Pro: {e}")
+                return jsonify({'error': 'Failed to upgrade account'}), 500
         else:
             return jsonify({'error': 'Payment verification failed'}), 400
             
@@ -408,6 +459,44 @@ def submit_quiz():
             'percentage': round((correct_answers / total_questions) * 100, 1) if total_questions > 0 else 0
         }
         
+        # Record quiz attempt in database if user is authenticated
+        try:
+            user = OAuthService.get_current_user()
+            if user:
+                db_service = current_app.database_service
+                
+                # Determine if this is a PRO quiz based on question count
+                is_pro_quiz = total_questions > 10  # More than 10 questions indicates PRO quiz
+                
+                # Prepare detailed questions data for storage
+                questions_data = []
+                for i, (question, user_answer) in enumerate(zip(questions, answers)):
+                    questions_data.append({
+                        'question': question,
+                        'user_answer': user_answer
+                    })
+                
+                # Record the attempt with detailed data
+                quiz_attempt = db_service.record_quiz_attempt(
+                    user_id=user['id'],
+                    question_count=total_questions,
+                    difficulty=2,  # Default difficulty - could be enhanced
+                    correct_answers=correct_answers,
+                    total_questions=total_questions,
+                    percentage=result['percentage'],
+                    is_pro_quiz=is_pro_quiz,
+                    questions_data=questions_data
+                )
+                
+                if quiz_attempt:
+                    logger.info(f"Quiz attempt recorded for user {user['email']}")
+                else:
+                    logger.warning(f"Failed to record quiz attempt for user {user['email']}")
+                    
+        except Exception as e:
+            logger.error(f"Error recording quiz attempt: {e}")
+            # Don't fail the quiz submission if recording fails
+        
         logger.info(f"Quiz submitted successfully: {correct_answers}/{total_questions} correct")
         return jsonify(result)
         
@@ -434,3 +523,170 @@ def question_stats():
     except Exception as e:
         logger.error(f"Error getting question stats: {e}")
         return jsonify({'error': 'Failed to get question stats'}), 500
+
+# User Management API Endpoints
+@api_bp.route('/user/profile')
+def get_user_profile():
+    """Get current user profile"""
+    try:
+        user = OAuthService.get_current_user()
+        if not user:
+            return jsonify({'error': 'User not authenticated'}), 401
+        
+        # Get database service
+        db_service = current_app.database_service
+        
+        # Get user from database
+        db_user = db_service.get_user_by_id(user['id'])
+        if not db_user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        return jsonify({
+            'success': True,
+            'user': db_user.to_dict()
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting user profile: {e}")
+        return jsonify({'error': 'Failed to get user profile'}), 500
+
+@api_bp.route('/user/stats')
+def get_user_stats():
+    """Get current user statistics"""
+    try:
+        user = OAuthService.get_current_user()
+        if not user:
+            return jsonify({'error': 'User not authenticated'}), 401
+        
+        # Get database service
+        db_service = current_app.database_service
+        
+        # Get user statistics
+        stats = db_service.get_user_stats(user['id'])
+        if stats is None:
+            return jsonify({'error': 'Failed to get user stats'}), 500
+        
+        return jsonify({
+            'success': True,
+            'stats': stats
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting user stats: {e}")
+        return jsonify({'error': 'Failed to get user stats'}), 500
+
+@api_bp.route('/user/quiz-history')
+def get_user_quiz_history():
+    """Get current user quiz history"""
+    try:
+        user = OAuthService.get_current_user()
+        if not user:
+            return jsonify({'error': 'User not authenticated'}), 401
+        
+        # Get limit from query parameters
+        limit = request.args.get('limit', type=int, default=10)
+        
+        # Get database service
+        db_service = current_app.database_service
+        
+        # Get quiz history
+        history = db_service.get_user_quiz_history(user['id'], limit)
+        
+        return jsonify({
+            'success': True,
+            'history': [attempt.to_dict() for attempt in history]
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting user quiz history: {e}")
+        return jsonify({'error': 'Failed to get quiz history'}), 500
+
+@api_bp.route('/user/check-pro-access')
+def check_pro_access():
+    """Check if current user has PRO access"""
+    try:
+        user = OAuthService.get_current_user()
+        if not user:
+            return jsonify({'error': 'User not authenticated'}), 401
+        
+        # Get database service
+        db_service = current_app.database_service
+        
+        # Check PRO access
+        has_pro_access = db_service.check_pro_access(user['id'])
+        
+        return jsonify({
+            'success': True,
+            'has_pro_access': has_pro_access
+        })
+        
+    except Exception as e:
+        logger.error(f"Error checking PRO access: {e}")
+        return jsonify({'error': 'Failed to check PRO access'}), 500
+
+@api_bp.route('/user/subscriptions')
+def get_user_subscriptions():
+    """Get current user subscriptions"""
+    try:
+        user = OAuthService.get_current_user()
+        if not user:
+            return jsonify({'error': 'User not authenticated'}), 401
+        
+        # Get database service
+        db_service = current_app.database_service
+        
+        # Get user subscriptions
+        subscriptions = db_service.get_user_subscriptions(user['id'])
+        
+        return jsonify({
+            'success': True,
+            'subscriptions': [sub.to_dict() for sub in subscriptions]
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting user subscriptions: {e}")
+        return jsonify({'error': 'Failed to get subscriptions'}), 500
+
+@api_bp.route('/user/download-attempt-pdf/<int:attempt_id>')
+def download_attempt_pdf(attempt_id):
+    """Download PDF summary of a specific quiz attempt"""
+    try:
+        user = OAuthService.get_current_user()
+        if not user:
+            return jsonify({'error': 'User not authenticated'}), 401
+        
+        # Get database service
+        db_service = current_app.database_service
+        
+        # Get the specific attempt
+        attempt = db_service.get_quiz_attempt_by_id(attempt_id)
+        if not attempt:
+            return jsonify({'error': 'Quiz attempt not found'}), 404
+        
+        # Verify the attempt belongs to the current user
+        if attempt.user_id != user['id']:
+            return jsonify({'error': 'Access denied'}), 403
+        
+        # Get detailed attempt data
+        attempt_details = db_service.get_quiz_attempt_details(attempt_id)
+        
+        # Import PDF service
+        from .services.pdf_service import PDFService
+        pdf_service = PDFService()
+        
+        # Convert attempt to dict for PDF generation
+        attempt_data = attempt.to_dict()
+        
+        # Generate PDF with detailed data
+        pdf_content = pdf_service.generate_quiz_attempt_pdf(attempt_data, attempt_details)
+        
+        # Create response with PDF content
+        from flask import Response
+        response = Response(pdf_content, mimetype='application/pdf')
+        response.headers['Content-Disposition'] = f'attachment; filename=quiz-attempt-{attempt_id}.pdf'
+        
+        return response
+        
+    except Exception as e:
+        logger.error(f"Error generating PDF for attempt {attempt_id}: {e}")
+        return jsonify({'error': 'Failed to generate PDF'}), 500

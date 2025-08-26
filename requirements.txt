@@ -10,3 +10,9 @@ google-auth-oauthlib==1.1.0
 google-auth-httplib2==0.1.1
 razorpay==1.4.1
 setuptools>=65.0.0
+
+# Database dependencies
+Flask-SQLAlchemy==3.0.5
+SQLAlchemy==2.0.23
+psycopg2==2.9.10
+reportlab==4.0.4
