@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dbt Certification Quiz - PRO</title>
-    <link rel="icon" type="image/png" href="/static/android-chrome-512x512.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/static/android-chrome-512x512.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+{% extends "base.html" %}
+
+{% block title %}dbt Certification Quiz - PRO{% endblock %}
+
+{% block extra_head %}
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -725,21 +720,9 @@
             }
         }
     </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="quiz-header">
-        <div class="header-content">
-            <div class="logo-section">
-                <a href="/" class="logo-link" title="Go to Home">
-                    <img src="/static/dbt-bit-standalone.png" alt="dbt Logo">
-                </a>
-                <h1>dbt Certification Quiz <span class="pro-badge">PRO</span></h1>
-            </div>
-        </div>
-    </header>
+{% endblock %}
 
-    <div class="container">
+{% block content %}
         <!-- Quiz Configuration Section -->
         <div class="quiz-config" id="quizConfig">
             <div class="config-header">
@@ -1158,5 +1141,4 @@
 
 
      </script>
-</body>
-</html>
+{% endblock %}

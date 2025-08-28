@@ -365,3 +365,206 @@ class DatabaseService:
         except Exception as e:
             logger.error(f"Error getting question {question_id}: {e}")
             return None
+
+    def get_available_topic_categories(self):
+        """Get all available topic categories from the question bank"""
+        try:
+            from ..models import Question
+            from sqlalchemy import func
+            
+            result = self.db.session.query(
+                Question.topic_category,
+                func.count(Question.id).label('question_count')
+            ).filter(
+                Question.topic_category.isnot(None),
+                Question.is_active == True
+            ).group_by(
+                Question.topic_category
+            ).order_by(
+                Question.topic_category
+            ).all()
+            
+            return [{'category': category, 'count': count} for category, count in result]
+            
+        except Exception as e:
+            logger.error(f"Error getting topic categories: {e}")
+            return []
+
+    def get_user_all_topic_performance(self, user_id):
+        """Get user's performance across ALL topics (for debugging)"""
+        try:
+            from ..models import QuizAttemptDetail, Question
+            from sqlalchemy import func, case
+            
+            result = self.db.session.query(
+                Question.topic_category,
+                func.count(QuizAttemptDetail.id).label('total_attempted'),
+                func.sum(case((QuizAttemptDetail.is_correct == True, 1), else_=0)).label('total_correct'),
+                func.round(
+                    func.sum(case((QuizAttemptDetail.is_correct == True, 1), else_=0)) * 100.0 / 
+                    func.count(QuizAttemptDetail.id), 1
+                ).label('accuracy')
+            ).join(
+                QuizAttemptDetail, Question.id == QuizAttemptDetail.question_id
+            ).join(
+                QuizAttempt, QuizAttemptDetail.quiz_attempt_id == QuizAttempt.id
+            ).filter(
+                QuizAttempt.user_id == user_id,
+                Question.topic_category.isnot(None)  # Exclude null topic categories
+            ).group_by(
+                Question.topic_category
+            ).order_by(
+                func.round(
+                    func.sum(case((QuizAttemptDetail.is_correct == True, 1), else_=0)) * 100.0 / 
+                    func.count(QuizAttemptDetail.id), 1
+                ).asc()  # Order by lowest accuracy first
+            ).all()
+            
+            # Convert to list of dictionaries
+            all_topics = []
+            for topic_category, total_attempted, total_correct, accuracy in result:
+                all_topics.append({
+                    'topic_category': topic_category,
+                    'total_attempted': total_attempted,
+                    'total_correct': total_correct,
+                    'accuracy': float(accuracy),
+                    'is_weak': float(accuracy) < 70.0 and total_attempted >= 2
+                })
+            
+            logger.info(f"All topic performance for user {user_id}: {all_topics}")
+            return all_topics
+            
+        except Exception as e:
+            logger.error(f"Error getting all topic performance for user {user_id}: {e}")
+            return []
+
+    def get_user_topic_analysis(self, user_id):
+        """Get user's topic analysis with weak areas and strengths (last 10 days)"""
+        try:
+            from ..models import QuizAttemptDetail, Question
+            from sqlalchemy import func, case
+            from datetime import datetime, timedelta
+            
+            # Calculate date 10 days ago
+            ten_days_ago = datetime.utcnow() - timedelta(days=10)
+            
+            # Get all available topic categories
+            all_topics = self.db.session.query(
+                Question.topic_category
+            ).filter(
+                Question.topic_category.isnot(None),
+                Question.is_active == True
+            ).distinct().all()
+            
+            all_topic_categories = [topic[0] for topic in all_topics]
+            
+            # Get user's performance for last 10 days
+            user_performance = self.db.session.query(
+                Question.topic_category,
+                func.count(QuizAttemptDetail.id).label('total_attempted'),
+                func.sum(case((QuizAttemptDetail.is_correct == True, 1), else_=0)).label('total_correct'),
+                func.round(
+                    func.sum(case((QuizAttemptDetail.is_correct == True, 1), else_=0)) * 100.0 / 
+                    func.count(QuizAttemptDetail.id), 1
+                ).label('accuracy')
+            ).join(
+                QuizAttemptDetail, Question.id == QuizAttemptDetail.question_id
+            ).join(
+                QuizAttempt, QuizAttemptDetail.quiz_attempt_id == QuizAttempt.id
+            ).filter(
+                QuizAttempt.user_id == user_id,
+                QuizAttempt.created_at >= ten_days_ago,
+                Question.topic_category.isnot(None)
+            ).group_by(
+                Question.topic_category
+            ).all()
+            
+            # Create a dictionary of attempted topics
+            attempted_topics = {}
+            for topic_category, total_attempted, total_correct, accuracy in user_performance:
+                attempted_topics[topic_category] = {
+                    'total_attempted': total_attempted,
+                    'total_correct': total_correct,
+                    'accuracy': float(accuracy)
+                }
+            
+            # Separate into weak areas and strengths
+            weak_areas = []
+            strengths = []
+            
+            # Process attempted topics
+            for topic_category, total_attempted, total_correct, accuracy in user_performance:
+                topic_data = {
+                    'topic_category': topic_category,
+                    'total_attempted': total_attempted,
+                    'total_correct': total_correct,
+                    'accuracy': float(accuracy),
+                    'recommendation': self._get_topic_recommendation(topic_category, float(accuracy))
+                }
+                
+                if float(accuracy) < 70.0:
+                    weak_areas.append(topic_data)
+                else:
+                    strengths.append(topic_data)
+            
+            # Add unattended topics to weak areas
+            unattended_topics = [topic for topic in all_topic_categories if topic not in attempted_topics]
+            for topic in unattended_topics:
+                weak_areas.append({
+                    'topic_category': topic,
+                    'total_attempted': 0,
+                    'total_correct': 0,
+                    'accuracy': 0.0,
+                    'recommendation': f'Start practicing {topic} questions to build your knowledge',
+                    'unattended': True
+                })
+            
+            # Sort weak areas by accuracy (lowest first) and strengths by accuracy (highest first)
+            weak_areas.sort(key=lambda x: x['accuracy'])
+            strengths.sort(key=lambda x: x['accuracy'], reverse=True)
+            
+            logger.info(f"Topic analysis for user {user_id}: {len(weak_areas)} weak areas, {len(strengths)} strengths")
+            
+            return {
+                'weak_areas': weak_areas,
+                'strengths': strengths
+            }
+            
+        except Exception as e:
+            logger.error(f"Error getting topic analysis for user {user_id}: {e}")
+            return {'weak_areas': [], 'strengths': []}
+
+    def _get_topic_recommendation(self, topic_category, accuracy):
+        """Get recommendation for a weak topic"""
+        recommendations = {
+            'DAG Execution': 'Focus on understanding dependency chains and execution order',
+            'Incremental Models': 'Practice incremental model configurations and strategies',
+            'State Management': 'Learn about state comparison and defer strategies',
+            'Dependencies': 'Understand model dependencies and ref() functions',
+            'Snapshots': 'Study snapshot configurations and change tracking',
+            'Commands': 'Review dbt CLI commands and their usage',
+            'Testing': 'Practice writing tests and understanding test types',
+            'Data Quality': 'Focus on data quality checks and monitoring',
+            'Model Contracts': 'Learn about model contracts and schema validation',
+            'CI/CD': 'Study continuous integration and deployment practices',
+            'Model Configuration': 'Understand model configurations and materializations',
+            'Macros and Jinja': 'Practice Jinja templating and macro development',
+            'Documentation': 'Learn about documentation and metadata',
+            'Variables': 'Understand variable usage and configuration',
+            'Hooks': 'Study pre and post-hook configurations',
+            'Profiles': 'Learn about profile configurations and connections',
+            'Packages': 'Understand package management and dependencies',
+            'Seeds': 'Practice working with seed files and static data',
+            'Sources': 'Learn about source definitions and freshness',
+            'Exposures': 'Understand exposure configurations and BI integration',
+            'Metrics': 'Study metric definitions and calculations',
+            'Semantic Layer': 'Learn about semantic layer configurations',
+            'Audit': 'Practice audit logging and tracking',
+            'Performance': 'Understand optimization techniques and best practices',
+            'Security': 'Learn about security configurations and access control',
+            'Version Control': 'Study version control practices and branching',
+            'Deployment': 'Learn about deployment strategies and environments',
+            'Monitoring': 'Understand monitoring and alerting configurations'
+        }
+        
+        return recommendations.get(topic_category, 'Review this topic thoroughly')

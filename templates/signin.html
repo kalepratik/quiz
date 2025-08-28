@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In - dbt Certification Quiz</title>
+{% extends "base.html" %}
+
+{% block title %}Sign In - dbt Certification Quiz{% endblock %}
+
+{% block extra_head %}
     <meta name="description" content="Sign in to access your dbt certification quiz progress and premium features.">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/static/android-chrome-512x512.png">
-    <link rel="apple-touch-icon" href="/static/android-chrome-512x512.png">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <!-- Performance optimizations -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -269,31 +262,9 @@
             }
         }
     </style>
-</head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-    <!-- Header -->
-    <header class="sticky top-0 z-50 glass-effect dark:dark-glass border-b border-gray-200 dark:border-gray-700">
-        <div class="max-w-7xl mx-auto px-4 py-3">
-            <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
-                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
-                    </a>
-                </div>
-                
-                <!-- Actions -->
-                <div class="flex items-center space-x-4">
-                    <!-- Theme Toggle -->
-                    <button id="themeToggle" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
-                        <i id="themeIcon" class="fas fa-moon text-gray-600 dark:text-gray-300" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
+{% endblock %}
 
+{% block content %}
     <!-- Sign In Section -->
     <section class="min-h-screen flex items-center justify-center py-12 px-4">
         <div class="max-w-md w-full fade-in">
@@ -342,62 +313,13 @@
         </div>
     </section>
 
-    <!-- JavaScript -->
-    <script>
-        // Performance: Add loading state
-        document.addEventListener('DOMContentLoaded', function() {
-            document.body.classList.add('loaded');
-        });
-        
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        const body = document.body;
-        
-        // Check for saved theme preference
-        try {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                body.classList.add('dark');
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            } else {
-                // Default to light theme
-                body.classList.remove('dark');
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
-            }
-        } catch (error) {
-            console.warn('Could not load theme preference:', error);
-            // Default to light theme if localStorage fails
-            body.classList.remove('dark');
-            themeIcon.classList.remove('fa-sun');
-            themeIcon.classList.add('fa-moon');
-        }
-        
-        themeToggle.addEventListener('click', () => {
-            try {
-                body.classList.toggle('dark');
-                
-                if (body.classList.contains('dark')) {
-                    themeIcon.classList.remove('fa-moon');
-                    themeIcon.classList.add('fa-sun');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    themeIcon.classList.remove('fa-sun');
-                    themeIcon.classList.add('fa-moon');
-                    localStorage.setItem('theme', 'light');
-                }
-            } catch (error) {
-                console.warn('Theme toggle failed:', error);
-                // Fallback: remove dark class if localStorage fails
-                body.classList.remove('dark');
-            }
-        });
-        
+{% endblock %}
 
-        
-
-    </script>
-</body>
-</html>
+{% block extra_scripts %}
+<script>
+    // Performance: Add loading state
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('loaded');
+    });
+</script>
+{% endblock %}

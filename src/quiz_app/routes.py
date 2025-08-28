@@ -20,9 +20,18 @@ logger = logging.getLogger(__name__)
 @ui_bp.context_processor
 def inject_environment():
     """Inject environment variables into template context"""
+    # Get current user info for header
+    user = OAuthService.get_current_user()
+    is_authenticated = user is not None
+    is_pro_user = user.get('is_pro', False) if user else False
+    user_name = user.get('name', '').split(' ')[0] if user and user.get('name') else None
+    
     return {
         'is_production': False,
-        'is_development': True
+        'is_development': True,
+        'is_authenticated': is_authenticated,
+        'is_pro_user': is_pro_user,
+        'user_name': user_name
     }
 
 
@@ -35,47 +44,83 @@ def index():
         # Redirect PRO users to PRO dashboard
         return redirect(url_for('ui.pro_dashboard'))
     
-    return render_template('homepage.html')
+    return render_template('homepage.html', active_page='homepage')
 
 @ui_bp.route('/pro-dashboard')
 def pro_dashboard():
     """PRO dashboard for paid users"""
-    return render_template('pro-homepage.html')
+    # Check if user is authenticated
+    user = OAuthService.get_current_user()
+    if not user:
+        return redirect(url_for('ui.signin'))
+    
+    # Check if user is PRO
+    if not user.get('is_pro', False):
+        return redirect(url_for('ui.payment'))
+    
+    return render_template('pro-homepage.html', active_page='pro-homepage')
 
 @ui_bp.route('/quiz')
 def quiz():
     """Main quiz interface"""
-    return render_template('index.html')
+    return render_template('index.html', active_page='quiz')
 
 @ui_bp.route('/quiz-pro')
 def quiz_pro():
     """PRO quiz interface for paid users"""
-    return render_template('quiz-pro.html')
+    # Check if user is authenticated
+    user = OAuthService.get_current_user()
+    if not user:
+        return redirect(url_for('ui.signin'))
+    
+    # Check if user is PRO
+    if not user.get('is_pro', False):
+        return redirect(url_for('ui.payment'))
+    
+    return render_template('quiz-pro.html', active_page='quiz-pro')
 
 @ui_bp.route('/history')
 def history():
     """Quiz history page for PRO users"""
-    return render_template('history.html')
+    # Check if user is authenticated
+    user = OAuthService.get_current_user()
+    if not user:
+        return redirect(url_for('ui.signin'))
+    
+    # Check if user is PRO
+    if not user.get('is_pro', False):
+        return redirect(url_for('ui.payment'))
+    
+    return render_template('history.html', active_page='history')
 
 @ui_bp.route('/dashboard')
 def dashboard():
     """Detailed dashboard with analytics for PRO users"""
-    return render_template('dashboard.html')
+    # Check if user is authenticated
+    user = OAuthService.get_current_user()
+    if not user:
+        return redirect(url_for('ui.signin'))
+    
+    # Check if user is PRO
+    if not user.get('is_pro', False):
+        return redirect(url_for('ui.payment'))
+    
+    return render_template('dashboard.html', active_page='dashboard')
 
 @ui_bp.route('/homepage')
 def homepage():
     """Landing page with modern UI (alias)"""
-    return render_template('homepage.html')
+    return render_template('homepage.html', active_page='homepage')
 
 @ui_bp.route('/signin')
 def signin():
     """Sign in page with authentication options"""
-    return render_template('signin.html')
+    return render_template('signin.html', active_page='signin')
 
 @ui_bp.route('/payment')
 def payment():
     """Payment page for Pro upgrade"""
-    return render_template('payment.html')
+    return render_template('payment.html', active_page='payment')
 
 @api_bp.route('/create-payment-order', methods=['POST'])
 def create_payment_order():
@@ -208,7 +253,7 @@ def verify_payment():
 @ui_bp.route('/legal')
 def legal():
     """Legal information page with Privacy Policy, Terms & Conditions, and Cancellation Policy"""
-    return render_template('legal.html')
+    return render_template('legal.html', active_page='legal')
 
 @ui_bp.route('/contact', methods=['GET', 'POST'])
 def contact():
@@ -223,11 +268,11 @@ def contact():
             
             # Validate required fields
             if not all([name, email, subject, message]):
-                return render_template('contact.html', error='All fields are required.')
+                return render_template('contact.html', active_page='contact', error='All fields are required.')
             
             # Basic email validation
             if '@' not in email or '.' not in email:
-                return render_template('contact.html', error='Please enter a valid email address.')
+                return render_template('contact.html', active_page='contact', error='Please enter a valid email address.')
             
             # Import email service
             from .services.email_service import EmailService
@@ -240,15 +285,15 @@ def contact():
             auto_reply_sent = email_service.send_auto_reply(email, name)
             
             if admin_email_sent:
-                return render_template('contact.html', success=True)
+                return render_template('contact.html', active_page='contact', success=True)
             else:
-                return render_template('contact.html', error='Failed to send message. Please try again later.')
+                return render_template('contact.html', active_page='contact', error='Failed to send message. Please try again later.')
                 
         except Exception as e:
             logger.error(f"Error processing contact form: {str(e)}")
-            return render_template('contact.html', error='An error occurred. Please try again later.')
+            return render_template('contact.html', active_page='contact', error='An error occurred. Please try again later.')
     
-    return render_template('contact.html')
+    return render_template('contact.html', active_page='contact')
 
 # OAuth Routes
 @ui_bp.route('/auth/google')
@@ -574,6 +619,71 @@ def get_user_stats():
     except Exception as e:
         logger.error(f"Error getting user stats: {e}")
         return jsonify({'error': 'Failed to get user stats'}), 500
+
+@api_bp.route('/user/topic-analysis')
+def get_user_topic_analysis():
+    """Get current user's topic analysis with weak areas and strengths (last 10 days)"""
+    try:
+        user = OAuthService.get_current_user()
+        if not user:
+            return jsonify({'error': 'User not authenticated'}), 401
+        
+        # Get database service
+        db_service = current_app.database_service
+        
+        # Get topic analysis (weak areas and strengths)
+        topic_analysis = db_service.get_user_topic_analysis(user['id'])
+        
+        return jsonify({
+            'success': True,
+            'topic_analysis': topic_analysis
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting user topic analysis: {e}")
+        return jsonify({'error': 'Failed to get topic analysis'}), 500
+
+@api_bp.route('/topic-categories')
+def get_topic_categories():
+    """Get all available topic categories from the question bank"""
+    try:
+        # Get database service
+        db_service = current_app.database_service
+        
+        # Get available topic categories
+        categories = db_service.get_available_topic_categories()
+        
+        return jsonify({
+            'success': True,
+            'categories': categories
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting topic categories: {e}")
+        return jsonify({'error': 'Failed to get topic categories'}), 500
+
+@api_bp.route('/user/topic-performance')
+def get_user_topic_performance():
+    """Get current user's performance across ALL topics (for debugging)"""
+    try:
+        user = OAuthService.get_current_user()
+        if not user:
+            return jsonify({'error': 'User not authenticated'}), 401
+        
+        # Get database service
+        db_service = current_app.database_service
+        
+        # Get all topic performance (not just weak ones)
+        all_topics = db_service.get_user_all_topic_performance(user['id'])
+        
+        return jsonify({
+            'success': True,
+            'all_topics': all_topics
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting user topic performance: {e}")
+        return jsonify({'error': 'Failed to get topic performance'}), 500
 
 @api_bp.route('/user/quiz-history')
 def get_user_quiz_history():

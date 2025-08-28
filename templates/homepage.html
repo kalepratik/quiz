@@ -424,44 +424,67 @@
     <!-- Header -->
     <header class="sticky top-0 z-50 glass-effect dark:dark-glass border-b border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 py-3">
-            <div class="flex items-center justify-between">
-                                 <!-- Logo -->
-                 <div class="flex items-center space-x-3">
-                     <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
-                         <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
-                         <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
-                     </a>
-                 </div>
+            <!-- Desktop Layout -->
+            <div class="hidden md:flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
+                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
+                    </a>
+                </div>
                 
-                <!-- Navigation -->
-                <nav class="hidden md:flex items-center space-x-8">
+                <!-- Center Navigation -->
+                <nav class="flex items-center space-x-8">
                     <a href="#features" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Features</a>
                     <a href="#pricing" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Pricing</a>
                     <a href="#faq" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">FAQ</a>
                 </nav>
                 
-                <!-- Actions -->
+                <!-- Right Side Controls -->
                 <div class="flex items-center space-x-4">
                     <!-- Theme Toggle -->
-                                         <button id="themeToggle" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
-                         <i id="themeIcon" class="fas fa-moon text-gray-600 dark:text-gray-300" aria-hidden="true"></i>
-                     </button>
+                    <button id="themeToggle" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
+                        <i id="themeIcon" class="fas fa-moon text-gray-600 dark:text-gray-300" aria-hidden="true"></i>
+                    </button>
                     
-                                         <!-- CTA Buttons -->
-                     <a href="/signin" id="signInBtn" class="px-4 py-2 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">
-                         Sign In
-                     </a>
-                     <div id="userInfo" class="hidden flex items-center space-x-3">
-                         <span id="userName" class="text-sm text-gray-700 dark:text-gray-300"></span>
-                         <button id="signOutBtn" class="px-4 py-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
-                             Sign Out
-                         </button>
-                     </div>
-                                          <a href="/quiz" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold">
-                          <i class="fas fa-play mr-2"></i>Start Free
-                      </a>
-                     
-
+                    <!-- CTA Buttons -->
+                    <a href="/signin" id="signInBtn" class="px-4 py-2 text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">
+                        Sign In
+                    </a>
+                    <div id="userInfo" class="hidden flex items-center space-x-3">
+                        <span id="userName" class="text-sm text-gray-700 dark:text-gray-300"></span>
+                        <button id="signOutBtn" class="px-4 py-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
+                            Sign Out
+                        </button>
+                    </div>
+                    <a href="/quiz" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold">
+                        <i class="fas fa-play mr-2"></i>Start Free
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Mobile Layout -->
+            <div class="md:hidden flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
+                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
+                    </a>
+                </div>
+                
+                <!-- Mobile Controls -->
+                <div class="flex items-center space-x-2">
+                    <!-- Theme Toggle -->
+                    <button id="themeToggleMobile" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
+                        <i id="themeIconMobile" class="fas fa-moon text-gray-600 dark:text-gray-300" aria-hidden="true"></i>
+                    </button>
+                    
+                    <!-- Mobile CTA -->
+                    <a href="/quiz" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold text-sm">
+                        <i class="fas fa-play mr-1"></i>Start Free
+                    </a>
                 </div>
             </div>
         </div>

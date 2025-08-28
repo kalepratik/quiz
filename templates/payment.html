@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upgrade to Pro - dbt Certification Quiz</title>
+{% extends "base.html" %}
+
+{% block title %}Upgrade to Pro - dbt Certification Quiz{% endblock %}
+
+{% block extra_head %}
     <meta name="description" content="Upgrade to Pro and unlock 200+ dbt certification questions with detailed explanations.">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/static/android-chrome-512x512.png">
-    <link rel="apple-touch-icon" href="/static/android-chrome-512x512.png">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <!-- Razorpay SDK -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -269,31 +262,9 @@
             }
         }
     </style>
-</head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-    <!-- Header -->
-    <header class="sticky top-0 z-50 glass-effect dark:dark-glass border-b border-gray-200 dark:border-gray-700">
-        <div class="max-w-7xl mx-auto px-4 py-3">
-            <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
-                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
-                    </a>
-                </div>
-                
-                <!-- Actions -->
-                <div class="flex items-center space-x-4">
-                    <!-- Theme Toggle -->
-                    <button id="themeToggle" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
-                        <i id="themeIcon" class="fas fa-moon text-gray-600 dark:text-gray-300" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
+{% endblock %}
 
+{% block content %}
     <!-- Payment Section -->
     <section class="min-h-screen flex items-center justify-center py-12 px-4">
         <div class="max-w-2xl w-full fade-in">
@@ -599,13 +570,12 @@
                     errorMessage = 'Payment service is currently unavailable. Please try again later.';
                 }
                 
-                alert(errorMessage);
-            } finally {
-                // Re-enable button
-                payButton.disabled = false;
-                payButton.innerHTML = '<i class="fas fa-lock mr-2"></i>Complete Purchase';
-            }
-        });
-    </script>
-</body>
-</html>
+                                 alert(errorMessage);
+             } finally {
+                 // Re-enable button
+                 payButton.disabled = false;
+                 payButton.innerHTML = '<i class="fas fa-lock mr-2"></i>Complete Purchase';
+             }
+         });
+     </script>
+{% endblock %}

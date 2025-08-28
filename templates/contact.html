@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - dbt Certification Quiz</title>
-    <link rel="icon" type="image/png" href="/static/android-chrome-512x512.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/static/android-chrome-512x512.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+{% extends "base.html" %}
+
+{% block title %}Contact Us - dbt Certification Quiz{% endblock %}
+
+{% block extra_head %}
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -450,42 +444,9 @@
             }
         }
     </style>
-</head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-    <!-- Header -->
-    <header class="sticky top-0 z-50 glass-effect dark:dark-glass border-b border-gray-200 dark:border-gray-700">
-        <div class="max-w-7xl mx-auto px-4 py-3">
-            <div class="flex items-center space-x-8">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
-                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
-                    </a>
-                </div>
-                
-                <!-- Navigation -->
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="/" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Home</a>
-                    <a href="/contact" class="text-purple-600 dark:text-purple-400 font-semibold">Contact</a>
-                    <a href="/legal" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Legal</a>
-                </nav>
-                
-                <!-- Mobile Navigation -->
-                <nav class="md:hidden flex items-center space-x-4">
-                    <a href="/" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm">Home</a>
-                    <a href="/contact" class="text-purple-600 dark:text-purple-400 font-semibold text-sm">Contact</a>
-                    <a href="/legal" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm">Legal</a>
-                </nav>
-                
-                <!-- Theme Toggle -->
-                <button id="themeToggle" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
-                    <i id="themeIcon" class="fas fa-moon text-gray-600 dark:text-gray-300" aria-hidden="true"></i>
-                </button>
-            </div>
-        </div>
-    </header>
+{% endblock %}
 
+{% block content %}
     <!-- Main Content -->
     <div class="container">
         <div class="text-center mb-8">
@@ -579,49 +540,22 @@
         </div>
     </div>
     
-    <script>
-        // Theme toggle functionality
-        function initThemeToggle() {
-            const themeToggle = document.getElementById('themeToggle');
-            const themeIcon = document.getElementById('themeIcon');
-            
-            // Check for saved theme preference or default to light mode
-            const currentTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.classList.toggle('dark', currentTheme === 'dark');
-            updateThemeIcon(currentTheme === 'dark');
-            
-            themeToggle.addEventListener('click', () => {
-                const isDark = document.documentElement.classList.toggle('dark');
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-                updateThemeIcon(isDark);
-            });
-        }
-        
-        function updateThemeIcon(isDark) {
-            const themeIcon = document.getElementById('themeIcon');
-            if (isDark) {
-                themeIcon.className = 'fas fa-sun text-gray-300';
-            } else {
-                themeIcon.className = 'fas fa-moon text-gray-600';
-            }
-        }
-        
-        // Initialize theme toggle
-        initThemeToggle();
-        
-        // Form submission handling
-        document.querySelector('.contact-form').addEventListener('submit', function(e) {
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-        });
-        
-        // Auto-resize textarea
-        const textarea = document.getElementById('message');
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 300) + 'px';
-        });
-    </script>
-</body>
-</html>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Form submission handling
+    document.querySelector('.contact-form').addEventListener('submit', function(e) {
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    });
+    
+    // Auto-resize textarea
+    const textarea = document.getElementById('message');
+    textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 300) + 'px';
+    });
+</script>
+{% endblock %}
