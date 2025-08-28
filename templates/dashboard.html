@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - dbt Certification Quiz PRO</title>
-    <link rel="icon" type="image/png" href="/static/android-chrome-512x512.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% extends "base.html" %}
+
+{% block title %}Dashboard - dbt Certification Quiz PRO{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --pro-color: #8b5cf6;
@@ -23,6 +18,77 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Custom CSS for enhanced styling */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .pro-gradient {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+        }
+        
+        .dark-gradient {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.8s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .code-block {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff00;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        
+        .dark .code-block {
+            background: rgba(0, 0, 0, 0.9);
+            color: #00ff88;
+        }
+        
+        .ascii-diagram {
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            white-space: pre;
+        }
+        
+        .theme-toggle {
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Ensure navigation stays horizontal */
+        nav {
+            flex-direction: row !important;
+        }
+        
+        nav a {
+            flex-direction: row !important;
+            white-space: nowrap;
         }
         
         .glass-effect {
@@ -65,144 +131,399 @@
             background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
             border: 1px solid #10b981;
         }
+        
+        /* Mobile Responsive Design */
+        @media (max-width: 768px) {
+            .max-w-7xl {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .logo-section h1 {
+                font-size: 1.25rem;
+            }
+            
+            .logo-section img {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .text-3xl {
+                font-size: 1.75rem;
+            }
+            
+            .grid-cols-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-card {
+                padding: 1.5rem;
+                text-align: center;
+            }
+            
+            .text-2xl {
+                font-size: 1.5rem;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .chart-container {
+                padding: 1.5rem;
+            }
+            
+            .weak-topics {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .topic-card {
+                padding: 1.25rem;
+            }
+            
+            .recent-activity {
+                padding: 1.5rem;
+            }
+            
+            .activity-item {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .nav {
+                display: none;
+            }
+            
+            .flex.items-center.space-x-4 {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .pro-badge {
+                font-size: 0.8rem;
+                padding: 0.25rem 0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .max-w-7xl {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+            
+            .text-3xl {
+                font-size: 1.5rem;
+            }
+            
+            .stat-card {
+                padding: 1.25rem;
+            }
+            
+            .text-2xl {
+                font-size: 1.25rem;
+            }
+            
+            .chart-container {
+                padding: 1.25rem;
+            }
+            
+            .topic-card {
+                padding: 1rem;
+            }
+            
+            .recent-activity {
+                padding: 1.25rem;
+            }
+        }
+        
+        /* Icon alignment fixes */
+        .fas, .fa {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+        }
+        
+        /* Dark mode specific styles */
+        .dark {
+            color-scheme: dark;
+        }
+        
+        /* Dark mode background and text colors */
+        .dark {
+            background-color: #111827 !important;
+            color: #f9fafb !important;
+        }
+        
+        .dark .bg-gray-50 {
+            background-color: #1f2937 !important;
+        }
+        
+        .dark .bg-white {
+            background-color: #1f2937 !important;
+        }
+        
+        .dark .text-gray-900 {
+            color: #f9fafb !important;
+        }
+        
+        .dark .text-gray-600 {
+            color: #d1d5db !important;
+        }
+        
+        .dark .text-gray-300 {
+            color: #d1d5db !important;
+        }
+        
+        .dark .text-gray-700 {
+            color: #e5e7eb !important;
+        }
+        
+        .dark .border-gray-200 {
+            border-color: #374151 !important;
+        }
+        
+        .dark .border-gray-600 {
+            border-color: #4b5563 !important;
+        }
+        
+        /* Strength card specific dark mode styles */
+        .dark .strength-topic {
+            background-color: rgba(34, 197, 94, 0.1) !important;
+            border-color: rgba(34, 197, 94, 0.3) !important;
+        }
+        
+        .dark .strength-topic h4 {
+            color: #f9fafb !important;
+        }
+        
+        .dark .strength-topic p {
+            color: #d1d5db !important;
+        }
+        
+        .dark .strength-topic .text-green-600 {
+            color: #4ade80 !important;
+        }
+        
+        .dark .strength-topic .text-green-400 {
+            color: #4ade80 !important;
+        }
+        
+        /* Ensure tooltips are visible */
+        .chartjs-tooltip {
+            z-index: 99999 !important;
+            pointer-events: none !important;
+            position: absolute !important;
+        }
+        
+        /* Chart container styles */
+        .chart-container {
+            position: relative;
+            min-height: 200px;
+            overflow: visible !important;
+        }
+        
+        /* Force tooltip visibility */
+        .chartjs-tooltip-box {
+            z-index: 99999 !important;
+            position: absolute !important;
+            pointer-events: none !important;
+        }
+        
+        /* Additional Chart.js tooltip selectors */
+        .chartjs-tooltip,
+        .chartjs-tooltip-box,
+        [data-chartjs-tooltip],
+        .chartjs-tooltip-container {
+            z-index: 99999 !important;
+            position: absolute !important;
+            pointer-events: none !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        /* Ensure chart canvas doesn't block tooltips */
+        canvas {
+            position: relative !important;
+            z-index: 1 !important;
+        }
+        
+        .dark .bg-gray-200 {
+            background-color: #374151 !important;
+        }
+        
+        .dark .bg-gray-700 {
+            background-color: #374151 !important;
+        }
+        
+        .dark .hover\:bg-gray-300:hover {
+            background-color: #4b5563 !important;
+        }
+        
+        .dark .hover\:bg-gray-600:hover {
+            background-color: #4b5563 !important;
+        }
+        
+        .dark .hover\:bg-gray-50:hover {
+            background-color: #1f2937 !important;
+        }
+        
+        .dark .hover\:bg-gray-800:hover {
+            background-color: #1f2937 !important;
+        }
     </style>
-</head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-    <!-- Header -->
-    <header class="sticky top-0 z-50 glass-effect dark:dark-glass border-b border-gray-200 dark:border-gray-700">
-        <div class="max-w-7xl mx-auto px-4 py-3">
-            <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
-                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
-                        <span class="pro-badge">PRO</span>
-                    </a>
-                </div>
-                
-                <!-- Navigation -->
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="/dashboard" class="text-purple-600 dark:text-purple-400 font-semibold">Dashboard</a>
-                    <a href="/history" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">History</a>
-                </nav>
-                
-                <!-- Actions -->
-                <div class="flex items-center space-x-4">
-                    <!-- User Info -->
-                    <div id="userInfo" class="flex items-center space-x-3">
-                        <span id="userName" class="text-sm text-gray-700 dark:text-gray-300"></span>
-                        <button id="signOutBtn" class="px-4 py-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
-                            Sign Out
-                        </button>
-                    </div>
-                    
-                    <!-- PRO Quiz Button -->
-                    <a href="/quiz-pro" class="px-6 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all font-semibold flex items-center">
-                        <i class="fas fa-crown mr-2"></i>
-                        Start Quiz
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
+{% endblock %}
 
+{% block content %}
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 py-8">
+
+        
         <!-- Page Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Your Dashboard</h1>
             <p class="text-gray-600 dark:text-gray-400">Track your progress and identify areas for improvement</p>
         </div>
 
-        <!-- Quick Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="stat-card bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+        <!-- Key Statistics -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Attempts</p>
-                        <p class="text-2xl font-bold text-gray-900 dark:text-white" id="totalAttempts">0</p>
+                        <div class="text-2xl font-bold text-gray-900 dark:text-white" id="totalAttempts">0</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Total Attempts</div>
                     </div>
-                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-chart-line text-blue-600 dark:text-blue-400"></i>
+                    <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-chart-line text-purple-600 dark:text-purple-400"></i>
                     </div>
                 </div>
             </div>
             
-            <div class="stat-card bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Average Score</p>
-                        <p class="text-2xl font-bold text-gray-900 dark:text-white" id="averageScore">0%</p>
+                        <div class="text-2xl font-bold text-gray-900 dark:text-white" id="averageScore">0%</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Average Score</div>
                     </div>
-                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
+                    <div class="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
                         <i class="fas fa-percentage text-green-600 dark:text-green-400"></i>
                     </div>
                 </div>
             </div>
             
-            <div class="stat-card bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Best Score</p>
-                        <p class="text-2xl font-bold text-gray-900 dark:text-white" id="bestScore">0%</p>
+                        <div class="text-2xl font-bold text-gray-900 dark:text-white" id="bestScore">0%</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Best Score</div>
                     </div>
-                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+                    <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
                         <i class="fas fa-trophy text-purple-600 dark:text-purple-400"></i>
                     </div>
                 </div>
             </div>
             
-            <div class="stat-card bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Study Streak</p>
-                        <p class="text-2xl font-bold text-gray-900 dark:text-white" id="studyStreak">0 days</p>
+                        <div class="text-2xl font-bold text-gray-900 dark:text-white" id="studyStreak">0 days</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Study Streak</div>
                     </div>
-                    <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
+                    <div class="w-8 h-8 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
                         <i class="fas fa-fire text-orange-600 dark:text-orange-400"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Charts Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Charts and Analytics -->
+        <div class="grid md:grid-cols-2 gap-8 mb-8">
             <!-- Performance Trend -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Performance Trend</h3>
-                <canvas id="performanceChart" width="400" height="200"></canvas>
+                <div class="chart-container">
+                    <canvas id="performanceChart" width="400" height="200"></canvas>
+                    <div id="performanceChartLoading" class="text-center py-8 text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                        <p>Loading performance data...</p>
+                    </div>
+                </div>
             </div>
             
-            <!-- Topic Distribution -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Topic Performance</h3>
-                <canvas id="topicChart" width="400" height="200"></canvas>
+            <!-- Difficulty Performance -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Difficulty Performance</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Accuracy by difficulty across all attempts</p>
+                <div class="chart-container">
+                    <canvas id="difficultyChart" width="400" height="200"></canvas>
+                    <div id="difficultyChartLoading" class="text-center py-8 text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                        <p>Loading difficulty data...</p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Weak Topics Section -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-8">
+        <!-- Areas of Improvement -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm mb-8">
             <div class="flex items-center justify-between mb-6">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Areas for Improvement</h3>
-                <span class="text-sm text-gray-600 dark:text-gray-400">Focus on these topics to improve your score</span>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    <i class="fas fa-exclamation-triangle text-orange-500 mr-2"></i>
+                    Areas of Improvement
+                </h3>
+                <span class="text-sm text-gray-600 dark:text-gray-400">Focus on these topics to improve your score (Last 10 days)</span>
             </div>
             
-            <div id="weakTopicsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Weak topics will be loaded here -->
+            <div id="weakAreasList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Weak areas will be loaded here -->
+                <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                    <p>Loading weak areas...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strengths -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    <i class="fas fa-star text-green-500 mr-2"></i>
+                    Strengths
+                </h3>
+                <span class="text-sm text-gray-600 dark:text-gray-400">Topics where you're performing well (Last 10 days)</span>
+            </div>
+            
+            <div id="strengthsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Strengths will be loaded here -->
+                <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                    <p>Loading strengths...</p>
+                </div>
             </div>
         </div>
 
         <!-- Recent Activity -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Activity</h3>
             <div id="recentActivity" class="space-y-4">
-                <!-- Recent activity will be loaded here -->
+                <!-- Recent activity will be populated by JavaScript -->
             </div>
         </div>
     </div>
+    </div>
 
     <script>
+
+
         // Load user info
         async function loadUserInfo() {
             try {
@@ -210,34 +531,89 @@
                 const data = await response.json();
                 
                 if (data.authenticated) {
-                    document.getElementById('userName').textContent = data.user.name || data.user.email;
+                    // Update page title
+                    if (data.user.name) {
+                        const firstName = data.user.name.split(' ')[0];
+                        document.title = `${firstName}'s Dashboard - dbt Certification Quiz PRO`;
+                    } else if (data.user.email) {
+                        const emailName = data.user.email.split('@')[0];
+                        document.title = `${emailName}'s Dashboard - dbt Certification Quiz PRO`;
+                    }
                 } else {
+                    console.log('User not authenticated, redirecting to signin');
                     window.location.href = '/signin';
                 }
             } catch (error) {
                 console.error('Error loading user info:', error);
+                // Don't redirect on network errors, just log the error
             }
         }
 
+        // Global error handler
+        window.addEventListener('error', function(e) {
+            console.error('Global JavaScript error:', e.error);
+        });
+        
         // Load dashboard data
         async function loadDashboardData() {
             try {
-                const [statsResponse, historyResponse] = await Promise.all([
+                console.log('Loading dashboard data...');
+                
+                const [statsResponse, historyResponse, topicAnalysisResponse] = await Promise.all([
                     fetch('/api/user/stats'),
-                    fetch('/api/user/quiz-history')
+                    fetch('/api/user/quiz-history'),
+                    fetch('/api/user/topic-analysis')
                 ]);
+                
+                console.log('API Responses:', {
+                    stats: statsResponse.status,
+                    history: historyResponse.status,
+                    topicAnalysis: topicAnalysisResponse.status
+                });
+                
+                // Check if any response failed
+                if (!statsResponse.ok || !historyResponse.ok || !topicAnalysisResponse.ok) {
+                    console.error('One or more API calls failed:', {
+                        stats: statsResponse.status,
+                        history: historyResponse.status,
+                        topicAnalysis: topicAnalysisResponse.status
+                    });
+                }
                 
                 const statsData = await statsResponse.json();
                 const historyData = await historyResponse.json();
+                const topicAnalysisData = await topicAnalysisResponse.json();
+                
+                console.log('API Data:', {
+                    stats: statsData,
+                    history: historyData,
+                    topicAnalysis: topicAnalysisData
+                });
                 
                 if (statsData.success) {
                     updateStats(statsData.stats);
                 }
                 
                 if (historyData.success && historyData.history) {
-                    updateCharts(historyData.history);
-                    updateWeakTopics(historyData.history);
+                    console.log('History data:', historyData.history);
+                    updateCharts(historyData.history, topicAnalysisData.success ? topicAnalysisData.topic_analysis : null);
                     updateRecentActivity(historyData.history);
+                } else {
+                    console.log('History data failed:', historyData);
+                    // Show empty charts
+                    updateCharts([], null);
+                    updateRecentActivity([]);
+                }
+                
+                if (topicAnalysisData.success) {
+                    console.log('Topic analysis data:', topicAnalysisData.topic_analysis);
+                    updateWeakAreas(topicAnalysisData.topic_analysis.weak_areas);
+                    updateStrengths(topicAnalysisData.topic_analysis.strengths);
+                } else {
+                    console.log('Topic analysis failed:', topicAnalysisData);
+                    // Show empty states
+                    updateWeakAreas([]);
+                    updateStrengths([]);
                 }
             } catch (error) {
                 console.error('Error loading dashboard data:', error);
@@ -253,73 +629,352 @@
         }
 
         // Update charts
-        function updateCharts(history) {
-            // Performance trend chart
-            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
-            const performanceData = history.slice(-10).map((attempt, index) => ({
-                x: index + 1,
-                y: attempt.percentage
-            }));
+        function updateCharts(history, topicAnalysis = null) {
+            // Hide loading indicators
+            const performanceLoading = document.getElementById('performanceChartLoading');
+            const difficultyLoading = document.getElementById('difficultyChartLoading');
+            if (performanceLoading) performanceLoading.style.display = 'none';
+            if (difficultyLoading) difficultyLoading.style.display = 'none';
             
-            new Chart(performanceCtx, {
+            // Check if dark mode is enabled
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            
+            // Performance trend chart - Daily averages
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            const dailyData = getDailyPerformanceData(history);
+            
+            const performanceChart = new Chart(performanceCtx, {
                 type: 'line',
                 data: {
+                    labels: dailyData.labels,
                     datasets: [{
-                        label: 'Score %',
-                        data: performanceData,
-                        borderColor: '#8b5cf6',
-                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100
-                        }
-                    }
-                }
-            });
-
-            // Topic performance chart
-            const topicCtx = document.getElementById('topicChart').getContext('2d');
-            const topicData = getTopicPerformance(history);
-            
-            new Chart(topicCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: topicData.labels,
-                    datasets: [{
-                        data: topicData.data,
-                        backgroundColor: [
-                            '#10b981',
-                            '#3b82f6',
-                            '#f59e0b',
-                            '#ef4444',
-                            '#8b5cf6'
-                        ]
+                        label: 'Daily Average Score %',
+                        data: dailyData.data,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#3b82f6',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
                     }]
                 },
                 options: {
                     responsive: true,
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: isDarkMode ? '#e5e7eb' : '#374151',
+                                font: {
+                                    size: 12,
+                                    weight: '500'
+                                },
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#e5e7eb',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            padding: 12,
+                            callbacks: {
+                                title: function(context) {
+                                    return `📅 ${context[0].label}`;
+                                },
+                                label: function(context) {
+                                    const dataPoint = dailyData.details[context.dataIndex];
+                                    if (dataPoint.attempts.length === 0) {
+                                        return '📊 No attempts on this day';
+                                    } else if (dataPoint.attempts.length === 1) {
+                                        return `📊 ${context.parsed.y}% (1 attempt)`;
+                                    } else {
+                                        return `📊 ${context.parsed.y}% (${dataPoint.attempts.length} attempts)`;
+                                    }
+                                },
+                                afterLabel: function(context) {
+                                    const dataPoint = dailyData.details[context.dataIndex];
+                                    if (dataPoint.attempts.length > 1) {
+                                        const attemptScores = dataPoint.attempts.map(attempt => 
+                                            `${attempt.percentage}%`
+                                        ).join(', ');
+                                        return `📋 Individual scores: ${attemptScores}`;
+                                    }
+                                    return '';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'category',
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#9ca3af',
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                },
+                                color: '#9ca3af',
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)',
+                                drawBorder: false
+                            }
+                                                }
+                    }
+                }
+            });
+            
+            console.log('✅ Line chart created successfully');
+            
+            // Difficulty performance chart - Bar chart
+            const difficultyCtx = document.getElementById('difficultyChart').getContext('2d');
+            const difficultyData = getDifficultyPerformance(history);
+            
+            console.log('✅ Difficulty data:', difficultyData);
+            
+            const difficultyChart = new Chart(difficultyCtx, {
+                type: 'bar',
+                data: {
+                    labels: difficultyData.labels,
+                    datasets: [{
+                        label: 'Accuracy %',
+                        data: difficultyData.data,
+                        backgroundColor: difficultyData.colors,
+                        borderColor: difficultyData.colors,
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(0, 0, 0, 0.95)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            borderColor: 'rgba(255, 255, 255, 0.2)',
+                            borderWidth: 2,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            padding: 16,
+                            mode: 'nearest',
+                            intersect: true,
+                                                            callbacks: {
+                                    title: function(context) {
+                                        console.log('🎯 Difficulty tooltip title:', context);
+                                        return `📊 ${context[0].label}`;
+                                    },
+                                    label: function(context) {
+                                        console.log('🎯 Difficulty tooltip label:', context);
+                                        // Fix: Use context.parsed.y instead of context[0].parsed.y
+                                        const accuracy = context.parsed.y;
+                                        const difficulty = context.label;
+                                        
+                                        if (accuracy >= 80) {
+                                            return `🎯 ${accuracy}% accuracy - Excellent!`;
+                                        } else if (accuracy >= 60) {
+                                            return `📈 ${accuracy}% accuracy - Good progress`;
+                                        } else {
+                                            return `⚠️ ${accuracy}% accuracy - Needs improvement`;
+                                        }
+                                    }
+                                }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#9ca3af',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                },
+                                color: '#9ca3af',
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)',
+                                drawBorder: false
+                            }
                         }
                     }
                 }
             });
+            
+            console.log('✅ Difficulty chart created successfully');
+            
+            // Test if difficulty chart responds to events
+            difficultyChart.canvas.addEventListener('mousemove', function(e) {
+                console.log('🖱️ Mouse moved over difficulty chart');
+            });
+            
+            difficultyChart.canvas.addEventListener('click', function(e) {
+                console.log('🖱️ Difficulty chart clicked');
+            });
         }
 
-        // Get topic performance data
+        // Get daily performance data with averages and gaps
+        function getDailyPerformanceData(history) {
+            if (!history || history.length === 0) {
+                return { labels: [], data: [], details: [] };
+            }
+            
+            // Group attempts by date
+            const dailyAttempts = {};
+            history.forEach(attempt => {
+                const date = new Date(attempt.created_at).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+                
+                if (!dailyAttempts[date]) {
+                    dailyAttempts[date] = [];
+                }
+                dailyAttempts[date].push(attempt);
+            });
+            
+            // Sort dates chronologically
+            const sortedDates = Object.keys(dailyAttempts).sort((a, b) => {
+                return new Date(a) - new Date(b);
+            });
+            
+            // Get the last 14 days (or fewer if less data available)
+            const last14Days = [];
+            const today = new Date();
+            for (let i = 13; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+                last14Days.push(dateStr);
+            }
+            
+            // Create data points for each day
+            const labels = [];
+            const data = [];
+            const details = [];
+            
+            last14Days.forEach(date => {
+                labels.push(date);
+                
+                if (dailyAttempts[date]) {
+                    // Calculate average for this day
+                    const totalScore = dailyAttempts[date].reduce((sum, attempt) => sum + attempt.percentage, 0);
+                    const averageScore = totalScore / dailyAttempts[date].length;
+                    
+                    data.push(Math.round(averageScore * 10) / 10); // Round to 1 decimal place
+                    details.push({
+                        attempts: dailyAttempts[date],
+                        average: averageScore
+                    });
+                } else {
+                    // No attempts on this day
+                    data.push(0);
+                    details.push({
+                        attempts: [],
+                        average: 0
+                    });
+                }
+            });
+            
+            return { labels, data, details };
+        }
+
+        // Get difficulty performance data
+        function getDifficultyPerformance(history) {
+            if (!history || history.length === 0) {
+                return {
+                    labels: ['Easy', 'Medium', 'Hard'],
+                    data: [0, 0, 0],
+                    colors: ['#10b981', '#f59e0b', '#6366f1']
+                };
+            }
+            
+            // Group attempts by difficulty
+            const difficulties = {
+                1: { total: 0, correct: 0, label: 'Easy' },
+                2: { total: 0, correct: 0, label: 'Medium' },
+                3: { total: 0, correct: 0, label: 'Hard' }
+            };
+            
+            history.forEach(attempt => {
+                const difficulty = attempt.difficulty || 2; // Default to medium if not specified
+                if (difficulties[difficulty]) {
+                    difficulties[difficulty].total += attempt.total_questions;
+                    difficulties[difficulty].correct += attempt.correct_answers;
+                }
+            });
+            
+            // Calculate accuracy for each difficulty
+            const labels = [];
+            const data = [];
+            const colors = ['#10b981', '#f59e0b', '#6366f1']; // Green, Amber, Indigo
+            
+            Object.values(difficulties).forEach(diff => {
+                labels.push(diff.label);
+                if (diff.total > 0) {
+                    const accuracy = Math.round((diff.correct / diff.total) * 100);
+                    data.push(accuracy);
+                } else {
+                    data.push(0);
+                }
+            });
+            
+            return { labels, data, colors };
+        }
+
+        // Get topic performance data (legacy function for other charts)
         function getTopicPerformance(history) {
             const topics = {};
             
             history.forEach(attempt => {
-                // Simulate topic data (in real app, this would come from the database)
-                const topic = attempt.topic || 'General';
+                // Get topic from attempt data (this should come from the database)
+                const topic = attempt.topic || 'Uncategorized';
                 if (!topics[topic]) {
                     topics[topic] = { total: 0, correct: 0 };
                 }
@@ -336,76 +991,76 @@
             return { labels, data };
         }
 
-        // Update weak topics
-        function updateWeakTopics(history) {
-            const weakTopics = identifyWeakTopics(history);
-            const container = document.getElementById('weakTopicsList');
+        // Update weak areas
+        function updateWeakAreas(weakAreas) {
+            const container = document.getElementById('weakAreasList');
             
-            if (weakTopics.length === 0) {
+            if (!weakAreas || weakAreas.length === 0) {
                 container.innerHTML = `
                     <div class="col-span-full text-center py-8">
                         <i class="fas fa-check-circle text-4xl text-green-500 mb-4"></i>
-                        <p class="text-gray-600 dark:text-gray-400">Great job! No weak topics identified.</p>
+                        <p class="text-gray-600 dark:text-gray-400">Great job! No weak areas identified.</p>
                     </div>
                 `;
                 return;
             }
             
-            container.innerHTML = weakTopics.map(topic => `
-                <div class="weak-topic rounded-lg p-4">
+            container.innerHTML = weakAreas.map(topic => {
+                const isUnattended = topic.unattended;
+                const accuracyText = isUnattended ? 'Not attempted' : `${topic.accuracy}%`;
+                const progressWidth = isUnattended ? 0 : topic.accuracy;
+                const progressColor = isUnattended ? 'bg-gray-400' : 'bg-orange-500';
+                const borderColor = isUnattended ? 'border-gray-300 dark:border-gray-600' : 'border-orange-200 dark:border-orange-700';
+                const bgColor = isUnattended ? 'bg-gray-50 dark:bg-gray-700' : 'bg-orange-50 dark:bg-orange-900/20';
+                const textColor = isUnattended ? 'text-gray-600 dark:text-gray-400' : 'text-orange-600 dark:text-orange-400';
+                
+                return `
+                    <div class="weak-topic rounded-lg p-4 border ${borderColor} ${bgColor}">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-semibold text-gray-900 dark:text-white">${topic.topic_category}</h4>
+                            <span class="text-sm font-medium ${textColor}">${accuracyText}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-2">
+                            <div class="${progressColor} h-2 rounded-full" style="width: ${progressWidth}%"></div>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                            ${isUnattended ? '0/0 attempted' : `${topic.total_correct}/${topic.total_attempted} correct`}
+                        </p>
+                        <p class="text-sm text-gray-700 dark:text-gray-300">${topic.recommendation}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update strengths
+        function updateStrengths(strengths) {
+            const container = document.getElementById('strengthsList');
+            
+            if (!strengths || strengths.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <i class="fas fa-info-circle text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-600 dark:text-gray-400">No strengths identified yet. Keep practicing!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = strengths.map(topic => `
+                <div class="strength-topic rounded-lg p-4 border border-green-200 dark:border-green-700 bg-green-50 dark:bg-green-900/20">
                     <div class="flex items-center justify-between mb-2">
-                        <h4 class="font-semibold text-gray-900 dark:text-white">${topic.name}</h4>
-                        <span class="text-sm font-medium text-red-600">${topic.score}%</span>
+                        <h4 class="font-semibold text-gray-900 dark:text-white">${topic.topic_category}</h4>
+                        <span class="text-sm font-medium text-green-600 dark:text-green-400">${topic.accuracy}%</span>
                     </div>
-                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                        <div class="bg-red-500 h-2 rounded-full" style="width: ${topic.score}%"></div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-2">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: ${topic.accuracy}%"></div>
                     </div>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">${topic.recommendation}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                        ${topic.total_correct}/${topic.total_attempted} correct
+                    </p>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">Keep up the great work!</p>
                 </div>
             `).join('');
-        }
-
-        // Identify weak topics
-        function identifyWeakTopics(history) {
-            const topics = {};
-            
-            history.forEach(attempt => {
-                const topic = attempt.topic || 'General';
-                if (!topics[topic]) {
-                    topics[topic] = { total: 0, correct: 0, attempts: 0 };
-                }
-                topics[topic].total += attempt.total_questions;
-                topics[topic].correct += attempt.correct_answers;
-                topics[topic].attempts += 1;
-            });
-            
-            const weakTopics = [];
-            Object.entries(topics).forEach(([topic, data]) => {
-                const score = Math.round((data.correct / data.total) * 100);
-                if (score < 70 && data.attempts >= 2) {
-                    weakTopics.push({
-                        name: topic,
-                        score: score,
-                        recommendation: getRecommendation(topic, score)
-                    });
-                }
-            });
-            
-            return weakTopics.sort((a, b) => a.score - b.score).slice(0, 6);
-        }
-
-        // Get recommendation for weak topic
-        function getRecommendation(topic, score) {
-            const recommendations = {
-                'General': 'Review basic dbt concepts and fundamentals',
-                'Models': 'Focus on model types, materializations, and best practices',
-                'Testing': 'Practice writing tests and understanding test types',
-                'Documentation': 'Learn about documentation and metadata',
-                'Deployment': 'Study deployment strategies and CI/CD',
-                'Performance': 'Understand optimization techniques'
-            };
-            
-            return recommendations[topic] || 'Review this topic thoroughly';
         }
 
         // Update recent activity
@@ -463,16 +1118,23 @@
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            loadUserInfo();
-            loadDashboardData();
+            console.log('🚀 Dashboard page loaded');
             
-            // Sign out functionality
-            document.getElementById('signOutBtn').addEventListener('click', function() {
-                fetch('/api/signout', { method: 'POST' })
-                    .then(() => window.location.href = '/')
-                    .catch(error => console.error('Error signing out:', error));
-            });
+            // Load user info
+            try {
+                loadUserInfo();
+                console.log('✅ User info loading started');
+            } catch (error) {
+                console.error('❌ User info error:', error);
+            }
+            
+            // Load dashboard data
+            try {
+                loadDashboardData();
+                console.log('✅ Dashboard data loading started');
+            } catch (error) {
+                console.error('❌ Dashboard data error:', error);
+            }
         });
     </script>
-</body>
-</html>
+{% endblock %}

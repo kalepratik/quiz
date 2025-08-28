@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dbt Certification Quiz - PRO</title>
-    <link rel="icon" type="image/png" href="/static/android-chrome-512x512.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/static/android-chrome-512x512.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+{% extends "base.html" %}
+
+{% block title %}dbt Certification Quiz - PRO{% endblock %}
+
+{% block extra_head %}
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -552,14 +547,43 @@
             
             .header-content {
                 padding: 0 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
             }
             
             .logo-section h1 {
                 font-size: 1.2rem;
             }
             
+            .logo-section img {
+                width: 32px;
+                height: 32px;
+            }
+            
             .config-form {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+            
+            .form-group label {
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .form-group select {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+            
+            .start-quiz-btn {
+                width: 100%;
+                padding: 1.25rem;
+                font-size: 1.1rem;
             }
             
             .quiz-header-section {
@@ -568,31 +592,137 @@
                 align-items: flex-start;
             }
             
+            .quiz-header-section h2 {
+                font-size: 1.5rem;
+            }
+            
+            .quiz-header-section p {
+                font-size: 0.9rem;
+            }
+            
             .navigation-buttons {
                 flex-direction: column;
                 gap: 1rem;
             }
             
+            .nav-btn {
+                width: 100%;
+                padding: 1rem;
+                font-size: 1rem;
+            }
+            
             .action-buttons {
                 flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .action-btn {
+                width: 100%;
+                max-width: 300px;
+                padding: 1rem;
+            }
+            
+            .progress-container {
+                margin-bottom: 1.5rem;
+            }
+            
+            .progress-text {
+                font-size: 0.9rem;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+                line-height: 1.5;
+            }
+            
+            .options-container {
+                gap: 0.75rem;
+            }
+            
+            .option-btn {
+                padding: 1rem;
+                font-size: 0.95rem;
+                text-align: left;
+            }
+            
+            .timer {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+            }
+            
+            .pro-features {
+                padding: 1.5rem;
+            }
+            
+            .pro-features h3 {
+                font-size: 1.25rem;
+            }
+            
+            .pro-features ul {
+                gap: 0.75rem;
+            }
+            
+            .pro-features li {
+                font-size: 0.95rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.75rem;
+            }
+            
+            .header-content {
+                padding: 0 0.75rem;
+            }
+            
+            .logo-section h1 {
+                font-size: 1.1rem;
+            }
+            
+            .config-form {
+                gap: 1.25rem;
+            }
+            
+            .form-group select {
+                padding: 0.875rem;
+                font-size: 0.95rem;
+            }
+            
+            .start-quiz-btn {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+            
+            .quiz-header-section h2 {
+                font-size: 1.25rem;
+            }
+            
+            .question-text {
+                font-size: 1rem;
+            }
+            
+            .option-btn {
+                font-size: 0.9rem;
+                padding: 0.875rem;
+            }
+            
+            .pro-features {
+                padding: 1.25rem;
+            }
+            
+            .pro-features h3 {
+                font-size: 1.1rem;
+            }
+            
+            .pro-features li {
+                font-size: 0.9rem;
             }
         }
     </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="quiz-header">
-        <div class="header-content">
-            <div class="logo-section">
-                <a href="/" class="logo-link" title="Go to Home">
-                    <img src="/static/dbt-bit-standalone.png" alt="dbt Logo">
-                </a>
-                <h1>dbt Certification Quiz <span class="pro-badge">PRO</span></h1>
-            </div>
-        </div>
-    </header>
+{% endblock %}
 
-    <div class="container">
+{% block content %}
         <!-- Quiz Configuration Section -->
         <div class="quiz-config" id="quizConfig">
             <div class="config-header">
@@ -1011,5 +1141,4 @@
 
 
      </script>
-</body>
-</html>
+{% endblock %}

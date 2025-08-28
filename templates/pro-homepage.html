@@ -146,6 +146,170 @@
             }
         }
         
+        /* Mobile Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header-content {
+                padding: 0 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .logo-section h1 {
+                font-size: 1.25rem;
+            }
+            
+            .logo-section img {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .welcome-section {
+                padding: 2rem 1rem;
+                text-align: center;
+            }
+            
+            .welcome-title {
+                font-size: 1.75rem;
+                line-height: 1.2;
+            }
+            
+            .welcome-subtitle {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .pro-badge {
+                font-size: 0.8rem;
+                padding: 0.5rem 1rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: center;
+            }
+            
+            .action-btn {
+                width: 100%;
+                max-width: 300px;
+                padding: 1rem;
+                font-size: 1.1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+            
+            .stat-card {
+                padding: 1.5rem;
+                text-align: center;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .stat-label {
+                font-size: 0.9rem;
+            }
+            
+            .pro-question-preview {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            .question-header {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+            
+            .question-text {
+                font-size: 1rem;
+                line-height: 1.5;
+            }
+            
+            .code-snippet {
+                font-size: 0.85rem;
+                padding: 1rem;
+                overflow-x: auto;
+            }
+            
+            .footer {
+                padding: 2rem 1rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+            
+            /* Mobile navigation styling */
+            .nav.hidden.md\\:flex {
+                display: none;
+            }
+            
+            .nav.md\\:hidden {
+                display: flex;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.75rem;
+            }
+            
+            .header-content {
+                padding: 0 0.75rem;
+            }
+            
+            .welcome-section {
+                padding: 1.5rem 0.75rem;
+            }
+            
+            .welcome-title {
+                font-size: 1.5rem;
+            }
+            
+            .welcome-subtitle {
+                font-size: 0.95rem;
+            }
+            
+            .stats-grid {
+                padding: 0.75rem;
+            }
+            
+            .stat-card {
+                padding: 1.25rem;
+            }
+            
+            .pro-question-preview {
+                padding: 1.25rem;
+                margin: 0.75rem;
+            }
+            
+            .question-text {
+                font-size: 0.95rem;
+            }
+            
+            .code-snippet {
+                font-size: 0.8rem;
+                padding: 0.875rem;
+            }
+            
+            .footer {
+                padding: 1.5rem 0.75rem;
+            }
+        }
+        
         /* Dark mode specific styles */
         .dark {
             color-scheme: dark;
@@ -191,6 +355,24 @@
         
         .dark .bg-gray-200 {
             background-color: #374151 !important;
+        }
+        
+        /* Icon alignment fixes */
+        .fas, .fa {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+        }
+        
+        /* Ensure navigation stays horizontal */
+        nav {
+            flex-direction: row !important;
+        }
+        
+        nav a {
+            flex-direction: row !important;
+            white-space: nowrap;
         }
         
         .dark .bg-gray-700 {
@@ -247,7 +429,8 @@
     <!-- Header -->
     <header class="sticky top-0 z-50 glass-effect dark:dark-glass border-b border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 py-3">
-            <div class="flex items-center justify-between">
+            <!-- Desktop Layout -->
+            <div class="hidden md:flex items-center justify-between">
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
                     <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
@@ -257,32 +440,62 @@
                     </a>
                 </div>
                 
-                <!-- Navigation -->
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="/dashboard" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Dashboard</a>
-                    <a href="/history" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">History</a>
+                <!-- Center Navigation -->
+                <nav class="flex items-center space-x-8">
+                    <a href="/dashboard" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center whitespace-nowrap">
+                        <i class="fas fa-chart-line mr-1"></i>Dashboard
+                    </a>
+                    <a href="/history" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center whitespace-nowrap">
+                        <i class="fas fa-history mr-1"></i>History
+                    </a>
                 </nav>
                 
-                <!-- Actions -->
+                <!-- Right Side Controls -->
                 <div class="flex items-center space-x-4">
                     <!-- Theme Toggle -->
                     <button id="themeToggle" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
                         <i id="themeIcon" class="fas fa-moon text-gray-600 dark:text-gray-300" aria-hidden="true"></i>
                     </button>
                     
-                    <!-- User Info -->
-                    <div id="userInfo" class="flex items-center space-x-3">
-                        <span id="userName" class="text-sm text-gray-700 dark:text-gray-300"></span>
-                        <button id="signOutBtn" class="px-4 py-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
-                            Sign Out
-                        </button>
-                    </div>
-                    
-                    <!-- PRO Quiz Button -->
-                    <a href="/quiz-pro" class="px-6 py-2 pro-gradient text-gray-900 rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all font-semibold flex items-center">
-                        <i class="fas fa-crown mr-2"></i>
-                        Start Quiz
+                    <!-- Sign Out -->
+                    <button id="signOutBtn" class="px-4 py-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Layout -->
+            <div class="md:hidden flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
+                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
+                        <span class="pro-badge">PRO</span>
                     </a>
+                </div>
+                
+                <!-- Mobile Navigation -->
+                <nav class="flex items-center space-x-4">
+                    <a href="/dashboard" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm flex items-center whitespace-nowrap">
+                        <i class="fas fa-chart-line mr-1"></i>Dashboard
+                    </a>
+                    <a href="/history" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm flex items-center whitespace-nowrap">
+                        <i class="fas fa-history mr-1"></i>History
+                    </a>
+                </nav>
+                
+                <!-- Mobile Controls -->
+                <div class="flex items-center space-x-2">
+                    <!-- Theme Toggle -->
+                    <button id="themeToggleMobile" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
+                        <i id="themeIconMobile" class="fas fa-moon text-gray-600 dark:text-gray-300" aria-hidden="true"></i>
+                    </button>
+                    
+                    <!-- Sign Out -->
+                    <button id="signOutBtnMobile" class="px-3 py-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
+                        Sign Out
+                    </button>
                 </div>
             </div>
         </div>
@@ -295,7 +508,7 @@
                 <!-- Left Column -->
                 <div class="fade-in">
                     <div class="flex items-center mb-4">
-                        <span class="pro-badge mr-3">PRO MEMBER</span>
+                        <span id="userNameBadge" class="pro-badge mr-3">PRO MEMBER</span>
                         <span class="text-sm text-gray-600 dark:text-gray-400">Welcome back!</span>
                     </div>
                     
@@ -310,11 +523,12 @@
                     
                     <!-- CTA Buttons -->
                     <div class="flex flex-wrap gap-4 mb-8">
-                        <a href="/quiz-pro" class="px-8 py-3 pro-gradient text-gray-900 rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all font-semibold flex items-center">
-                            <i class="fas fa-crown mr-2"></i>
+                        <a href="/quiz-pro" class="px-8 py-3 pro-gradient text-gray-900 rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all font-semibold flex items-center justify-center">
+                            <i class="fas fa-crown mr-2 flex items-center"></i>
                             Start PRO Quiz
                         </a>
-                        <a href="#stats" class="px-8 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-semibold">
+                        <a href="#stats" class="px-8 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-semibold flex items-center justify-center">
+                            <i class="fas fa-chart-bar mr-2 flex items-center"></i>
                             View Stats
                         </a>
                     </div>
@@ -619,7 +833,7 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
         
         // Handle user info display
         const userInfo = document.getElementById('userInfo');
-        const userName = document.getElementById('userName');
+        const userNameBadge = document.getElementById('userNameBadge');
         const signOutBtn = document.getElementById('signOutBtn');
         
         async function updateUserDisplay() {
@@ -629,13 +843,17 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
                 const data = await response.json();
                 
                 if (data.authenticated && data.user) {
-                    // Display user info
+                    // Display user info in badge
                     if (data.user.name) {
-                        userName.textContent = `Welcome, ${data.user.name}`;
+                        // Extract first name only
+                        const firstName = data.user.name.split(' ')[0];
+                        userNameBadge.textContent = `${firstName} - PRO MEMBER`;
                     } else if (data.user.email) {
-                        userName.textContent = `Welcome, ${data.user.email}`;
+                        // Extract first part of email (before @)
+                        const emailName = data.user.email.split('@')[0];
+                        userNameBadge.textContent = `${emailName} - PRO MEMBER`;
                     } else {
-                        userName.textContent = 'Welcome!';
+                        userNameBadge.textContent = 'PRO MEMBER';
                     }
                 } else {
                     // Redirect to regular homepage if not authenticated
