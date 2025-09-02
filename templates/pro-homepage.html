@@ -1,510 +1,535 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dbt Certification Quiz - PRO Dashboard</title>
-    <meta name="description" content="Welcome to your PRO dashboard. Access 200+ exam-style questions and advanced features for comprehensive dbt certification preparation.">
-    <meta name="keywords" content="dbt, certification, quiz, analytics engineering, data transformation, practice exam, pro">
-    <meta name="author" content="dbt Quiz">
-    <meta property="og:title" content="dbt Certification Quiz - PRO Dashboard">
-    <meta property="og:description" content="Welcome to your PRO dashboard. Access 200+ exam-style questions and advanced features.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://your-app-name.onrender.com">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="dbt Certification Quiz - PRO Dashboard">
-    <meta name="twitter:description" content="Welcome to your PRO dashboard. Access 200+ exam-style questions and advanced features.">
+{% extends "base.html" %}
+
+{% block title %}dbt Certification Quiz - PRO Dashboard{% endblock %}
+
+{% block extra_head %}
+<meta name="description" content="Welcome to your PRO dashboard. Access 200+ exam-style questions and advanced features for comprehensive dbt certification preparation.">
+<meta name="keywords" content="dbt, certification, quiz, analytics engineering, data transformation, practice exam, pro">
+<meta name="author" content="dbt Quiz">
+<meta property="og:title" content="dbt Certification Quiz - PRO Dashboard">
+<meta property="og:description" content="Welcome to your PRO dashboard. Access 200+ exam-style questions and advanced features.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://your-app-name.onrender.com">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="dbt Certification Quiz - PRO Dashboard">
+<meta name="twitter:description" content="Welcome to your PRO dashboard. Access 200+ exam-style questions and advanced features.">
+
+<!-- Performance optimizations -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
+<style>
+    /* Custom CSS for enhanced styling */
+    .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/static/android-chrome-512x512.png">
-    <link rel="apple-touch-icon" href="/static/android-chrome-512x512.png">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    .pro-gradient {
+        background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+    }
     
-    <!-- Performance optimizations -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    <style>
-        /* Custom CSS for enhanced styling */
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    .dark-gradient {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+    
+    .glass-effect {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .dark-glass {
+        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .card-hover {
+        transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .fade-in {
+        animation: fadeIn 0.6s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .slide-in {
+        animation: slideIn 0.8s ease-out;
+    }
+    
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateX(-30px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .code-block {
+        font-family: 'Courier New', monospace;
+        background: rgba(0, 0, 0, 0.8);
+        color: #00ff00;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        overflow-y: visible !important;
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+        text-overflow: unset !important;
+    }
+    
+    .dark .code-block {
+        background: rgba(0, 0, 0, 0.9);
+        color: #00ff88;
+    }
+    
+    .ascii-diagram {
+        font-family: 'Courier New', monospace;
+        font-size: 0.875rem;
+        line-height: 1.4;
+        white-space: pre;
+        overflow: visible !important;
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        text-overflow: unset !important;
+    }
+    
+    .theme-toggle {
+        transition: all 0.3s ease;
+    }
+    
+    .theme-toggle:hover {
+        transform: scale(1.1);
+    }
+    
+    .pro-badge {
+        background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Loading animation */
+    body:not(.loaded) {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    body.loaded {
+        opacity: 1;
+    }
+    
+    /* Focus styles for accessibility */
+    button:focus,
+    a:focus {
+        outline: 2px solid #6366f1;
+        outline-offset: 2px;
+    }
+    
+    /* Reduced motion for users who prefer it */
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
         }
-        
-        .pro-gradient {
-            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
-        }
-        
-        .dark-gradient {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-        }
-        
-        .glass-effect {
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .dark-glass {
-            backdrop-filter: blur(10px);
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.6s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .slide-in {
-            animation: slideIn 0.8s ease-out;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        .code-block {
-            font-family: 'Courier New', monospace;
-            background: rgba(0, 0, 0, 0.8);
-            color: #00ff00;
+    }
+    
+    /* Mobile Responsive Design */
+    @media (max-width: 768px) {
+        .container {
             padding: 1rem;
-            border-radius: 0.5rem;
-            overflow-x: auto;
         }
         
-        .dark .code-block {
-            background: rgba(0, 0, 0, 0.9);
-            color: #00ff88;
+        /* Let Tailwind handle container padding - don't override */
+        
+
+        
+        /* Ensure grids take full width and center properly */
+        .grid.w-full {
+            width: 100% !important;
+            justify-items: stretch;
         }
         
-        .ascii-diagram {
-            font-family: 'Courier New', monospace;
-            font-size: 0.875rem;
-            line-height: 1.4;
-            white-space: pre;
+        /* Ensure cards stretch to fill grid cells */
+        .grid .card-hover {
+            width: 100% !important;
+            min-width: 0;
         }
         
-        .theme-toggle {
-            transition: all 0.3s ease;
+        /* Mobile: Ensure containers take full width */
+        @media (max-width: 768px) {
+            .w-full.md\\:max-w-7xl {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
         }
         
-        .theme-toggle:hover {
-            transform: scale(1.1);
+
+        
+        /* Prevent text truncation */
+        p, span, div {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            overflow: visible;
+            height: auto;
+        }
+        
+        /* Ensure all content is fully visible */
+        section, .grid, .grid > div {
+            overflow: visible !important;
+            height: auto !important;
+            min-height: auto !important;
+            max-height: none !important;
+        }
+        
+        /* Force grid to take full width on mobile */
+        .grid.grid-cols-1 {
+            width: 100% !important;
+            /* Remove max-width: 100% to preserve centering */
+        }
+        
+        /* Ensure sample question card is fully visible */
+        .bg-white.dark\\:bg-gray-800.rounded-2xl.shadow-xl {
+            overflow: visible !important;
+            height: auto !important;
+            min-height: auto !important;
+            max-height: none !important;
+        }
+        
+        /* Ensure text doesn't get cut off */
+        .text-xl {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+            word-break: normal;
+            overflow: visible;
+        }
+        
+        .header-content {
+            padding: 0 1rem;
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+        
+        .logo-section h1 {
+            font-size: 1.25rem;
+        }
+        
+        .logo-section img {
+            width: 32px;
+            height: 32px;
+        }
+        
+        .welcome-section {
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+        
+        .welcome-title {
+            font-size: 1.75rem;
+            line-height: 1.2;
+        }
+        
+        .welcome-subtitle {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
         }
         
         .pro-badge {
-            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
         }
         
-        /* Loading animation */
-        body:not(.loaded) {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        body.loaded {
-            opacity: 1;
-        }
-        
-        /* Focus styles for accessibility */
-        button:focus,
-        a:focus {
-            outline: 2px solid #6366f1;
-            outline-offset: 2px;
-        }
-        
-        /* Reduced motion for users who prefer it */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-        
-        /* Mobile Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .header-content {
-                padding: 0 1rem;
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            
-            .logo-section h1 {
-                font-size: 1.25rem;
-            }
-            
-            .logo-section img {
-                width: 32px;
-                height: 32px;
-            }
-            
-            .welcome-section {
-                padding: 2rem 1rem;
-                text-align: center;
-            }
-            
-            .welcome-title {
-                font-size: 1.75rem;
-                line-height: 1.2;
-            }
-            
-            .welcome-subtitle {
-                font-size: 1rem;
-                margin-bottom: 1.5rem;
-            }
-            
-            .pro-badge {
-                font-size: 0.8rem;
-                padding: 0.5rem 1rem;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: center;
-            }
-            
-            .action-btn {
-                width: 100%;
-                max-width: 300px;
-                padding: 1rem;
-                font-size: 1.1rem;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-                padding: 1rem;
-            }
-            
-            .stat-card {
-                padding: 1.5rem;
-                text-align: center;
-            }
-            
-            .stat-number {
-                font-size: 2rem;
-            }
-            
-            .stat-label {
-                font-size: 0.9rem;
-            }
-            
-            .pro-question-preview {
-                padding: 1.5rem;
-                margin: 1rem;
-            }
-            
-            .question-header {
-                flex-direction: column;
-                gap: 0.5rem;
-                align-items: flex-start;
-            }
-            
-            .question-text {
-                font-size: 1rem;
-                line-height: 1.5;
-            }
-            
-            .code-snippet {
-                font-size: 0.85rem;
-                padding: 1rem;
-                overflow-x: auto;
-            }
-            
-            .footer {
-                padding: 2rem 1rem;
-            }
-            
-            .footer-content {
-                flex-direction: column;
-                gap: 1.5rem;
-                text-align: center;
-            }
-            
-            /* Mobile navigation styling */
-            .nav.hidden.md\\:flex {
-                display: none;
-            }
-            
-            .nav.md\\:hidden {
-                display: flex;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .container {
-                padding: 0.75rem;
-            }
-            
-            .header-content {
-                padding: 0 0.75rem;
-            }
-            
-            .welcome-section {
-                padding: 1.5rem 0.75rem;
-            }
-            
-            .welcome-title {
-                font-size: 1.5rem;
-            }
-            
-            .welcome-subtitle {
-                font-size: 0.95rem;
-            }
-            
-            .stats-grid {
-                padding: 0.75rem;
-            }
-            
-            .stat-card {
-                padding: 1.25rem;
-            }
-            
-            .pro-question-preview {
-                padding: 1.25rem;
-                margin: 0.75rem;
-            }
-            
-            .question-text {
-                font-size: 0.95rem;
-            }
-            
-            .code-snippet {
-                font-size: 0.8rem;
-                padding: 0.875rem;
-            }
-            
-            .footer {
-                padding: 1.5rem 0.75rem;
-            }
-        }
-        
-        /* Dark mode specific styles */
-        .dark {
-            color-scheme: dark;
-        }
-        
-        /* Dark mode background and text colors */
-        .dark {
-            background-color: #111827 !important;
-            color: #f9fafb !important;
-        }
-        
-        .dark .bg-gray-50 {
-            background-color: #1f2937 !important;
-        }
-        
-        .dark .bg-white {
-            background-color: #1f2937 !important;
-        }
-        
-        .dark .text-gray-900 {
-            color: #f9fafb !important;
-        }
-        
-        .dark .text-gray-600 {
-            color: #d1d5db !important;
-        }
-        
-        .dark .text-gray-300 {
-            color: #d1d5db !important;
-        }
-        
-        .dark .text-gray-700 {
-            color: #e5e7eb !important;
-        }
-        
-        .dark .border-gray-200 {
-            border-color: #374151 !important;
-        }
-        
-        .dark .border-gray-600 {
-            border-color: #4b5563 !important;
-        }
-        
-        .dark .bg-gray-200 {
-            background-color: #374151 !important;
-        }
-        
-        /* Icon alignment fixes */
-        .fas, .fa {
-            display: inline-flex;
+        .action-buttons {
+            flex-direction: column;
+            gap: 1rem;
             align-items: center;
-            justify-content: center;
-            vertical-align: middle;
         }
         
-        /* Ensure navigation stays horizontal */
-        nav {
-            flex-direction: row !important;
+        .action-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: 1rem;
+            font-size: 1.1rem;
         }
         
-        nav a {
-            flex-direction: row !important;
-            white-space: nowrap;
+        .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            padding: 1rem;
         }
         
-        .dark .bg-gray-700 {
-            background-color: #374151 !important;
+        .stat-card {
+            padding: 1.5rem;
+            text-align: center;
         }
         
-        .dark .hover\:bg-gray-300:hover {
-            background-color: #4b5563 !important;
+        .stat-number {
+            font-size: 2rem;
         }
         
-        .dark .hover\:bg-gray-600:hover {
-            background-color: #4b5563 !important;
+        .stat-label {
+            font-size: 0.9rem;
         }
         
-        .dark .hover\:bg-gray-50:hover {
-            background-color: #1f2937 !important;
+        .pro-question-preview {
+            padding: 1.5rem;
+            margin: 1rem;
         }
         
-        .dark .hover\:bg-gray-800:hover {
-            background-color: #1f2937 !important;
+        .question-header {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-start;
         }
         
-        .dark .glass-effect {
-            backdrop-filter: blur(10px);
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .question-text {
+            font-size: 1rem;
+            line-height: 1.5;
         }
         
-        /* Ensure dark mode toggle works properly */
-        .dark .theme-toggle {
-            background-color: rgba(55, 65, 81, 1);
-            border-color: rgba(75, 85, 99, 1);
+        .code-snippet {
+            font-size: 0.85rem;
+            padding: 1rem;
+            overflow-x: auto;
         }
         
-        .dark .theme-toggle:hover {
-            background-color: rgba(75, 85, 99, 1);
+        .footer {
+            padding: 2rem 1rem;
         }
         
-        /* Fix sample question card in dark mode */
-        .dark .bg-gray-100 {
-            background-color: #374151 !important;
+        .footer-content {
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
         }
         
-        .dark .text-gray-500 {
-            color: #9ca3af !important;
+        /* Mobile navigation styling */
+        .nav.hidden.md\\:flex {
+            display: none;
         }
         
-        .dark .text-gray-400 {
-            color: #9ca3af !important;
+        .nav.md\\:hidden {
+            display: flex;
         }
-    </style>
-</head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-    <!-- Header -->
-    <header class="sticky top-0 z-50 glass-effect dark:dark-glass border-b border-gray-200 dark:border-gray-700">
-        <div class="max-w-7xl mx-auto px-4 py-3">
-            <!-- Desktop Layout -->
-            <div class="hidden md:flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
-                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
-                        <span class="pro-badge">PRO</span>
-                    </a>
-                </div>
-                
-                <!-- Center Navigation -->
-                <nav class="flex items-center space-x-8">
-                    <a href="/dashboard" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center whitespace-nowrap">
-                        <i class="fas fa-chart-line mr-1"></i>Dashboard
-                    </a>
-                    <a href="/history" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center whitespace-nowrap">
-                        <i class="fas fa-history mr-1"></i>History
-                    </a>
-                </nav>
-                
-                <!-- Right Side Controls -->
-                <div class="flex items-center space-x-4">
-                    <!-- Theme Toggle -->
-                    <button id="themeToggle" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
-                        <i id="themeIcon" class="fas fa-moon text-gray-600 dark:text-gray-300" aria-hidden="true"></i>
-                    </button>
-                    
-                    <!-- Sign Out -->
-                    <button id="signOutBtn" class="px-4 py-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
-                        Sign Out
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Mobile Layout -->
-            <div class="md:hidden flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
-                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
-                        <span class="pro-badge">PRO</span>
-                    </a>
-                </div>
-                
-                <!-- Mobile Navigation -->
-                <nav class="flex items-center space-x-4">
-                    <a href="/dashboard" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm flex items-center whitespace-nowrap">
-                        <i class="fas fa-chart-line mr-1"></i>Dashboard
-                    </a>
-                    <a href="/history" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm flex items-center whitespace-nowrap">
-                        <i class="fas fa-history mr-1"></i>History
-                    </a>
-                </nav>
-                
-                <!-- Mobile Controls -->
-                <div class="flex items-center space-x-2">
-                    <!-- Theme Toggle -->
-                    <button id="themeToggleMobile" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
-                        <i id="themeIconMobile" class="fas fa-moon text-gray-600 dark:text-gray-300" aria-hidden="true"></i>
-                    </button>
-                    
-                    <!-- Sign Out -->
-                    <button id="signOutBtnMobile" class="px-3 py-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
-                        Sign Out
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
+    }
+    
+    @media (max-width: 480px) {
+        .container {
+            padding: 0.75rem;
+        }
+        
+        /* Ensure proper text wrapping on very small screens */
+        .text-xl {
+            font-size: 1rem;
+            line-height: 1.5rem;
+        }
+        
+        /* Prevent horizontal overflow */
+        body {
+            overflow-x: hidden;
+        }
+        
+        /* Let Tailwind handle container padding - don't override */
+        
+        .header-content {
+            padding: 0 1.5rem;
+        }
+        
+        .welcome-section {
+            padding: 1.5rem 0.75rem;
+        }
+        
+        .welcome-title {
+            font-size: 1.5rem;
+        }
+        
+        .welcome-subtitle {
+            font-size: 0.95rem;
+        }
+        
+        .stats-grid {
+            padding: 0.75rem;
+        }
+        
+        .stat-card {
+            padding: 1.25rem;
+        }
+        
+        .pro-question-preview {
+            padding: 1.25rem;
+            margin: 0.75rem;
+        }
+        
+        .question-text {
+            font-size: 0.95rem;
+        }
+        
+        .code-snippet {
+            font-size: 0.8rem;
+            padding: 0.875rem;
+        }
+        
+        .footer {
+            padding: 1.5rem 0.75rem;
+        }
+    }
+    
+    /* Dark mode specific styles */
+    .dark {
+        color-scheme: dark;
+    }
+    
+    /* Dark mode background and text colors */
+    .dark {
+        background-color: #111827 !important;
+        color: #f9fafb !important;
+    }
+    
+    .dark .bg-gray-50 {
+        background-color: #111827 !important;
+    }
+    
+    .dark .bg-white {
+        background-color: #111827 !important;
+    }
+    
+    /* Ensure consistent dark background for all sections */
+    .dark section {
+        background-color: #111827 !important;
+    }
+    
+    .dark .bg-gray-800 {
+        background-color: #111827 !important;
+    }
+    
+    .dark .bg-gray-900 {
+        background-color: #111827 !important;
+    }
+    
+    .dark .text-gray-900 {
+        color: #f9fafb !important;
+    }
+    
+    .dark .text-gray-600 {
+        color: #d1d5db !important;
+    }
+    
+    .dark .text-gray-300 {
+        color: #d1d5db !important;
+    }
+    
+    .dark .text-gray-700 {
+        color: #e5e7eb !important;
+    }
+    
+    .dark .border-gray-200 {
+        border-color: #374151 !important;
+    }
+    
+    .dark .border-gray-600 {
+        border-color: #4b5563 !important;
+    }
+    
+    .dark .bg-gray-200 {
+        background-color: #374151 !important;
+    }
+    
+    /* Icon alignment fixes */
+    .fas, .fa {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        vertical-align: middle;
+    }
+    
+    /* Ensure navigation stays horizontal */
+    nav {
+        flex-direction: row !important;
+    }
+    
+    nav a {
+        flex-direction: row !important;
+        white-space: nowrap;
+    }
+    
+    .dark .bg-gray-700 {
+        background-color: #374151 !important;
+    }
+    
+    .dark .hover\:bg-gray-300:hover {
+        background-color: #4b5563 !important;
+    }
+    
+    .dark .hover\:bg-gray-600:hover {
+        background-color: #4b5563 !important;
+    }
+    
+    .dark .hover\:bg-gray-50:hover {
+        background-color: #1f2937 !important;
+    }
+    
+    .dark .hover\:bg-gray-800:hover {
+        background-color: #1f2937 !important;
+    }
+    
+    .dark .glass-effect {
+        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Ensure dark mode toggle works properly */
+    .dark .theme-toggle {
+        background-color: rgba(55, 65, 81, 1);
+        border-color: rgba(75, 85, 99, 1);
+    }
+    
+    .dark .theme-toggle:hover {
+        background-color: rgba(75, 85, 99, 1);
+    }
+    
+    /* Fix sample question card in dark mode */
+    .dark .bg-gray-100 {
+        background-color: #374151 !important;
+    }
+    
+    .dark .text-gray-500 {
+        color: #9ca3af !important;
+    }
+    
+    .dark .text-gray-400 {
+        color: #9ca3af !important;
+    }
+</style>
+{% endblock %}
 
+{% block content %}
     <!-- Hero Section -->
-    <section class="relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 py-16 md:py-24">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
+    <section class="relative overflow-visible">
+        <div class="w-full md:max-w-7xl mx-auto px-6 py-16 md:py-24">
+            <div class="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
                 <!-- Left Column -->
                 <div class="fade-in">
                     <div class="flex items-center mb-4">
@@ -552,7 +577,7 @@
                 
                 <!-- Right Column - Sample Question -->
                 <div class="slide-in">
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
                         <div class="flex items-center justify-between mb-3">
                             <div class="text-xs font-medium text-purple-600 dark:text-purple-400">PRO Question</div>
                             <span class="pro-badge text-xs">PRO</span>
@@ -596,7 +621,7 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
 
     <!-- PRO Features Section -->
     <section id="dashboard" class="py-16 bg-gray-50 dark:bg-gray-800">
-        <div class="max-w-7xl mx-auto px-4">
+        <div class="w-full md:max-w-7xl mx-auto px-6">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                     Your PRO Features
@@ -606,9 +631,9 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
                 </p>
             </div>
             
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
                 <!-- Feature Cards -->
-                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
+                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 w-full">
                     <div class="flex items-center mb-4">
                                                  <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center mr-4">
                              <i class="fas fa-infinity text-purple-600 dark:text-purple-400 text-xl"></i>
@@ -620,7 +645,7 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
                     </p>
                 </div>
                 
-                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
+                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 w-full">
                     <div class="flex items-center mb-4">
                                                  <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center mr-4">
                              <i class="fas fa-chart-line text-purple-600 dark:text-purple-400 text-xl"></i>
@@ -632,7 +657,7 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
                     </p>
                 </div>
                 
-                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
+                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 w-full">
                     <div class="flex items-center mb-4">
                                                  <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center mr-4">
                              <i class="fas fa-history text-purple-600 dark:text-purple-400 text-xl"></i>
@@ -644,7 +669,7 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
                     </p>
                 </div>
                 
-                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
+                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 w-full">
                     <div class="flex items-center mb-4">
                                                  <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center mr-4">
                              <i class="fas fa-layer-group text-purple-600 dark:text-purple-400 text-xl"></i>
@@ -656,7 +681,7 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
                     </p>
                 </div>
                 
-                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
+                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 w-full">
                     <div class="flex items-center mb-4">
                                                  <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center mr-4">
                              <i class="fas fa-clock text-purple-600 dark:text-purple-400 text-xl"></i>
@@ -668,7 +693,7 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
                     </p>
                 </div>
                 
-                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
+                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 w-full">
                     <div class="flex items-center mb-4">
                                                  <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center mr-4">
                              <i class="fas fa-headset text-purple-600 dark:text-purple-400 text-xl"></i>
@@ -685,7 +710,7 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
 
     <!-- Quick Stats Section -->
     <section id="stats" class="py-16">
-        <div class="max-w-7xl mx-auto px-4">
+        <div class="w-full md:max-w-7xl mx-auto px-6">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                     Your Progress
@@ -695,24 +720,24 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
                 </p>
             </div>
             
-            <div class="grid md:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 w-full">
                 <!-- Stats Cards -->
-                <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 text-center">
-                                         <div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2" id="totalAttempts">0</div>
+                                 <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-4 md:p-6 border border-gray-200 dark:border-gray-700 text-center">
+                     <div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2" id="totalAttempts">0</div>
                      <div class="text-sm text-gray-600 dark:text-gray-400">Total Attempts</div>
                  </div>
                  
-                 <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 text-center">
+                 <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-4 md:p-6 border border-gray-200 dark:border-gray-700 text-center">
                      <div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2" id="averageScore">0%</div>
                      <div class="text-sm text-gray-600 dark:text-gray-400">Average Score</div>
                  </div>
                  
-                 <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 text-center">
+                 <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-4 md:p-6 border border-gray-200 dark:border-gray-700 text-center">
                      <div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2" id="bestScore">0%</div>
                      <div class="text-sm text-gray-600 dark:text-gray-400">Best Score</div>
                  </div>
                  
-                 <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 text-center">
+                 <div class="card-hover bg-white dark:bg-gray-900 rounded-2xl p-4 md:p-6 border border-gray-200 dark:border-gray-700 text-center">
                      <div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2" id="questionsAnswered">0</div>
                      <div class="text-sm text-gray-600 dark:text-gray-400">Questions Answered</div>
                 </div>
@@ -720,199 +745,131 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="flex items-center space-x-3 mb-4 md:mb-0">
-                    <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
-                    <span class="text-xl font-bold">Quiz</span>
-                    <span class="pro-badge">PRO</span>
-                </div>
-                
-                <div class="flex items-center space-x-6 text-sm">
-                    <a href="/legal" class="text-gray-400 hover:text-white transition-colors">Legal</a>
-                    <a href="/contact" class="text-gray-400 hover:text-white transition-colors">Contact</a>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
-                <p class="text-gray-400 text-sm">
-                    © 2024 dbt Quiz. Built for analytics engineers, by analytics engineers.
-                </p>
-            </div>
-        </div>
-    </footer>
 
-    <!-- JavaScript -->
-    <script>
-        // Performance: Add loading state
-        document.addEventListener('DOMContentLoaded', function() {
-            // Remove loading class when page is ready
-            document.body.classList.add('loaded');
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Performance: Add loading state
+    document.addEventListener('DOMContentLoaded', function() {
+        // Remove loading class when page is ready
+        document.body.classList.add('loaded');
+    });
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         });
-        
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        const body = document.body;
-        
-        // Check for saved theme preference
+    });
+    
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+            }
+        });
+    }, observerOptions);
+    
+    // Observe elements for animation
+    document.querySelectorAll('.card-hover').forEach(el => {
+        observer.observe(el);
+    });
+    
+    // Handle user info display
+    const userInfo = document.getElementById('userInfo');
+    const userNameBadge = document.getElementById('userNameBadge');
+    const signOutBtn = document.getElementById('signOutBtn');
+    
+    async function updateUserDisplay() {
         try {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                body.classList.add('dark');
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
+            // Fetch user info from server
+            const response = await fetch('/api/user-info');
+            const data = await response.json();
+            
+            if (data.authenticated && data.user) {
+                // Display user info in badge
+                if (data.user.name) {
+                    // Extract first name only
+                    const firstName = data.user.name.split(' ')[0];
+                    userNameBadge.textContent = `${firstName} - PRO MEMBER`;
+                } else if (data.user.email) {
+                    // Extract first part of email (before @)
+                    const emailName = data.user.email.split('@')[0];
+                    userNameBadge.textContent = `${emailName} - PRO MEMBER`;
+                } else {
+                    userNameBadge.textContent = 'PRO MEMBER';
+                }
             } else {
-                // Default to light theme
-                body.classList.remove('dark');
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
-            }
-        } catch (error) {
-            console.warn('Could not load theme preference:', error);
-            // Default to light theme if localStorage fails
-            body.classList.remove('dark');
-            themeIcon.classList.remove('fa-sun');
-            themeIcon.classList.add('fa-moon');
-        }
-        
-        themeToggle.addEventListener('click', () => {
-            try {
-                body.classList.toggle('dark');
-                
-                if (body.classList.contains('dark')) {
-                    themeIcon.classList.remove('fa-moon');
-                    themeIcon.classList.add('fa-sun');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    themeIcon.classList.remove('fa-sun');
-                    themeIcon.classList.add('fa-moon');
-                    localStorage.setItem('theme', 'light');
-                }
-            } catch (error) {
-                console.warn('Theme toggle failed:', error);
-                // Fallback: remove dark class if localStorage fails
-                body.classList.remove('dark');
-            }
-        });
-        
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-        
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('fade-in');
-                }
-            });
-        }, observerOptions);
-        
-        // Observe elements for animation
-        document.querySelectorAll('.card-hover').forEach(el => {
-            observer.observe(el);
-        });
-        
-        // Handle user info display
-        const userInfo = document.getElementById('userInfo');
-        const userNameBadge = document.getElementById('userNameBadge');
-        const signOutBtn = document.getElementById('signOutBtn');
-        
-        async function updateUserDisplay() {
-            try {
-                // Fetch user info from server
-                const response = await fetch('/api/user-info');
-                const data = await response.json();
-                
-                if (data.authenticated && data.user) {
-                    // Display user info in badge
-                    if (data.user.name) {
-                        // Extract first name only
-                        const firstName = data.user.name.split(' ')[0];
-                        userNameBadge.textContent = `${firstName} - PRO MEMBER`;
-                    } else if (data.user.email) {
-                        // Extract first part of email (before @)
-                        const emailName = data.user.email.split('@')[0];
-                        userNameBadge.textContent = `${emailName} - PRO MEMBER`;
-                    } else {
-                        userNameBadge.textContent = 'PRO MEMBER';
-                    }
-                } else {
-                    // Redirect to regular homepage if not authenticated
-                    window.location.href = '/';
-                }
-            } catch (error) {
-                console.error('Error fetching user info:', error);
-                // Redirect to regular homepage if error
+                // Redirect to regular homepage if not authenticated
                 window.location.href = '/';
             }
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+            // Redirect to regular homepage if error
+            window.location.href = '/';
         }
-        
-        // Handle sign out
-        if (signOutBtn) {
-            signOutBtn.addEventListener('click', () => {
-                // Clear localStorage for user session
-                localStorage.removeItem('isSignedIn');
-                localStorage.removeItem('userEmail');
-                localStorage.removeItem('userName');
-                
-                // Redirect to logout endpoint
-                window.location.href = '/auth/logout';
-            });
-        }
-        
-        // Update display on page load
-        updateUserDisplay();
-        
-        // Load user stats from database
-        async function loadUserStats() {
-            try {
-                const response = await fetch('/api/user/stats');
-                const data = await response.json();
-                
-                if (data.success && data.stats) {
-                    const stats = data.stats;
-                    document.getElementById('totalAttempts').textContent = stats.total_attempts || '0';
-                    document.getElementById('averageScore').textContent = (stats.average_score || 0) + '%';
-                    document.getElementById('bestScore').textContent = (stats.best_score || 0) + '%';
-                    document.getElementById('questionsAnswered').textContent = stats.total_attempts * 10 || '0'; // Approximate
-                } else {
-                    // Fallback to placeholder values
-                    document.getElementById('totalAttempts').textContent = '0';
-                    document.getElementById('averageScore').textContent = '0%';
-                    document.getElementById('bestScore').textContent = '0%';
-                    document.getElementById('questionsAnswered').textContent = '0';
-                }
-            } catch (error) {
-                console.error('Error loading user stats:', error);
+    }
+    
+    // Handle sign out
+    if (signOutBtn) {
+        signOutBtn.addEventListener('click', () => {
+            // Clear localStorage for user session
+            localStorage.removeItem('isSignedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            
+            // Redirect to logout endpoint
+            window.location.href = '/auth/logout';
+        });
+    }
+    
+    // Update display on page load
+    updateUserDisplay();
+    
+    // Load user stats from database
+    async function loadUserStats() {
+        try {
+            const response = await fetch('/api/user/stats');
+            const data = await response.json();
+            
+            if (data.success && data.stats) {
+                const stats = data.stats;
+                document.getElementById('totalAttempts').textContent = stats.total_attempts || '0';
+                document.getElementById('averageScore').textContent = (stats.average_score || 0) + '%';
+                document.getElementById('bestScore').textContent = (stats.best_score || 0) + '%';
+                document.getElementById('questionsAnswered').textContent = stats.total_attempts * 10 || '0'; // Approximate
+            } else {
                 // Fallback to placeholder values
                 document.getElementById('totalAttempts').textContent = '0';
                 document.getElementById('averageScore').textContent = '0%';
                 document.getElementById('bestScore').textContent = '0%';
                 document.getElementById('questionsAnswered').textContent = '0';
             }
+        } catch (error) {
+            console.error('Error loading user stats:', error);
+            // Fallback to placeholder values
+            document.getElementById('totalAttempts').textContent = '0';
+            document.getElementById('averageScore').textContent = '0%';
+            document.getElementById('bestScore').textContent = '0%';
+            document.getElementById('questionsAnswered').textContent = '0';
         }
-        
-        // Load stats on page load
-        loadUserStats();
-    </script>
-</body>
-</html>
+    }
+    
+    // Load stats on page load
+    loadUserStats();
+</script>
+{% endblock %}
