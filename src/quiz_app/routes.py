@@ -41,14 +41,14 @@ def index():
     # Check if user is authenticated and is PRO
     user = OAuthService.get_current_user()
     if user and user.get('is_pro', False):
-        # Redirect PRO users to PRO dashboard
-        return redirect(url_for('ui.pro_dashboard'))
+        # Redirect PRO users to PRO homepage
+        return redirect(url_for('ui.pro_homepage'))
     
     return render_template('homepage.html', active_page='homepage')
 
-@ui_bp.route('/pro-dashboard')
-def pro_dashboard():
-    """PRO dashboard for paid users"""
+@ui_bp.route('/pro-homepage')
+def pro_homepage():
+    """PRO homepage for paid users"""
     # Check if user is authenticated
     user = OAuthService.get_current_user()
     if not user:
