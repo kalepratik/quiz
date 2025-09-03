@@ -18,9 +18,9 @@
         .pro-badge {
             background: linear-gradient(135deg, var(--pro-color) 0%, #a855f7 100%);
             color: white;
-            padding: 0.25rem 0.75rem;
+             padding: 0.375rem 0.875rem;
             border-radius: 20px;
-            font-size: 0.75rem;
+             font-size: 0.875rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -104,23 +104,120 @@
             background-color: #1f2937 !important;
         }
         
-        /* Mobile Responsive Design */
+        /* Universal Mobile Responsive Design - Works for ANY device */
         @media (max-width: 768px) {
-            /* Keep header on single line */
-            header .flex.items-center.justify-between {
+            /* Dynamic header that adapts to any viewport */
+            header .md\\:hidden {
+                display: flex !important;
                 flex-direction: row !important;
-                gap: 0.5rem;
-                text-align: left;
+                align-items: center !important;
+                justify-content: space-between !important;
+                flex-wrap: nowrap !important;
+                min-height: 56px !important;
+                padding: 0.5rem 0.25rem !important;
+                gap: 0.25rem !important;
             }
             
-            /* Ensure header content doesn't wrap */
-            header nav {
-                flex-shrink: 0;
+            /* Make all header elements flexible and responsive */
+            header .md\\:hidden > * {
+                flex-shrink: 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                white-space: nowrap !important;
             }
             
-            header .flex.items-center.space-x-4,
-            header .flex.items-center.space-x-2 {
-                flex-shrink: 0;
+            /* Responsive logo section */
+            header .md\\:hidden .flex.items-center.space-x-0 {
+                gap: 0 !important;
+                margin: 0 !important;
+                flex-shrink: 0 !important;
+            }
+            
+            /* Responsive navigation */
+            header .md\\:hidden nav {
+                gap: 0.25rem !important;
+                margin: 0 0.125rem !important;
+                flex-shrink: 0 !important;
+            }
+            
+            /* Responsive controls */
+            header .md\\:hidden .flex.items-center.space-x-1 {
+                gap: 0.125rem !important;
+                flex-shrink: 0 !important;
+            }
+            
+            /* Responsive container padding */
+            header .max-w-7xl {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            
+            /* Ensure all text stays on one line */
+            header .md\\:hidden * {
+                white-space: nowrap !important;
+                flex-shrink: 0 !important;
+            }
+            
+                         /* Responsive PRO badge */
+             header .pro-badge {
+                 white-space: nowrap !important;
+                 flex-shrink: 0 !important;
+                 background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%) !important;
+                 color: white !important;
+                 padding: 0.375rem 0.875rem !important;
+                 border-radius: 20px !important;
+                 font-size: 0.875rem !important;
+                 font-weight: 600 !important;
+                 text-transform: uppercase !important;
+                 letter-spacing: 0.5px !important;
+             }
+            
+            /* Responsive Sign Out button */
+            header #signOutBtnMobile {
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: clip !important;
+                min-width: 50px !important;
+                max-width: 60px !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 10px !important;
+                line-height: 1 !important;
+                height: 24px !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                flex-shrink: 0 !important;
+                word-spacing: 0 !important;
+                letter-spacing: 0 !important;
+            }
+            
+            /* Responsive text sizes */
+            header .text-xs {
+                font-size: 0.75rem !important;
+                line-height: 1rem !important;
+                white-space: nowrap !important;
+                overflow: visible !important;
+            }
+            
+            header .text-lg {
+                font-size: 1rem !important;
+                line-height: 1.5rem !important;
+            }
+            
+            /* Responsive logo size */
+            header img.h-6 {
+                height: 1.5rem !important;
+                width: auto !important;
+            }
+            
+            /* Responsive theme toggle */
+            header #themeToggleMobile {
+                width: 24px !important;
+                height: 24px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
             }
         }
         
@@ -142,24 +239,259 @@
              white-space: nowrap;
          }
          
+        /* Header alignment improvements */
+        header {
+            min-height: 60px;
+        }
+        
+        header .flex.items-center {
+            align-items: center !important;
+        }
+        
+        /* Ensure consistent button heights */
+        header button, header a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 36px;
+        }
+        
+                            /* Universal mobile optimizations - works for any device */
+        @media (max-width: 768px) {
+            /* Ensure tight logo spacing */
+            header .flex.items-center.space-x-0 {
+                gap: 0 !important;
+            }
+            
+            header .flex.items-center.space-x-0 > * {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            /* Ensure consistent alignment */
+            header .text-lg {
+                line-height: 1.5rem !important;
+                display: flex !important;
+                align-items: center !important;
+            }
+            
+            /* Ensure consistent button sizing */
+            header button, header a {
+                min-height: 36px !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+            
+            /* Ensure proper navigation spacing */
+            header nav a {
+                padding: 0.5rem 0.75rem !important;
+                border-radius: 0.375rem !important;
+                transition: all 0.2s ease !important;
+            }
+        }
+        
+        /* Universal responsive design - adapts to ANY device */
+        @media (max-width: 640px) {
+            /* Ensure header doesn't overflow */
+            header {
+                overflow: hidden !important;
+            }
+            
+            /* Optimize spacing for smaller screens */
+            header .md\\:hidden .space-x-1 {
+                gap: 0.125rem !important;
+            }
+            
+            header .md\\:hidden .space-x-2 {
+                gap: 0.25rem !important;
+            }
+            
+            /* Ensure single line layout */
+            header .md\\:hidden {
+                flex-wrap: nowrap !important;
+            }
+            
+            /* Prevent any element from wrapping */
+            header .md\\:hidden * {
+                flex-shrink: 0 !important;
+                white-space: nowrap !important;
+            }
+        }
+        
+                          /* Floating Header Styles */
+         #floatingHeader {
+             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+             background: rgba(255, 255, 255, 0) !important; /* 100% transparent at top */
+             backdrop-filter: blur(0px);
+         }
+         
+         #floatingHeader.collapsed {
+             background: rgba(255, 255, 255, 0.4) !important; /* 60% transparent when scrolled */
+             backdrop-filter: blur(8px);
+             border-bottom: 1px solid rgba(229, 231, 235, 0.3);
+         }
+         
+         .dark #floatingHeader {
+             background: rgba(31, 41, 55, 0) !important; /* 100% transparent at top */
+         }
+         
+         .dark #floatingHeader.collapsed {
+             background: rgba(31, 41, 55, 0.4) !important; /* 60% transparent when scrolled */
+             border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+         }
+        
 
+         
+
+        
+        
+         
+
+        
+        
+        
+                 
+        
+                         /* Add padding to body to account for fixed header */
+        body {
+            padding-top: 72px !important;
+        }
+        
+        /* Viewport-based responsive design for any device */
+        @media (max-width: 100vw) {
+            html, body {
+                width: 100% !important;
+                max-width: 100vw !important;
+            }
+
+            /* DO NOT touch .max-w-* centering; let Tailwind handle it */
+            /* Remove the old .container/.max-w-* width/max-width overrides */
+
+            /* Keep images responsive */
+            img { max-width: 100% !important; height: auto !important; }
+
+            /* DO NOT globally set .flex { flex-wrap: wrap } — it breaks layouts */
+            /* Remove the old .flex { flex-wrap: wrap !important; } */
+
+            /* Safe text wrapping */
+            * { word-wrap: break-word !important; overflow-wrap: break-word !important; }
+        }
+        
+        /* Dynamic font sizing based on viewport width */
+        @media (max-width: 480px) {
+            html {
+                font-size: 14px !important;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            html {
+                font-size: 13px !important;
+            }
+        }
+        
+        /* Force dbt logo sizing */
+        img[src*="dbt-bit-standalone.png"] {
+            height: 32px !important;
+            width: 32px !important;
+            max-height: 32px !important;
+            max-width: 32px !important;
+            min-height: 32px !important;
+            min-width: 32px !important;
+            object-fit: contain !important;
+        }
+        
+        /* Mobile logo sizing */
+        .md\\:hidden img[src*="dbt-bit-standalone.png"] {
+            height: 24px !important;
+            width: 24px !important;
+            max-height: 24px !important;
+            max-width: 24px !important;
+            min-height: 24px !important;
+            min-width: 24px !important;
+        }
+        
+        @media (max-width: 320px) {
+            html {
+                font-size: 12px !important;
+            }
+        }
+        
+        /* Footer Styles */
+        footer {
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        footer .pro-badge {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            color: white;
+            padding: 0.375rem 0.875rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Ensure footer stays at bottom */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        main {
+            flex: 1;
+        }
+        
+        /* Footer responsive design */
+        @media (max-width: 768px) {
+            footer {
+                padding: 1.5rem 0;
+            }
+            
+            footer .flex.flex-col.md\\:flex-row {
+                gap: 1rem;
+            }
+            
+            footer .text-sm {
+                font-size: 0.875rem;
+            }
+        }
+        /* Force PRO badge sizing - override any text-xs classes */
+        .pro-badge, .pro-badge.text-xs {
+            background: linear-gradient(135deg, var(--pro-color) 0%, #a855f7 100%) !important;
+            color: white !important;
+            padding: 0.375rem 0.875rem !important;
+            border-radius: 20px !important;
+            font-size: 0.875rem !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+        }
     </style>
     
     {% block extra_head %}{% endblock %}
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-    <!-- Shared Header -->
-    <header class="sticky top-0 z-50 glass-effect dark:dark-glass border-b border-gray-200 dark:border-gray-700">
-        <div class="max-w-7xl mx-auto px-4 py-3">
+    <!-- Floating Header -->
+    <header id="floatingHeader" class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-300 ease-in-out pt-2">
+                 <div class="w-full md:max-w-7xl mx-auto px-6 transition-all duration-300 ease-in-out" id="headerContainer">
             
             <!-- 1. PRO HOMEPAGE, DASHBOARD, HISTORY HEADER -->
             {% if is_pro_user and active_page in ['pro-homepage', 'dashboard', 'history'] %}
+            
+
+            
+
             <!-- Desktop Layout -->
             <div class="hidden md:flex items-center justify-between">
                 <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
-                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity" title="Go to Home">
+                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-8">
                         <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
                         <span class="pro-badge">PRO</span>
                     </a>
@@ -190,38 +522,42 @@
             </div>
             
             <!-- Mobile Layout -->
-            <div class="md:hidden flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center space-x-2">
-                    <a href="/" class="flex items-center space-x-2 hover:opacity-80 transition-opacity" title="Go to Home">
-                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-6 w-auto">
+              <div class="md:hidden flex items-center justify-between px-1 min-h-[56px]">
+                                    <!-- 1. Logo + Quiz + PRO pill -->
+                   <div class="flex items-center flex-shrink-0">
+                       <a href="/" class="flex items-center gap-1 hover:opacity-80 transition-opacity" title="Go to Home">
+                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-6 w-6">
                         <span class="text-lg font-bold text-gray-900 dark:text-white">Quiz</span>
-                        <span class="pro-badge text-xs">PRO</span>
+                        <span class="pro-badge">PRO</span>
                     </a>
                 </div>
                 
-                <!-- Mobile Navigation -->
-                <nav class="flex items-center space-x-2">
-                    <a href="/dashboard" class="{% if active_page == 'dashboard' %}text-purple-600 dark:text-purple-400 font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400{% endif %} transition-colors text-xs flex items-center whitespace-nowrap">
-                        <i class="fas fa-chart-line mr-1"></i>Dashboard
-                    </a>
-                    <a href="/history" class="{% if active_page == 'history' %}text-purple-600 dark:text-purple-400 font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400{% endif %} transition-colors text-xs flex items-center whitespace-nowrap">
-                        <i class="fas fa-history mr-1"></i>History
+                                                        <!-- 2. Dashboard + 3. History -->
+                    <nav class="flex items-center space-x-1 flex-shrink-0">
+                        <a href="/dashboard" class="{% if active_page == 'dashboard' %}text-purple-600 dark:text-purple-400 font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400{% endif %} transition-colors text-xs whitespace-nowrap px-0.5">
+                            Dashboard
+                        </a>
+                        <a href="/history" class="{% if active_page == 'history' %}text-purple-600 dark:text-purple-400 font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400{% endif %} transition-colors text-xs whitespace-nowrap px-0.5">
+                            History
                     </a>
                 </nav>
                 
-                <!-- Mobile Controls -->
-                <div class="flex items-center space-x-1">
+                  <!-- 4. Theme Toggle + 5. Sign Out -->
+                  <div class="flex items-center space-x-1 flex-shrink-0">
                     <!-- Theme Toggle -->
-                    <button id="themeToggleMobile" class="theme-toggle p-1.5 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
-                        <i id="themeIconMobile" class="fas fa-moon text-gray-600 dark:text-gray-300 text-sm" aria-hidden="true"></i>
+                      <button id="themeToggleMobile" class="w-6 h-6 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors flex items-center justify-center" aria-label="Toggle dark mode">
+                          <i id="themeIconMobile" class="fas fa-moon text-gray-600 dark:text-gray-300 text-xs" aria-hidden="true"></i>
                     </button>
                     
                     <!-- Sign Out -->
-                    <button id="signOutBtnMobile" class="px-2 py-1.5 text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
+                        <button id="signOutBtnMobile" class="px-0 py-1 text-[10px] font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors whitespace-nowrap leading-none">
                         Sign Out
                     </button>
                 </div>
+               </div>
+               
+
+               
             </div>
             
             <!-- 2. SIGNIN, PAYMENT, LEGAL, CONTACT HEADER -->
@@ -231,7 +567,7 @@
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
                     <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
-                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
+                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-8">
                         <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
                     </a>
                 </div>
@@ -259,9 +595,9 @@
             </div>
             
             <!-- Mobile Layout -->
-            <div class="md:hidden flex items-center justify-between">
+            <div class="md:hidden flex items-center justify-between px-2">
                 <!-- Logo -->
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-2 flex-shrink-0">
                     <a href="/" class="flex items-center space-x-2 hover:opacity-80 transition-opacity" title="Go to Home">
                         <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-6 w-auto">
                         <span class="text-lg font-bold text-gray-900 dark:text-white">Quiz</span>
@@ -269,22 +605,22 @@
                 </div>
                 
                 <!-- Mobile Navigation -->
-                <nav class="flex items-center space-x-2">
-                    <a href="/" class="{% if active_page == 'home' %}text-purple-600 dark:text-purple-400 font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400{% endif %} transition-colors text-xs flex items-center whitespace-nowrap">
+                <nav class="flex items-center space-x-3 flex-shrink-0 mx-2">
+                    <a href="/" class="{% if active_page == 'home' %}text-purple-600 dark:text-purple-400 font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400{% endif %} transition-colors text-xs flex items-center whitespace-nowrap px-2 py-1">
                         <i class="fas fa-home mr-1"></i>Home
                     </a>
-                    <a href="/contact" class="{% if active_page == 'contact' %}text-purple-600 dark:text-purple-400 font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400{% endif %} transition-colors text-xs flex items-center whitespace-nowrap">
+                    <a href="/contact" class="{% if active_page == 'contact' %}text-purple-600 dark:text-purple-400 font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400{% endif %} transition-colors text-xs flex items-center whitespace-nowrap px-2 py-1">
                         <i class="fas fa-envelope mr-1"></i>Contact
                     </a>
-                    <a href="/legal" class="{% if active_page == 'legal' %}text-purple-600 dark:text-purple-400 font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400{% endif %} transition-colors text-xs flex items-center whitespace-nowrap">
+                    <a href="/legal" class="{% if active_page == 'legal' %}text-purple-600 dark:text-purple-400 font-semibold{% else %}text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400{% endif %} transition-colors text-xs flex items-center whitespace-nowrap px-2 py-1">
                         <i class="fas fa-gavel mr-1"></i>Legal
                     </a>
                 </nav>
                 
                 <!-- Mobile Controls -->
-                <div class="flex items-center space-x-1">
+                <div class="flex items-center space-x-2 flex-shrink-0">
                     <!-- Theme Toggle -->
-                    <button id="themeToggleMobile" class="theme-toggle p-1.5 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
+                    <button id="themeToggleMobile" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors flex items-center justify-center" aria-label="Toggle dark mode">
                         <i id="themeIconMobile" class="fas fa-moon text-gray-600 dark:text-gray-300 text-sm" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -295,9 +631,9 @@
             <!-- Desktop Layout -->
             <div class="hidden md:flex items-center justify-between">
                 <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" title="Go to Home">
-                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-auto">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity" title="Go to Home">
+                        <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-8">
                         <span class="text-xl font-bold text-gray-900 dark:text-white">Quiz</span>
                         <span class="pro-badge">PRO</span>
                     </a>
@@ -325,9 +661,9 @@
             </div>
             
             <!-- Mobile Layout -->
-            <div class="md:hidden flex items-center justify-between">
+            <div class="md:hidden flex items-center justify-between px-2">
                 <!-- Logo -->
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-2 flex-shrink-0">
                     <a href="/" class="flex items-center space-x-2 hover:opacity-80 transition-opacity" title="Go to Home">
                         <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-6 w-auto">
                         <span class="text-lg font-bold text-gray-900 dark:text-white">Quiz</span>
@@ -336,21 +672,21 @@
                 </div>
                 
                 <!-- Mobile Navigation -->
-                <nav class="flex items-center space-x-2">
-                    <a href="/" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-xs flex items-center whitespace-nowrap">
+                <nav class="flex items-center space-x-3 flex-shrink-0 mx-2">
+                    <a href="/" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-xs flex items-center whitespace-nowrap px-2 py-1">
                         <i class="fas fa-home mr-1"></i>Home
                     </a>
                 </nav>
                 
                 <!-- Mobile Controls -->
-                <div class="flex items-center space-x-1">
+                <div class="flex items-center space-x-2 flex-shrink-0">
                     <!-- Theme Toggle -->
-                    <button id="themeToggleMobile" class="theme-toggle p-1.5 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
+                    <button id="themeToggleMobile" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors flex items-center justify-center" aria-label="Toggle dark mode">
                         <i id="themeIconMobile" class="fas fa-moon text-gray-600 dark:text-gray-300 text-sm" aria-hidden="true"></i>
                     </button>
                     
                     <!-- Sign Out -->
-                    <button id="signOutBtnMobile" class="px-2 py-1.5 text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
+                    <button id="signOutBtnMobile" class="px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors whitespace-nowrap">
                         Sign Out
                     </button>
                 </div>
@@ -396,9 +732,9 @@
             </div>
             
             <!-- Mobile Layout -->
-            <div class="md:hidden flex items-center justify-between">
+            <div class="md:hidden flex items-center justify-between px-2">
                 <!-- Logo -->
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-2 flex-shrink-0">
                     <a href="/" class="flex items-center space-x-2 hover:opacity-80 transition-opacity" title="Go to Home">
                         <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-6 w-auto">
                         <span class="text-lg font-bold text-gray-900 dark:text-white">Quiz</span>
@@ -406,22 +742,22 @@
                 </div>
                 
                 <!-- Mobile Navigation (Empty for non-pro homepage) -->
-                <nav class="flex items-center space-x-2">
+                <nav class="flex items-center space-x-2 flex-shrink-0 mx-2">
                     <!-- Empty center for non-pro homepage -->
                 </nav>
                 
                 <!-- Mobile Controls -->
-                <div class="flex items-center space-x-1">
+                <div class="flex items-center space-x-2 flex-shrink-0">
                     <!-- Theme Toggle -->
-                    <button id="themeToggleMobile" class="theme-toggle p-1.5 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
+                    <button id="themeToggleMobile" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors flex items-center justify-center" aria-label="Toggle dark mode">
                         <i id="themeIconMobile" class="fas fa-moon text-gray-600 dark:text-gray-300 text-sm" aria-hidden="true"></i>
                     </button>
                     
                     <!-- Sign Out and Start Free -->
-                    <button id="signOutBtnMobile" class="px-2 py-1.5 text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
+                    <button id="signOutBtnMobile" class="px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors whitespace-nowrap">
                         Sign Out
                     </button>
-                    <a href="/quiz" class="px-2 py-1.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-xs font-semibold">
+                    <a href="/quiz" class="px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-xs font-semibold whitespace-nowrap">
                         Start Free
                     </a>
                 </div>
@@ -467,9 +803,9 @@
             </div>
             
             <!-- Mobile Layout -->
-            <div class="md:hidden flex items-center justify-between">
+            <div class="md:hidden flex items-center justify-between px-2">
                 <!-- Logo -->
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-2 flex-shrink-0">
                     <a href="/" class="flex items-center space-x-2 hover:opacity-80 transition-opacity" title="Go to Home">
                         <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-6 w-auto">
                         <span class="text-lg font-bold text-gray-900 dark:text-white">Quiz</span>
@@ -477,26 +813,26 @@
                 </div>
                 
                 <!-- Mobile Navigation -->
-                <nav class="flex items-center space-x-2">
-                    <a href="/" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-xs flex items-center whitespace-nowrap">
+                <nav class="flex items-center space-x-3 flex-shrink-0 mx-2">
+                    <a href="/" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-xs flex items-center whitespace-nowrap px-2 py-1">
                         <i class="fas fa-home mr-1"></i>Home
                     </a>
                 </nav>
                 
                 <!-- Mobile Controls -->
-                <div class="flex items-center space-x-1">
+                <div class="flex items-center space-x-2 flex-shrink-0">
                     <!-- Theme Toggle -->
-                    <button id="themeToggleMobile" class="theme-toggle p-1.5 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="Toggle dark mode">
+                    <button id="themeToggleMobile" class="theme-toggle p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors flex items-center justify-center" aria-label="Toggle dark mode">
                         <i id="themeIconMobile" class="fas fa-moon text-gray-600 dark:text-gray-300 text-sm" aria-hidden="true"></i>
                     </button>
                     
                     <!-- Sign Out/Sign In -->
                     {% if is_authenticated %}
-                    <button id="signOutBtnMobile" class="px-2 py-1.5 text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">
+                    <button id="signOutBtnMobile" class="px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors whitespace-nowrap">
                         Sign Out
                     </button>
                     {% else %}
-                    <a href="/signin" class="px-2 py-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
+                    <a href="/signin" class="px-3 py-2 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors whitespace-nowrap">
                         Sign In
                     </a>
                     {% endif %}
@@ -509,6 +845,33 @@
 
     <!-- Page Content -->
     {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <!-- Logo and Brand -->
+                <div class="flex items-center space-x-3 mb-4 md:mb-0">
+                    <img src="/static/dbt-bit-standalone.png" alt="dbt logo" class="h-8 w-8">
+                    <span class="text-xl font-bold">Quiz</span>
+                    {% if is_pro_user %}<span class="pro-badge">PRO</span>{% endif %}
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="flex items-center space-x-6 text-sm">
+                    <a href="/legal" class="text-gray-400 hover:text-white transition-colors duration-200">Legal</a>
+                    <a href="/contact" class="text-gray-400 hover:text-white transition-colors duration-200">Contact</a>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="border-t border-gray-800 mt-6 pt-6 text-center">
+                <p class="text-gray-400 text-sm">
+                    © 2024 dbt Quiz. Built for analytics engineers, by analytics engineers.
+                </p>
+            </div>
+        </div>
+    </footer>
 
     <!-- Shared JavaScript -->
     <script>
@@ -582,7 +945,228 @@
         document.addEventListener('DOMContentLoaded', function() {
             initThemeToggle();
             initSignOut();
+            initResponsiveDesign();
+            initFloatingHeader();
         });
+        
+        // Universal responsive design that adapts to ANY device
+        function initResponsiveDesign() {
+            // Get the actual viewport dimensions
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            
+            // Calculate responsive values based on viewport
+            const scaleFactor = Math.max(0.5, Math.min(1.2, viewportWidth / 400));
+            const baseFontSize = Math.max(12, Math.min(16, 14 * scaleFactor));
+            const headerPadding = Math.max(0.25, Math.min(1, 0.5 * scaleFactor));
+            const elementSpacing = Math.max(0.125, Math.min(0.5, 0.25 * scaleFactor));
+            
+            // Apply dynamic styles to header
+            const mobileHeader = document.querySelector('header .md\\:hidden');
+            if (mobileHeader) {
+                mobileHeader.style.padding = `${headerPadding}rem ${elementSpacing}rem`;
+                mobileHeader.style.gap = `${elementSpacing}rem`;
+            }
+            
+            // Adjust navigation spacing
+            const mobileNav = document.querySelector('header .md\\:hidden nav');
+            if (mobileNav) {
+                mobileNav.style.gap = `${elementSpacing}rem`;
+                mobileNav.style.margin = `0 ${elementSpacing * 0.5}rem`;
+            }
+            
+            // Adjust controls spacing
+            const mobileControls = document.querySelector('header .md\\:hidden .flex.items-center.space-x-1');
+            if (mobileControls) {
+                mobileControls.style.gap = `${elementSpacing * 0.5}rem`;
+            }
+            
+            // Adjust font sizes dynamically
+            const textElements = document.querySelectorAll('header .text-xs, header .text-lg');
+            textElements.forEach(element => {
+                if (element.classList.contains('text-xs')) {
+                    element.style.fontSize = `${Math.max(0.625, Math.min(0.875, 0.75 * scaleFactor))}rem`;
+                } else if (element.classList.contains('text-lg')) {
+                    element.style.fontSize = `${Math.max(0.875, Math.min(1.125, 1 * scaleFactor))}rem`;
+                }
+            });
+            
+            // Adjust logo size
+            const logo = document.querySelector('header img.h-6');
+            if (logo) {
+                logo.style.height = `${Math.max(1.25, Math.min(1.75, 1.5 * scaleFactor))}rem`;
+            }
+            
+            // Adjust PRO badge
+            const proBadge = document.querySelector('header .pro-badge');
+            if (proBadge) {
+                proBadge.style.fontSize = `${Math.max(0.5, Math.min(0.75, 0.625 * scaleFactor))}rem`;
+                proBadge.style.padding = `${elementSpacing * 0.25}rem ${elementSpacing * 0.5}rem`;
+            }
+            
+            // Adjust Sign Out button
+            const signOutBtn = document.querySelector('header #signOutBtnMobile');
+            if (signOutBtn) {
+                signOutBtn.style.fontSize = `${Math.max(0.5, Math.min(0.75, 0.625 * scaleFactor))}rem`;
+                signOutBtn.style.minWidth = `${Math.max(45, Math.min(65, 50 * scaleFactor))}px`;
+                signOutBtn.style.maxWidth = `${Math.max(55, Math.min(75, 60 * scaleFactor))}px`;
+            }
+            
+            // Adjust theme toggle
+            const themeToggle = document.querySelector('header #themeToggleMobile');
+            if (themeToggle) {
+                const toggleSize = Math.max(20, Math.min(28, 24 * scaleFactor));
+                themeToggle.style.width = `${toggleSize}px`;
+                themeToggle.style.height = `${toggleSize}px`;
+            }
+            
+            // Apply global responsive adjustments
+            document.documentElement.style.fontSize = `${baseFontSize}px`;
+            document.documentElement.style.setProperty('--scale-factor', scaleFactor);
+            document.documentElement.style.setProperty('--element-spacing', `${elementSpacing}rem`);
+            
+            // Log responsive info for debugging
+            console.log('Universal Responsive Design:', {
+                viewport: `${viewportWidth}x${viewportHeight}`,
+                scaleFactor: scaleFactor.toFixed(2),
+                baseFontSize: `${baseFontSize}px`,
+                headerPadding: `${headerPadding}rem`,
+                elementSpacing: `${elementSpacing}rem`
+            });
+        }
+        
+        // Recalculate on window resize
+        window.addEventListener('resize', function() {
+            initResponsiveDesign();
+        });
+        
+        // Recalculate on orientation change
+        window.addEventListener('orientationchange', function() {
+            setTimeout(initResponsiveDesign, 100);
+        });
+        
+                 // Floating header functionality
+         function initFloatingHeader() {
+             const header = document.getElementById('floatingHeader');
+             let lastScrollTop = 0;
+             let ticking = false;
+             let isTransitioning = false;
+             const scrollThreshold = 30; // Reduced threshold for smoother transition
+            
+                         function handleScroll() {
+                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                 
+                 // Prevent rapid transitions
+                 if (isTransitioning) return;
+                 
+                 // Add/remove collapsed class based on scroll position
+                 if (scrollTop > scrollThreshold) {
+                     if (!header.classList.contains('collapsed')) {
+                         isTransitioning = true;
+                         header.classList.add('collapsed');
+                         console.log('Header collapsed at scroll position:', scrollTop);
+                         
+                         // Allow transition to complete
+                         setTimeout(() => {
+                             isTransitioning = false;
+                         }, 300);
+                     }
+                 } else {
+                     if (header.classList.contains('collapsed')) {
+                         isTransitioning = true;
+                         header.classList.remove('collapsed');
+                         console.log('Header expanded at scroll position:', scrollTop);
+                         
+                         // Allow transition to complete
+                         setTimeout(() => {
+                             isTransitioning = false;
+                         }, 300);
+                     }
+                 }
+                 
+                 lastScrollTop = scrollTop;
+             }
+            
+            // Initialize theme toggle for collapsed header
+            const themeToggleCollapsed = document.getElementById('themeToggleCollapsed');
+            const themeToggleMobileCollapsed = document.getElementById('themeToggleMobileCollapsed');
+            const themeIconCollapsed = document.getElementById('themeIconCollapsed');
+            const themeIconMobileCollapsed = document.getElementById('themeIconMobileCollapsed');
+            
+            if (themeToggleCollapsed) {
+                themeToggleCollapsed.addEventListener('click', function() {
+                    const isDark = document.documentElement.classList.toggle('dark');
+                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                    updateThemeIcon(isDark);
+                });
+            }
+            
+            if (themeToggleMobileCollapsed) {
+                themeToggleMobileCollapsed.addEventListener('click', function() {
+                    const isDark = document.documentElement.classList.toggle('dark');
+                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                    updateThemeIcon(isDark);
+                });
+            }
+            
+            // Initialize sign out for collapsed header
+            const signOutBtnCollapsed = document.getElementById('signOutBtnCollapsed');
+            const signOutBtnMobileCollapsed = document.getElementById('signOutBtnMobileCollapsed');
+            
+            if (signOutBtnCollapsed) {
+                signOutBtnCollapsed.addEventListener('click', function() {
+                    fetch('/api/signout', { method: 'POST' })
+                        .then(() => window.location.href = '/')
+                        .catch(error => console.error('Error signing out:', error));
+                });
+            }
+            
+            if (signOutBtnMobileCollapsed) {
+                signOutBtnMobileCollapsed.addEventListener('click', function() {
+                    fetch('/api/signout', { method: 'POST' })
+                        .then(() => window.location.href = '/')
+                        .catch(error => console.error('Error signing out:', error));
+                });
+            }
+            
+            // Update theme icons for collapsed header
+            function updateThemeIcon(isDark) {
+                const themeIcon = document.getElementById('themeIcon');
+                const themeIconMobile = document.getElementById('themeIconMobile');
+                const themeIconCollapsed = document.getElementById('themeIconCollapsed');
+                const themeIconMobileCollapsed = document.getElementById('themeIconMobileCollapsed');
+                
+                if (themeIcon) {
+                    themeIcon.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-600';
+                }
+                
+                if (themeIconMobile) {
+                    themeIconMobile.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-600';
+                }
+                
+                if (themeIconCollapsed) {
+                    themeIconCollapsed.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-600';
+                }
+                
+                if (themeIconMobileCollapsed) {
+                    themeIconMobileCollapsed.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-600';
+                }
+            }
+            
+                         // Add scroll event listener with throttling
+             window.addEventListener('scroll', function() {
+                 if (!ticking) {
+                     requestAnimationFrame(function() {
+                         handleScroll();
+                         ticking = false;
+                     });
+                     ticking = true;
+                 }
+             });
+             
+             // Initial check
+             handleScroll();
+        }
     </script>
     
     {% block extra_scripts %}{% endblock %}
