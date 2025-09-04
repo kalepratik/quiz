@@ -126,19 +126,10 @@ def payment():
 def create_payment_order():
     """Create a new payment order"""
     try:
-        # Check if user is authenticated (allow test user in development)
+        # Check if user is authenticated
         user = OAuthService.get_current_user()
         if not user:
-            if current_app.config.get('FLASK_ENV') == 'development':
-                # Create a test user for development
-                user = {
-                    'id': 'test_user_123',
-                    'email': 'test@example.com',
-                    'name': 'Test User'
-                }
-                logger.info("Using test user for development payment testing")
-            else:
-                return jsonify({'error': 'User not authenticated'}), 401
+            return jsonify({'error': 'User not authenticated'}), 401
         
         # Get payment amount from request
         data = request.get_json()
@@ -173,19 +164,10 @@ def create_payment_order():
 def verify_payment():
     """Verify payment and upgrade user to Pro"""
     try:
-        # Check if user is authenticated (allow test user in development)
+        # Check if user is authenticated
         user = OAuthService.get_current_user()
         if not user:
-            if current_app.config.get('FLASK_ENV') == 'development':
-                # Create a test user for development
-                user = {
-                    'id': 'test_user_123',
-                    'email': 'test@example.com',
-                    'name': 'Test User'
-                }
-                logger.info("Using test user for development payment verification")
-            else:
-                return jsonify({'error': 'User not authenticated'}), 401
+            return jsonify({'error': 'User not authenticated'}), 401
         
         # Get payment details from request
         data = request.get_json()
@@ -199,15 +181,8 @@ def verify_payment():
         # Create payment service
         payment_service = PaymentService()
         
-        # Verify payment (allow mock verification in development)
-        payment_verified = False
-        if current_app.config.get('FLASK_ENV') == 'development':
-            # In development, accept any payment for testing
-            payment_verified = True
-            logger.info("Development mode: Accepting payment for testing")
-        else:
-            # In production, verify payment properly
-            payment_verified = payment_service.verify_payment(payment_id, order_id, signature)
+        # Verify payment
+        payment_verified = payment_service.verify_payment(payment_id, order_id, signature)
         
         if payment_verified:
             # Payment verified - upgrade user to Pro
@@ -356,6 +331,16 @@ def logout():
         logger.error(f"Error during logout: {e}")
         return redirect(url_for('ui.index'))
 
+@api_bp.route('/signout', methods=['POST'])
+def api_signout():
+    """API endpoint for signing out user"""
+    try:
+        OAuthService.logout_user()
+        return jsonify({'success': True, 'message': 'User signed out successfully'}), 200
+    except Exception as e:
+        logger.error(f"Error during API signout: {e}")
+        return jsonify({'success': False, 'error': 'Failed to sign out'}), 500
+
 @api_bp.route('/user-info')
 def user_info():
     """Get current user information"""
@@ -367,22 +352,10 @@ def user_info():
                 'user': user
             })
         else:
-            # In development mode, return a test user
-            if current_app.config.get('FLASK_ENV') == 'development':
-                test_user = {
-                    'id': 'test_user_123',
-                    'email': 'test@example.com',
-                    'name': 'Test User'
-                }
-                return jsonify({
-                    'authenticated': True,
-                    'user': test_user
-                })
-            else:
-                return jsonify({
-                    'authenticated': False,
-                    'user': None
-                })
+            return jsonify({
+                'authenticated': False,
+                'user': None
+            })
     except Exception as e:
         logger.error(f"Error getting user info: {e}")
         return jsonify({

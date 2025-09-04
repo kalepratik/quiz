@@ -943,27 +943,15 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
                  }
              } catch (error) {
                  console.error('Error fetching user info:', error);
-                                   // Fallback to localStorage for user session
-                  const isSignedIn = localStorage.getItem('isSignedIn') === 'true';
-                  if (isSignedIn) {
-                      signInBtn.classList.add('hidden');
-                      userInfo.classList.remove('hidden');
-                      userName.textContent = 'Welcome, User';
-                  } else {
-                      signInBtn.classList.remove('hidden');
-                      userInfo.classList.add('hidden');
-                  }
+                 // Show sign in button if there's an error
+                 signInBtn.classList.remove('hidden');
+                 userInfo.classList.add('hidden');
              }
          }
          
          // Handle sign out
          if (signOutBtn) {
              signOutBtn.addEventListener('click', () => {
-                                   // Clear localStorage for user session
-                  localStorage.removeItem('isSignedIn');
-                  localStorage.removeItem('userEmail');
-                  localStorage.removeItem('userName');
-                 
                  // Redirect to logout endpoint
                  window.location.href = '/auth/logout';
              });
@@ -990,13 +978,8 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
                      }
                  } catch (error) {
                      console.error('Error checking authentication:', error);
-                     // Fallback to localStorage check
-                     const isSignedIn = localStorage.getItem('isSignedIn') === 'true';
-                     if (isSignedIn) {
-                         window.location.href = '/payment';
-                     } else {
-                         window.location.href = '/signin';
-                     }
+                     // Redirect to sign in page if there's an error
+                     window.location.href = '/signin';
                  }
              });
          }

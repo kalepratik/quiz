@@ -827,11 +827,6 @@ dbt build --select state:modified+ --defer --state s3://artifacts/prod
     // Handle sign out
     if (signOutBtn) {
         signOutBtn.addEventListener('click', () => {
-            // Clear localStorage for user session
-            localStorage.removeItem('isSignedIn');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('userName');
-            
             // Redirect to logout endpoint
             window.location.href = '/auth/logout';
         });
