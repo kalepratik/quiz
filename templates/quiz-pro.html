@@ -27,21 +27,32 @@
         
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background: #f9fafb;
             min-height: 100vh;
             color: var(--text-primary);
             line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+        
+        .dark body {
+            background: #0f0f0f;
         }
         
         /* Header with dbt logo as home button */
         .quiz-header {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 100;
+            transition: background-color 0.3s ease;
+        }
+        
+        .dark .quiz-header {
+            background: rgba(17, 24, 39, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .header-content {
@@ -99,25 +110,97 @@
         }
         
         .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
+            max-width: 1200px !important;
+            margin: 2rem auto;
+            padding: 1.5rem;
         }
         
         /* Quiz Configuration Section */
         .quiz-config {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            max-width: 1200px !important;
+            width: 1200px !important;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(32px) saturate(150%);
+            -webkit-backdrop-filter: blur(32px) saturate(150%);
+            border-radius: 24px;
             padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: var(--shadow-xl);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Inner gradient + rim light for realism */
+        .quiz-config::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.45),
+                inset 0 -80px 140px -120px rgba(255, 255, 255, 0.25);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* Specular highlight (soft white glow in corner) */
+        .quiz-config::after {
+            content: '';
+            position: absolute;
+            left: -96px;
+            top: -96px;
+            width: 256px;
+            height: 256px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            filter: blur(48px);
+            opacity: 0.4;
+            transform: rotate(12deg);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .dark .quiz-config {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(32px) saturate(150%);
+            -webkit-backdrop-filter: blur(32px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+        }
+        
+        .dark .quiz-config::before {
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -80px 140px -120px rgba(255, 255, 255, 0.15);
+        }
+        
+        .dark .quiz-config::after {
+            background: rgba(255, 255, 255, 0.3);
+            opacity: 0.3;
+        }
+        
+        /* Fine noise texture overlay for config */
+        .quiz-config .noise-texture {
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            opacity: 0.06;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 2;
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
+            background-size: 20px 20px;
         }
         
         .config-header {
             text-align: center;
             margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
         }
         
         .config-header h2 {
@@ -127,13 +210,21 @@
             margin-bottom: 0.5rem;
         }
         
+        .dark .config-header h2 {
+            color: #f9fafb;
+        }
+        
         .config-header p {
             color: var(--text-secondary);
             font-size: 1.1rem;
         }
         
+        .dark .config-header p {
+            color: #d1d5db;
+        }
+        
         .pro-features {
-            background: linear-gradient(135deg, var(--pro-color) 0%, #ffed4e 100%);
+            backdrop-filter: blur(20px);
             border-radius: 12px;
             padding: 1rem;
             margin-bottom: 2rem;
@@ -141,7 +232,6 @@
         }
         
         .pro-features h3 {
-            color: #2d3748;
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
@@ -149,7 +239,6 @@
         
         .pro-features ul {
             list-style: none;
-            color: #2d3748;
             font-weight: 500;
         }
         
@@ -160,6 +249,34 @@
         .pro-features li::before {
             content: "✨ ";
             margin-right: 0.5rem;
+        }
+        
+        /* Light mode styles for PRO Features */
+        .pro-features {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .pro-features h3 {
+            color: #1f2937;
+        }
+        
+        .pro-features ul {
+            color: #374151;
+        }
+        
+        /* Dark mode overrides */
+        .dark .pro-features {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .dark .pro-features h3 {
+            color: #ffffff;
+        }
+        
+        .dark .pro-features ul {
+            color: #e5e7eb;
         }
         
         .config-form {
@@ -179,6 +296,10 @@
             color: var(--text-primary);
             margin-bottom: 0.5rem;
             font-size: 0.95rem;
+        }
+        
+        .dark .form-group label {
+            color: #f9fafb;
         }
         
         .form-group select,
@@ -227,13 +348,82 @@
         
         /* Quiz Section */
         .quiz-section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(32px) saturate(150%);
+            -webkit-backdrop-filter: blur(32px) saturate(150%);
+            border-radius: 24px;
             padding: 2rem;
-            box-shadow: var(--shadow-xl);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             display: none;
+            max-width: 1150px !important;
+            margin: 2rem auto;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Inner gradient + rim light for realism */
+        .quiz-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.45),
+                inset 0 -80px 140px -120px rgba(255, 255, 255, 0.25);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* Specular highlight (soft white glow in corner) */
+        .quiz-section::after {
+            content: '';
+            position: absolute;
+            left: -96px;
+            top: -96px;
+            width: 256px;
+            height: 256px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            filter: blur(48px);
+            opacity: 0.4;
+            transform: rotate(12deg);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .dark .quiz-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(32px) saturate(150%);
+            -webkit-backdrop-filter: blur(32px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+        }
+        
+        .dark .quiz-section::before {
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -80px 140px -120px rgba(255, 255, 255, 0.15);
+        }
+        
+        .dark .quiz-section::after {
+            background: rgba(255, 255, 255, 0.3);
+            opacity: 0.3;
+        }
+        
+        /* Fine noise texture overlay */
+        .quiz-section .noise-texture {
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            opacity: 0.06;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 2;
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
+            background-size: 20px 20px;
         }
         
         .quiz-header-section {
@@ -243,12 +433,22 @@
             margin-bottom: 2rem;
             padding-bottom: 1rem;
             border-bottom: 2px solid var(--border-color);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .dark .quiz-header-section {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
         }
         
         .quiz-title {
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--text-primary);
+        }
+        
+        .dark .quiz-title {
+            color: #f9fafb;
         }
         
         .quiz-progress {
@@ -260,6 +460,10 @@
         .progress-text {
             font-weight: 600;
             color: var(--text-primary);
+        }
+        
+        .dark .progress-text {
+            color: #f9fafb;
         }
         
         .progress-bar {
@@ -287,6 +491,8 @@
         
         .question-container {
             margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
         }
         
         .question-text {
@@ -295,6 +501,10 @@
             color: var(--text-primary);
             margin-bottom: 1.5rem;
             line-height: 1.6;
+        }
+        
+        .dark .question-text {
+            color: #f9fafb;
         }
         
         .code-inline {
@@ -306,15 +516,94 @@
             font-size: 0.9rem;
             border: 1px solid var(--border-color);
             font-weight: normal;
-            white-space: pre;
-            display: block;
-            margin: 1rem 0;
-            overflow-x: auto;
+            white-space: nowrap;
+            display: inline;
         }
+        
+        .ascii-art {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            border: 1px solid var(--border-color);
+            white-space: pre;
+            overflow-x: auto;
+            margin: 1rem 0;
+            text-align: center;
+            line-height: 1.2;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .ascii-diagram-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border-left: 6px solid var(--accent-color);
+        }
+        
+        .dark .ascii-diagram-container {
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .ascii-diagram-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color) 0%, var(--success-color) 100%);
+        }
+        
         
         .options-container {
             display: grid;
             gap: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .ascii-diagram {
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            white-space: pre;
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            color: #374151;
+            overflow-x: auto;
+            min-width: fit-content;
+        }
+        
+        .dark .ascii-diagram {
+            background: #1f2937;
+            color: #d1d5db;
+        }
+        
+        .code-block {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff00;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .dark .code-block {
+            background: rgba(0, 0, 0, 0.9);
+            color: #00ff88;
         }
         
         .option {
@@ -543,6 +832,14 @@
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
+                margin: 1rem auto;
+                max-width: 1000px !important;
+            }
+            
+            .quiz-section {
+                margin: 1rem auto;
+                max-width: 1000px !important;
+                padding: 1.5rem;
             }
             
             .header-content {
@@ -670,6 +967,14 @@
         @media (max-width: 480px) {
             .container {
                 padding: 0.75rem;
+                margin: 0.75rem auto;
+                max-width: 900px !important;
+            }
+            
+            .quiz-section {
+                margin: 0.75rem auto;
+                max-width: 900px !important;
+                padding: 1rem;
             }
             
             .header-content {
@@ -719,12 +1024,14 @@
                 font-size: 0.9rem;
             }
         }
+        
     </style>
 {% endblock %}
 
 {% block content %}
         <!-- Quiz Configuration Section -->
         <div class="quiz-config" id="quizConfig">
+            <div class="noise-texture"></div>
             <div class="config-header">
                 <h2>🎯 PRO Quiz Configuration</h2>
                 <p>Unlock advanced features and comprehensive testing</p>
@@ -780,6 +1087,7 @@
 
         <!-- Quiz Section -->
         <div class="quiz-section" id="quizSection">
+            <div class="noise-texture"></div>
             <div class="quiz-header-section">
                 <div class="quiz-title">Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span></div>
                 <div class="quiz-progress">
@@ -930,21 +1238,44 @@
         }
 
         function formatQuestionText(text) {
-            // Handle code blocks (```...```)
+            // Handle code blocks (```...```) - preserve ASCII art formatting
             text = text.replace(/```([\s\S]*?)```/g, function(match, code) {
-                return `<code class="code-inline">${code.trim()}</code>`;
+                const codeContent = code.trim();
+                // Check if this looks like ASCII art (contains +, |, -, > characters)
+                if (/[+\-|>]/.test(codeContent) && (codeContent.includes('+') || codeContent.includes('|'))) {
+                    // This is ASCII art - create a dedicated container
+                    return `<div class="ascii-diagram-container">
+                        <div class="ascii-diagram">${codeContent}</div>
+                    </div>`;
+                } else {
+                    // Regular code - use code-block styling
+                    return `<div class="code-block">${codeContent}</div>`;
+                }
             });
             
-            // Convert inline backticks to proper code formatting
-            text = text.replace(/`([^`]+)`/g, '<code class="code-inline">$1</code>');
+            // First, protect backticks from line break conversion
+            text = text.replace(/`([^`]+)`/g, function(match, content) {
+                return '___BACKTICK_CODE___' + content + '___END_BACKTICK___';
+            });
             
             // Handle bold text (**text**) - convert to <strong> tags
             text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            
+            // Handle the DAG scenario format - integrate into regular question flow
+            text = text.replace(/You have a DAG scenario defined as:/g, '<strong>You have a DAG scenario defined as:</strong>');
             
             // Remove duplicate question endings and clean up formatting
             text = text.replace(/\n\nQuestion:\s*\nWhat will happen\?\s*$/g, '');
             text = text.replace(/\n\nWhat will happen\?\s*$/g, '');
             text = text.replace(/\n\nWhat happens to [^?]+\?\s*$/g, '');
+            text = text.replace(/\n\nWhich models will run\?\s*$/g, '');
+            text = text.replace(/\n\nWhat is the \*\*most critical action\*\* to take in this situation\?\s*$/g, '');
+            
+            // Convert line breaks to HTML
+            text = text.replace(/\n/g, '<br>');
+            
+            // Now convert protected backticks to proper code formatting
+            text = text.replace(/___BACKTICK_CODE___([^]+?)___END_BACKTICK___/g, '<code class="code-inline">$1</code>');
             
             // Clean up any extra whitespace at the end
             text = text.trim();
@@ -1141,4 +1472,5 @@
 
 
      </script>
+     
 {% endblock %}

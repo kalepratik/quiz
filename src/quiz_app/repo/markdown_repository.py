@@ -158,7 +158,7 @@ class MarkdownQuestionRepository:
         content = []
         in_section = False
         
-        for line in lines:
+        for i, line in enumerate(lines):
             line_stripped = line.strip()
             
             # Check for start marker (contains the marker)
@@ -177,6 +177,11 @@ class MarkdownQuestionRepository:
         # Remove leading/trailing empty lines
         result = re.sub(r'^\n+', '', result)
         result = re.sub(r'\n+$', '', result)
+        
+        # Preserve markdown code blocks by ensuring they have proper spacing
+        # This ensures that ```...``` blocks are properly formatted for the JavaScript function
+        result = re.sub(r'```\s*\n', '```\n', result)  # Clean up spacing after opening ```
+        result = re.sub(r'\n\s*```', '\n```', result)  # Clean up spacing before closing ```
         
         return result
     

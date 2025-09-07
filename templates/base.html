@@ -473,6 +473,192 @@
         }
     </style>
     
+    <!-- Sign Out Popup Styles -->
+    <style>
+        /* Sign Out Popup Styles */
+        .signout-popup-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            place-items: center;
+            padding: 1rem;
+        }
+        
+        .signout-popup {
+            position: relative;
+            width: min(90vw, 500px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(32px) saturate(150%);
+            -webkit-backdrop-filter: blur(32px) saturate(150%);
+        }
+        
+        /* Rim light & inner glow */
+        .signout-popup::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                inset 0 -80px 140px -120px rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* Highlight blob */
+        .signout-popup::after {
+            content: '';
+            position: absolute;
+            left: -96px;
+            top: -96px;
+            width: 256px;
+            height: 256px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            filter: blur(48px);
+            opacity: 0.4;
+            transform: rotate(12deg);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* Noise texture */
+        .signout-popup .noise-texture {
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            opacity: 0.06;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 2;
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
+            background-size: 20px 20px;
+        }
+        
+        .signout-popup-content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .signout-popup h2 {
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .signout-popup p {
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 2rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        .signout-popup-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .signout-popup-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .signout-popup-btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .signout-popup-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .signout-popup-btn-confirm {
+            background: #ef4444;
+            color: #ffffff;
+        }
+        
+        .signout-popup-btn-confirm:hover {
+            background: #dc2626;
+        }
+        
+        /* Light mode adjustments */
+        .signout-popup {
+            background: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+        
+        .signout-popup h2 {
+            color: #1f2937;
+        }
+        
+        .signout-popup p {
+            color: rgba(31, 41, 55, 0.85);
+        }
+        
+        .signout-popup-btn-cancel {
+            background: rgba(0, 0, 0, 0.1);
+            color: #1f2937;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+        
+        .signout-popup-btn-cancel:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Dark mode overrides */
+        .dark .signout-popup {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .dark .signout-popup::before {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -80px 140px -120px rgba(255, 255, 255, 0.15);
+        }
+        
+        .dark .signout-popup::after {
+            background: rgba(255, 255, 255, 0.3);
+            opacity: 0.3;
+        }
+        
+        .dark .signout-popup h2 {
+            color: #ffffff;
+        }
+        
+        .dark .signout-popup p {
+            color: rgba(255, 255, 255, 0.85);
+        }
+        
+        .dark .signout-popup-btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .signout-popup-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+    
     {% block extra_head %}{% endblock %}
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
@@ -924,21 +1110,7 @@
             const signOutBtn = document.getElementById('signOutBtn');
             const signOutBtnMobile = document.getElementById('signOutBtnMobile');
             
-            if (signOutBtn) {
-                signOutBtn.addEventListener('click', function() {
-                    fetch('/api/signout', { method: 'POST' })
-                        .then(() => window.location.href = '/')
-                        .catch(error => console.error('Error signing out:', error));
-                });
-            }
-            
-            if (signOutBtnMobile) {
-                signOutBtnMobile.addEventListener('click', function() {
-                    fetch('/api/signout', { method: 'POST' })
-                        .then(() => window.location.href = '/')
-                        .catch(error => console.error('Error signing out:', error));
-                });
-            }
+            // Sign out buttons are now handled by the popup system
         }
 
         // Initialize header functionality
@@ -1113,21 +1285,7 @@
             const signOutBtnCollapsed = document.getElementById('signOutBtnCollapsed');
             const signOutBtnMobileCollapsed = document.getElementById('signOutBtnMobileCollapsed');
             
-            if (signOutBtnCollapsed) {
-                signOutBtnCollapsed.addEventListener('click', function() {
-                    fetch('/api/signout', { method: 'POST' })
-                        .then(() => window.location.href = '/')
-                        .catch(error => console.error('Error signing out:', error));
-                });
-            }
-            
-            if (signOutBtnMobileCollapsed) {
-                signOutBtnMobileCollapsed.addEventListener('click', function() {
-                    fetch('/api/signout', { method: 'POST' })
-                        .then(() => window.location.href = '/')
-                        .catch(error => console.error('Error signing out:', error));
-                });
-            }
+            // Sign out buttons are now handled by the popup system
             
             // Update theme icons for collapsed header
             function updateThemeIcon(isDark) {
@@ -1167,6 +1325,77 @@
              // Initial check
              handleScroll();
         }
+    </script>
+    
+    <!-- Sign Out Popup -->
+    <div class="signout-popup-overlay" id="signoutPopup">
+        <div class="signout-popup">
+            <div class="noise-texture"></div>
+            <div class="signout-popup-content">
+                <h2>Sign Out</h2>
+                <p>Are you sure you want to sign out? You'll need to log in again to access your quiz progress.</p>
+                <div class="signout-popup-buttons">
+                    <button class="signout-popup-btn signout-popup-btn-cancel" onclick="closeSignoutPopup()">
+                        Cancel
+                    </button>
+                    <button class="signout-popup-btn signout-popup-btn-confirm" onclick="confirmSignout()">
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Sign Out Popup Functions
+        function showSignoutPopup() {
+            document.getElementById('signoutPopup').style.display = 'grid';
+        }
+        
+        function closeSignoutPopup() {
+            document.getElementById('signoutPopup').style.display = 'none';
+        }
+        
+        function confirmSignout() {
+            // Call the sign out API
+            fetch('/api/signout', { method: 'POST' })
+                .then(() => {
+                    closeSignoutPopup();
+                    window.location.href = '/';
+                })
+                .catch(error => {
+                    console.error('Error signing out:', error);
+                    closeSignoutPopup();
+                    // Still redirect even if API call fails
+                    window.location.href = '/';
+                });
+        }
+        
+        // Close popup when clicking outside
+        document.getElementById('signoutPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSignoutPopup();
+            }
+        });
+        
+        // Add click handlers to all sign out buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const signOutButtons = document.querySelectorAll('#signOutBtn, #signOutBtnMobile, #signOutBtnCollapsed, #signOutBtnMobileCollapsed');
+            signOutButtons.forEach(button => {
+                // Remove any existing event listeners by cloning the element
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+                
+                // Add our popup event listener
+                newButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    showSignoutPopup();
+                    return false;
+                });
+            });
+        });
     </script>
     
     {% block extra_scripts %}{% endblock %}
