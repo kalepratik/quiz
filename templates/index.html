@@ -29,117 +29,94 @@
 
         
         .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 2rem;
+            max-width: 550px;
+            margin: 2rem auto;
+            padding: 1.5rem;
             position: relative;
         }
         
-        /* Background pattern for depth */
-        .container::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        /* Dark mode background pattern */
-        .dark .container::before {
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
-        }
         
         /* Modern Card Design - Glass Morphism */
         .quiz-container {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(32px) saturate(150%);
+            -webkit-backdrop-filter: blur(32px) saturate(150%);
             border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 
-                0 20px 25px -5px rgba(0, 0, 0, 0.2),
-                0 10px 10px -5px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
             overflow: hidden;
-            margin-bottom: 2rem;
+            margin: 2rem auto;
+            max-width: 900px;
             transform: translateY(0);
             transition: all 0.3s ease;
             position: relative;
         }
         
+        /* Inner gradient + rim light for realism */
         .quiz-container::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            inset: 0;
             border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.45),
+                inset 0 -80px 140px -120px rgba(255, 255, 255, 0.25);
             pointer-events: none;
             z-index: 1;
         }
         
+        /* Specular highlight (soft white glow in corner) */
         .quiz-container::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.4) 50%, 
-                transparent 100%);
-            z-index: 3;
-        }
-        
-        .quiz-container::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            right: 2px;
-            bottom: 2px;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.05) 100%);
-            border-radius: 22px;
+            left: -96px;
+            top: -96px;
+            width: 256px;
+            height: 256px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            filter: blur(48px);
+            opacity: 0.4;
+            transform: rotate(12deg);
             pointer-events: none;
             z-index: 1;
         }
+        
         
         /* Dark mode for quiz container */
         .dark .quiz-container {
-            background: rgba(17, 24, 39, 0.3);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 
-                0 20px 25px -5px rgba(0, 0, 0, 0.4),
-                0 10px 10px -5px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(32px) saturate(150%);
+            -webkit-backdrop-filter: blur(32px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
         }
         
         .dark .quiz-container::before {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -80px 140px -120px rgba(255, 255, 255, 0.15);
         }
         
         .dark .quiz-container::after {
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.2) 50%, 
-                transparent 100%);
+            background: rgba(255, 255, 255, 0.3);
+            opacity: 0.3;
+        }
+        
+        /* Fine noise texture overlay */
+        .quiz-container .noise-texture {
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            opacity: 0.06;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 2;
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
+            background-size: 20px 20px;
         }
         
         /* Hover effects for 3D tile */
@@ -183,7 +160,7 @@
         
         /* Dark mode for quiz content */
         .dark .quiz-content {
-            background: #1f2937;
+            background: transparent;
         }
         
         /* Configuration Section - Glass Morphism */
@@ -654,11 +631,11 @@
                  /* Question Styling - Matching Homepage Format */
          .question {
              margin-bottom: 2rem;
-             background: var(--bg-primary);
+             background: transparent;
              border-radius: 16px;
              padding: 2rem;
-             box-shadow: var(--shadow-md);
-             border: 1px solid var(--border-color);
+             box-shadow: none;
+             border: none;
          }
          
                    .question-header {
@@ -710,13 +687,17 @@
             line-height: 1.6;
           }
           
-                     .question-text {
-               font-size: 1.1rem;
-               font-weight: normal;
-               color: var(--text-primary);
-               margin-bottom: 1.5rem;
-               line-height: 1.6;
-           }
+                             .question-text {
+            font-size: 1.1rem;
+            font-weight: normal;
+            color: #f9fafb;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .dark .question-text {
+            color: #f9fafb !important;
+        }
          
          .code-block {
              background: #1e293b;
@@ -758,6 +739,7 @@
               color: #374151;
               text-align: left;
               box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+              min-width: fit-content;
           }
           
                      .ascii-diagram pre {
@@ -772,20 +754,63 @@
                padding: 0;
            }
          
-                   .code-inline {
-              background: var(--bg-secondary);
-              color: var(--text-primary);
-              padding: 0.25rem 0.5rem;
-              border-radius: 4px;
-              font-family: 'Courier New', monospace;
-              font-size: 0.9rem;
-              border: 1px solid var(--border-color);
-              font-weight: normal;
-              white-space: pre;
-              display: block;
-              margin: 1rem 0;
-            overflow-x: auto;
+                           .code-inline {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+            font-weight: normal;
+            white-space: nowrap;
+            display: inline;
         }
+        
+        .ascii-art {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            border: 1px solid var(--border-color);
+            white-space: pre;
+            overflow-x: auto;
+            margin: 1rem 0;
+            text-align: center;
+            line-height: 1.2;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .ascii-diagram-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border-left: 6px solid var(--accent-color);
+        }
+        
+        .dark .ascii-diagram-container {
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .ascii-diagram-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color) 0%, var(--success-color) 100%);
+        }
+        
         
                  /* Options Styling - Matching Homepage Format */
         .options {
@@ -912,6 +937,10 @@
             font-size: 0.9rem;
         }
         
+        .dark .progress-text {
+            color: #d1d5db;
+        }
+        
         /* Results Section */
         .results {
              text-align: center;
@@ -1035,7 +1064,13 @@
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
-                max-width: 100%;
+                margin: 1rem auto;
+                max-width: calc(100% - 2rem);
+            }
+            
+            .quiz-container {
+                margin: 1rem auto;
+                max-width: calc(100% - 2rem);
             }
             
             .header-content {
@@ -1156,6 +1191,13 @@
         @media (max-width: 480px) {
             .container {
                 padding: 0.75rem;
+                margin: 0.75rem auto;
+                max-width: calc(100% - 1.5rem);
+            }
+            
+            .quiz-container {
+                margin: 0.75rem auto;
+                max-width: calc(100% - 1.5rem);
             }
             
             .header-content {
@@ -1197,7 +1239,7 @@
     <div class="container">
                  <!-- Configuration Screen -->
          <div id="config" class="quiz-container">
-            
+            <div class="noise-texture"></div>
             <div class="quiz-content">
                 <div class="config-section">
                     <h2 class="config-title">Configure Your Quiz</h2>
@@ -1235,6 +1277,7 @@
 
         <!-- Loading Screen -->
         <div id="loading" class="quiz-container" style="display: none;">
+            <div class="noise-texture"></div>
             <div class="loading">
                 <i class="fas fa-spinner"></i>
                 <p>Loading your quiz...</p>
@@ -1243,7 +1286,7 @@
 
                  <!-- Quiz Screen -->
          <div id="quiz" class="quiz-container" style="display: none;">
-            
+            <div class="noise-texture"></div>
             <div class="quiz-content">
                 <div class="progress-container">
                     <div class="progress-bar">
@@ -1266,7 +1309,7 @@
 
                  <!-- Results Screen -->
          <div id="results" class="quiz-container" style="display: none;">
-            
+            <div class="noise-texture"></div>
             <div class="results">
                 <div class="score" id="score"></div>
                 <div class="score-text" id="scoreText"></div>
@@ -1577,28 +1620,51 @@
              }
          }
 
-                 function formatQuestionText(text) {
-             // Handle code blocks (```...```)
-             text = text.replace(/```([\s\S]*?)```/g, function(match, code) {
-                 return `<code class="code-inline">${code.trim()}</code>`;
-             });
-             
-             // Convert inline backticks to proper code formatting
-             text = text.replace(/`([^`]+)`/g, '<code class="code-inline">$1</code>');
-             
-             // Handle bold text (**text**) - convert to <strong> tags
-             text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-             
-             // Remove duplicate question endings and clean up formatting
-             text = text.replace(/\n\nQuestion:\s*\nWhat will happen\?\s*$/g, '');
-             text = text.replace(/\n\nWhat will happen\?\s*$/g, '');
-             text = text.replace(/\n\nWhat happens to [^?]+\?\s*$/g, '');
-             
-             // Clean up any extra whitespace at the end
-             text = text.trim();
-             
-             return text;
-         }
+                         function formatQuestionText(text) {
+            // Handle code blocks (```...```) - preserve ASCII art formatting
+            text = text.replace(/```([\s\S]*?)```/g, function(match, code) {
+                const codeContent = code.trim();
+                // Check if this looks like ASCII art (contains +, |, -, > characters)
+                if (/[+\-|>]/.test(codeContent) && (codeContent.includes('+') || codeContent.includes('|'))) {
+                    // This is ASCII art - create a dedicated container
+                    return `<div class="ascii-diagram-container">
+                        <div class="ascii-diagram">${codeContent}</div>
+                    </div>`;
+                } else {
+                    // Regular code - use code-block styling
+                    return `<div class="code-block">${codeContent}</div>`;
+                }
+            });
+            
+            // First, protect backticks from line break conversion
+            text = text.replace(/`([^`]+)`/g, function(match, content) {
+                return '___BACKTICK_CODE___' + content + '___END_BACKTICK___';
+            });
+            
+            // Handle bold text (**text**) - convert to <strong> tags
+            text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            
+            // Handle the DAG scenario format - integrate into regular question flow
+            text = text.replace(/You have a DAG scenario defined as:/g, '<strong>You have a DAG scenario defined as:</strong>');
+            
+            // Remove duplicate question endings and clean up formatting
+            text = text.replace(/\n\nQuestion:\s*\nWhat will happen\?\s*$/g, '');
+            text = text.replace(/\n\nWhat will happen\?\s*$/g, '');
+            text = text.replace(/\n\nWhat happens to [^?]+\?\s*$/g, '');
+            text = text.replace(/\n\nWhich models will run\?\s*$/g, '');
+            text = text.replace(/\n\nWhat is the \*\*most critical action\*\* to take in this situation\?\s*$/g, '');
+            
+            // Convert line breaks to HTML
+            text = text.replace(/\n/g, '<br>');
+            
+            // Now convert protected backticks to proper code formatting
+            text = text.replace(/___BACKTICK_CODE___([^]+?)___END_BACKTICK___/g, '<code class="code-inline">$1</code>');
+            
+            // Clean up any extra whitespace at the end
+            text = text.trim();
+            
+            return text;
+        }
          
 
          

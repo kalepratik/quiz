@@ -5,12 +5,12 @@
 **Difficulty:** 2 (Medium)
 
 **Scenario:**
-You have a DAG defined as:
+You have a DAG scenario defined as:
 
 ```
-+---------------+   +------------------+   +-------------+   +------------------+   +---------+
-| seed_customers | ->| A_stg_customers  | ->| S_customers | ->| B_customer_dim   | ->| tests   |
-+---------------+   +------------------+   +-------------+   +------------------+   +---------+
++---------------+   +------------------+   +-------------+   +------------------+
+| seed_customers | ->| A_stg_customers  | ->| S_customers | ->| B_customer_dim   |
++---------------+   +------------------+   +-------------+   +------------------+
 ```
 
 You run the following command:
@@ -61,7 +61,7 @@ The --full-refresh flag only forces incremental models to rebuild from scratch; 
 **Difficulty:** 3 (Difficult)
 
 **Scenario:**
-You have a DAG defined as:
+You have a DAG scenario defined as:
 
 ```
 +---------------+   +------------------+   +-------------+   +------------------+
@@ -92,7 +92,7 @@ With state:modified+ and defer the modified model and all its downstream depende
 **Difficulty:** 2 (Medium)
 
 **Scenario:**
-You have a DAG defined as:
+You have a DAG scenario defined as:
 
 ```
 +---------------+   +------------------+   +-------------+   +------------------+
@@ -207,7 +207,7 @@ The --state flag specifies which state artifacts to use for comparison enabling 
 **Difficulty:** 2 (Medium)
 
 **Scenario:**
-You have a DAG defined as:
+You have a DAG scenario defined as:
 
 ```
 +---------------+   +------------------+   +-------------+   +------------------+
@@ -255,7 +255,7 @@ Tests run after their target models exist ensuring that the models they test hav
 **Difficulty:** 4 (Critical)
 
 **Scenario:**
-You have a production DAG structured as follows:
+You have a DAG scenario defined as:
 
 ```
 +---------------+   +---------------+   +---------------+   +---------------+
