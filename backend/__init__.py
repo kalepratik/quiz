@@ -4,8 +4,9 @@ dbt Certification Quiz Application Factory
 from flask import Flask
 from dotenv import load_dotenv
 from .config import config_from_env
-from .routes import ui_bp, api_bp
 from .models import db
+from .routers import ui_bp, api_bp
+from .routers.admin import admin_bp
 
 # Load environment variables from .env file
 load_dotenv()
@@ -15,8 +16,8 @@ def create_app():
     """Application factory pattern"""
     app = Flask(
         __name__, 
-        static_folder="../../static", 
-        template_folder="../../templates"
+        static_folder="static", 
+        template_folder="templates"
     )
     
     # Load configuration
@@ -28,6 +29,7 @@ def create_app():
     # Register blueprints
     app.register_blueprint(ui_bp)
     app.register_blueprint(api_bp)
+    app.register_blueprint(admin_bp)
     
     # Initialize extensions and services
     from .services.quiz_service import QuizService

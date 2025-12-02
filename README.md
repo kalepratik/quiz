@@ -1,26 +1,102 @@
 # 🎯 dbt Certification Quiz Application
 
-A **production-ready**, modern web-based dbt certification quiz application with comprehensive question coverage, beautiful formatting, and enterprise-grade architecture. **Successfully deployed and live!** 🚀
+A **production-ready**, modern web-based dbt certification quiz application with comprehensive question coverage, beautiful formatting, enterprise-grade architecture, and full admin panel for user and question management. **Successfully deployed and live!** 🚀
 
 ## ✨ Features
 
+### 🎨 User Features
 - **🎨 Modern Homepage**: Professional landing page with dark/light mode, responsive design, and SEO optimization
 - **🔐 OAuth Authentication**: Google OAuth integration for secure user authentication
-- **💳 Payment Integration**: PRO plan upgrade flow with conditional redirection
-- **35+ Questions**: Comprehensive dbt certification coverage with realistic scenarios
-- **Rich Text Formatting**: ASCII diagrams, code highlighting, bold text, and proper formatting
-- **Smart Question Selection**: Flexible difficulty and count options with intelligent fallback
-- **Modern UI**: Beautiful, responsive web interface with React-style components
-- **Comprehensive Review**: Detailed feedback after quiz completion with 2-decimal percentage display
-- **Self-Contained Questions**: Each question is complete and independent with no redundant phrasing
-- **Production-Ready**: App factory pattern, proper configuration management, health checks
-- **Testing**: Comprehensive test coverage for routes and repository
-- **Tooling**: Code formatting, linting, and type checking
-- **Render Optimized**: Optimized for Render hosting with caching, performance, and SEO
-- **📧 Contact Form**: Professional contact form with email notifications and auto-replies
+- **💳 Payment Integration**: PRO plan upgrade flow with Razorpay integration
+- **📊 Quiz System**: 
+  - Regular users: Access to 10 easy questions per quiz
+  - PRO users: Access to all questions (up to 45 per quiz) including PRO-only content
+  - Smart question selection with difficulty filtering
+  - Comprehensive review with detailed explanations
+- **📈 Dashboard & History**: PRO users get detailed analytics and quiz history
+- **📧 Contact Form**: Professional contact form with email notifications
 - **📋 Legal Pages**: Complete Privacy Policy, Terms & Conditions, and Cancellation Policy
 
+### 👨‍💼 Admin Features
+- **🔐 Admin Panel**: Full-featured admin interface for managing users and questions
+- **👥 User Management**:
+  - View all users with role, PRO status, and activity
+  - Toggle user active/inactive status (preserves data, removes access)
+  - Change user roles (Regular, Pro, Admin)
+  - Delete users with cascade deletion of all related data
+- **📝 Question Management**:
+  - View all questions with topic, difficulty, type, and status
+  - Toggle question active/inactive status
+  - Change question type (Regular/PRO-only)
+  - Question statistics and counts
+- **🎯 Role-Based Access Control**:
+  - Three user roles: Regular, Pro, Admin
+  - Admin users have access to all PRO features plus admin panel
+  - Regular users limited to 10 questions per quiz
+  - PRO users can access up to 45 questions per quiz
+
+## 🏗️ Project Structure
+
+```
+dbt-certification-quiz/
+├── 📁 backend/                      # Main application backend
+│   ├── 📁 config/                  # Configuration management
+│   │   └── __init__.py             # Environment-based configuration
+│   ├── 📁 data/                     # Data storage
+│   │   └── questions.md             # Question bank in Markdown format
+│   ├── 📁 models/                   # Database models
+│   │   ├── __init__.py              # Database initialization
+│   │   ├── user_models.py           # User and Subscription models
+│   │   └── quiz_models.py           # Question, QuizAttempt models
+│   ├── 📁 routers/                  # Route handlers
+│   │   ├── __init__.py              # Blueprint initialization
+│   │   ├── main.py                  # Main UI and API routes
+│   │   └── admin/                   # Admin routes
+│   │       └── __init__.py          # Admin panel routes
+│   ├── 📁 services/                 # Business logic layer
+│   │   ├── database_service.py      # Database operations
+│   │   ├── oauth_service.py         # OAuth authentication
+│   │   ├── quiz_service.py          # Quiz logic and question selection
+│   │   ├── scoring_service.py       # Scoring and results
+│   │   ├── payment_service.py       # Razorpay payment integration
+│   │   ├── email_service.py          # Email notifications
+│   │   └── pdf_service.py           # PDF generation
+│   ├── 📁 templates/                # HTML templates
+│   │   ├── base.html                # Base template with navigation
+│   │   ├── homepage.html            # Landing page
+│   │   ├── index.html               # Quiz interface
+│   │   ├── signin.html              # OAuth sign-in
+│   │   ├── payment.html             # PRO upgrade page
+│   │   ├── dashboard.html           # PRO dashboard
+│   │   ├── history.html             # Quiz history
+│   │   └── admin.html               # Admin panel
+│   ├── 📁 static/                   # Static assets
+│   │   └── *.png                    # Logos and favicons
+│   ├── 📁 utils/                    # Utility functions
+│   │   └── markdown_repository.py   # Markdown parsing utilities
+│   ├── 📁 tests/                    # Test suite
+│   │   ├── test_routes.py           # Route tests
+│   │   └── test_repo.py             # Repository tests
+│   └── __init__.py                  # App factory
+│
+├── 📁 scripts/                      # Utility scripts
+│   └── import_questions.py          # Import questions from Markdown
+│
+├── 📄 main.py                       # Development entry point
+├── 📄 wsgi.py                       # Production entry point
+├── 📄 requirements.txt              # Python dependencies
+├── 📄 render.yaml                   # Render deployment config
+├── 📄 env.example                   # Environment variables template
+└── 📄 README.md                     # This file
+```
+
 ## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.7+
+- PostgreSQL database (for production) or SQLite (for development)
+- Google OAuth credentials (for authentication)
+- Razorpay account (for payments)
 
 ### Local Development
 
@@ -35,710 +111,354 @@ A **production-ready**, modern web-based dbt certification quiz application with
    pip install -r requirements.txt
    ```
 
-3. **Set up environment variables** (Optional but recommended):
+3. **Set up environment variables**
    ```bash
-   python setup_env.py
+   cp env.example .env
    ```
-   Or manually create a `.env` file based on `env.example`
+   Edit `.env` and configure:
+   ```bash
+   # Database
+   DATABASE_URL=postgresql://user:password@localhost/dbname
+   # Or for SQLite: sqlite:///quiz.db
+   
+   # Google OAuth
+   GOOGLE_CLIENT_ID=your-client-id
+   GOOGLE_CLIENT_SECRET=your-client-secret
+   
+   # Razorpay (optional for development)
+   RAZORPAY_KEY_ID=your-key-id
+   RAZORPAY_KEY_SECRET=your-key-secret
+   
+   # Flask
+   FLASK_ENV=development
+   SECRET_KEY=your-secret-key
+   ```
 
-4. **Run the application**
+4. **Initialize the database**
+   ```bash
+   python -c "from backend import create_app; from backend.models import db; app = create_app(); app.app_context().push(); db.create_all()"
+   ```
+
+5. **Import questions (optional)**
+   ```bash
+   python scripts/import_questions.py backend/data/questions.md
+   ```
+
+6. **Run the application**
    ```bash
    python main.py
+   # Choose option 1 to start development server
    ```
-   Choose option 1 to start the development server
-
-5. **Run tests**
+   Or directly:
    ```bash
-   python main.py
+   flask run
+   # Or
+   python wsgi.py
    ```
-   Choose option 2 to run the test suite
 
-6. **Open your browser**
-   - **Homepage**: `http://localhost:8000` - Modern landing page with features and pricing
-   - **Quiz Interface**: `http://localhost:8000/quiz` - Direct access to the quiz
-   - **Contact Form**: `http://localhost:8000/contact` - Contact form with email notifications
-   - **Legal Pages**: `http://localhost:8000/legal` - Privacy Policy, Terms & Conditions
-   - **Health Check**: `http://localhost:8000/healthz` - Application health status
+7. **Access the application**
+   - **Homepage**: `http://localhost:5000`
+   - **Quiz**: `http://localhost:5000/quiz`
+   - **Admin Panel**: `http://localhost:5000/admin` (requires Admin role)
+   - **Health Check**: `http://localhost:5000/healthz`
 
-### 🌐 Live Demo
+## 🗄️ Database Schema
 
-**The application is now deployed and available at:**
-- **Live Demo**: [https://dbt-certification-quiz.onrender.com](https://dbt-certification-quiz.onrender.com)
+### Users Table
+- `id`: Primary key
+- `email`: Unique email address
+- `name`: User's full name
+- `google_id`: Google OAuth ID
+- `is_pro`: Boolean flag for PRO access
+- `role`: User role ('regular', 'pro', 'admin')
+- `is_active`: Active/inactive status
+- `created_at`, `updated_at`: Timestamps
 
-*Your fully functional dbt certification quiz application with 35+ questions, modern homepage, rich text formatting, and comprehensive review system.*
+### Questions Table
+- `id`: Primary key
+- `question_id`: Unique question identifier
+- `question_text`: Full question text with scenario
+- `options`: JSON array of answer options
+- `correct_answer`: 0-based index of correct answer
+- `explanation`: Detailed explanation
+- `difficulty_level`: 1 (Easy) to 4 (Critical)
+- `topic_category`: Question topic/category
+- `is_active`: Active/inactive status
+- `is_pro_only`: PRO-only flag
+- `created_at`, `updated_at`: Timestamps
 
-## 🚀 Deployment
+### Quiz Attempts Table
+- `id`: Primary key
+- `user_id`: Foreign key to users
+- `question_count`: Number of questions in quiz
+- `difficulty`: Difficulty level used
+- `correct_answers`: Number of correct answers
+- `total_questions`: Total questions attempted
+- `percentage`: Score percentage
+- `is_pro_quiz`: Whether PRO questions were included
+- `created_at`: Timestamp
 
-### Render Hosting (Recommended)
+### Subscriptions Table
+- `id`: Primary key
+- `user_id`: Foreign key to users
+- `razorpay_payment_id`: Payment ID from Razorpay
+- `razorpay_order_id`: Order ID from Razorpay
+- `amount`: Payment amount in paise
+- `currency`: Currency code (INR)
+- `status`: Payment status
+- `subscription_start`, `subscription_end`: Subscription period
+- `created_at`, `updated_at`: Timestamps
 
-The application is optimized for Render hosting with:
+## 👨‍💼 Admin Panel
 
-#### **Performance Optimizations**
-- **Caching Headers**: Static assets cached for 1 year, templates for 1 hour
-- **CDN Resources**: External CSS/JS libraries served from CDN
-- **Health Checks**: `/healthz` endpoint for monitoring
-- **Auto-scaling**: Handles traffic spikes automatically
+### Access
+- Only users with `role='admin'` can access the admin panel
+- Default admin: `kpratik64@gmail.com` (set during initial setup)
+- Admin users automatically have PRO access
 
-#### **SEO & Accessibility**
-- **Meta Tags**: Complete SEO optimization
-- **Social Cards**: Open Graph and Twitter Card support
-- **Accessibility**: ARIA labels, focus management, reduced motion
-- **Mobile Optimized**: Responsive design for all devices
+### Features
 
-#### **Deployment Configuration**
-- **render.yaml**: Optimized configuration file included
-- **Environment Variables**: Production-ready settings
-- **Error Handling**: Graceful fallbacks and logging
-- **Zero-downtime**: Automatic deployments with health checks
+#### User Management
+- **View Users**: See all users with ID, name, email, role, PRO status, active status, and quiz attempts
+- **Toggle Active Status**: Activate/deactivate users (preserves data, removes access)
+- **Change Role**: Update user role (Regular, Pro, Admin)
+- **Delete User**: Permanently delete user and all related data (quiz attempts, subscriptions)
 
-## 🔐 Google OAuth Setup (Production)
+#### Question Management
+- **View Questions**: See all questions with ID, text, topic, difficulty, type, and status
+- **Toggle Active Status**: Activate/deactivate questions
+- **Change Type**: Switch between Regular and PRO-only
+- **Statistics**: View total, regular, and PRO-only question counts
 
-To enable Google Sign-In in production, you need to configure Google OAuth credentials:
+### API Endpoints
 
-### 1. Create Google Cloud Project
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select existing one
-3. Enable the Google+ API
+#### User Management
+- `GET /api/admin/users` - Get all users
+- `POST /api/admin/user/<id>/update-role` - Update user role
+- `POST /api/admin/user/<id>/toggle-active` - Toggle user active status
+- `DELETE /api/admin/user/<id>/delete` - Delete user
 
-### 2. Configure OAuth Consent Screen
-1. Go to "APIs & Services" > "OAuth consent screen"
-2. Choose "External" user type
-3. Fill in required information:
-   - App name: "dbt Quiz"
-   - User support email: your email
-   - Developer contact information: your email
-4. Add scopes: `email`, `profile`
-5. Add test users if needed
+#### Question Management
+- `GET /api/admin/questions` - Get all questions
+- `POST /api/admin/question/<id>/toggle-active` - Toggle question active status
+- `POST /api/admin/question/<id>/update-type` - Update question type
 
-### 3. Create OAuth Credentials
-1. Go to "APIs & Services" > "Credentials"
-2. Click "Create Credentials" > "OAuth 2.0 Client IDs"
-3. Choose "Web application"
-4. Add authorized redirect URIs:
-   - **Development**: `http://localhost:8000/auth/google/callback`
-   - **Production**: `https://your-app-name.onrender.com/auth/google/callback`
-5. Copy the Client ID and Client Secret
+## 🎯 Question Segregation
 
-### 4. Set Environment Variables in Render
-Add these to your Render environment variables:
-```bash
-GOOGLE_CLIENT_ID=your-client-id-from-google-console
-GOOGLE_CLIENT_SECRET=your-client-secret-from-google-console
-FLASK_ENV=production
-```
+### Regular Users
+- Can access **only regular questions** (is_pro_only=False)
+- Limited to **10 questions per quiz**
+- See only easy questions (difficulty level 1) by default
 
-### 5. Update OAuth Consent Screen (After First Deploy)
-1. Get your actual Render URL (e.g., `https://your-app-name.onrender.com`)
-2. Go back to Google Cloud Console > OAuth consent screen
-3. Add your production domain to authorized domains
-4. Update redirect URIs with your actual Render URL
+### PRO Users
+- Can access **all questions** (both regular and PRO-only)
+- Can take **up to 45 questions per quiz**
+- Access to all difficulty levels (Easy, Medium, Difficult, Critical)
 
-## 📧 Email Configuration (Contact Form)
+### Question Distribution
+- **Total Questions**: 35
+- **Regular Questions**: 10 (Easy difficulty)
+- **PRO-only Questions**: 25 (Medium, Difficult, Critical)
 
-The application includes a professional contact form that sends emails to your specified email address. To set up email functionality:
+## 🔐 Authentication & Authorization
 
-### Gmail Setup (Recommended)
+### User Roles
+1. **Regular**: Basic access, 10 questions per quiz, regular questions only
+2. **Pro**: PRO access, up to 45 questions per quiz, all questions
+3. **Admin**: Full access including admin panel, all PRO features
 
-1. **Enable 2-Step Verification** on your Google Account
-2. **Generate App Password**:
-   - Go to Google Account settings → Security
-   - Click "App passwords" under 2-Step Verification
-   - Select "Mail" and generate a password
-3. **Configure Environment Variables**:
+### Access Control
+- **Authentication**: Google OAuth required for all protected routes
+- **Authorization**: Role-based access control (RBAC)
+- **Active Status**: Inactive users cannot log in (data preserved)
+- **Session Management**: Flask sessions with secure token handling
+
+## 💳 Payment Integration
+
+### Razorpay Setup
+1. Create Razorpay account at [razorpay.com](https://razorpay.com)
+2. Get API keys from dashboard
+3. Configure environment variables:
    ```bash
-   # Copy env.example to .env and update:
+   RAZORPAY_KEY_ID=your-key-id
+   RAZORPAY_KEY_SECRET=your-key-secret
+   ```
+
+### Payment Flow
+1. User clicks "Upgrade to PRO"
+2. Razorpay payment form displayed
+3. Payment processed via Razorpay
+4. User upgraded to PRO on successful payment
+5. Subscription record created in database
+
+## 📧 Email Configuration
+
+### Gmail Setup
+1. Enable 2-Step Verification
+2. Generate App Password
+3. Configure environment variables:
+   ```bash
    SMTP_SERVER=smtp.gmail.com
    SMTP_PORT=587
    SMTP_USERNAME=your-email@gmail.com
    SMTP_PASSWORD=your-app-password
    FROM_EMAIL=your-email@gmail.com
-   FROM_NAME=dbt Quiz Support
-   TO_EMAIL=mail@kalepratik.in
+   TO_EMAIL=admin@example.com
    ```
-
-### Other Email Providers
-
-You can use any SMTP provider by updating the configuration:
-- **Outlook/Hotmail**: `smtp-mail.outlook.com:587`
-- **Yahoo**: `smtp.mail.yahoo.com:587`
-- **Custom SMTP**: Use your provider's SMTP settings
-
-### Features
-
-- **Admin Notifications**: Receive detailed emails when someone submits the contact form
-- **Auto-Reply**: Users receive a professional thank-you email
-- **HTML Formatting**: Beautiful, branded email templates
-- **Error Handling**: Graceful fallbacks if email fails
-- **Validation**: Form validation and spam protection
-
-## 💳 Payment Integration Setup
-
-The application includes a PRO plan upgrade system with Razorpay integration. To set up payment functionality:
-
-### 1. Razorpay Account Setup
-
-1. **Create Razorpay Account**:
-   - Go to [https://razorpay.com/](https://razorpay.com/)
-   - Sign up for a free account
-   - Complete KYC verification (required for live payments)
-
-2. **Get API Keys**:
-   - Login to Razorpay Dashboard
-   - Go to Settings > API Keys
-   - Generate new API keys
-   - Copy the Key ID and Key Secret
-
-3. **Test vs Live Keys**:
-   - **Development**: Use test keys (start with `rzp_test_`)
-   - **Production**: Use live keys (start with `rzp_live_`)
-
-### 2. Environment Configuration
-
-Add these to your `.env` file or environment variables:
-
-```bash
-# Razorpay Configuration
-RAZORPAY_KEY_ID=your-razorpay-key-id-here
-RAZORPAY_KEY_SECRET=your-razorpay-key-secret-here
-```
-
-### 3. Testing Payments
-
-For testing, use Razorpay's test card details:
-
-- **Card Number**: `4111 1111 1111 1111`
-- **Expiry**: Any future date (e.g., `12/25`)
-- **CVV**: Any 3 digits (e.g., `123`)
-- **Name**: Any name
-
-### 4. Common Payment Issues
-
-If you're experiencing payment failures:
-
-1. **Check Authentication**: Users must be signed in via Google OAuth
-2. **Verify API Keys**: Ensure Razorpay keys are correctly configured
-3. **Test Mode**: Use test keys for development, live keys for production
-4. **Check Logs**: Review application logs for specific error messages
-
-For detailed troubleshooting, see **[PAYMENT_SETUP.md](PAYMENT_SETUP.md)**.
-
-## 🏗️ Production-Ready Architecture
-
-### App Factory Pattern
-- Clean separation of concerns
-- Environment-based configuration
-- Blueprint-based routing
-- Service layer for business logic
-
-### Configuration Management
-- Environment-specific configs (Development, Production, Testing)
-- Secure secret management
-- Configurable application settings
-
-### Health Monitoring
-- `/healthz` endpoint for monitoring
-- Structured logging throughout
-- Error handling and validation
-
-## 🎨 Modern Homepage
-
-The application now features a **professional landing page** that showcases the quiz capabilities:
-
-### 🌟 Homepage Features
-- **Dark/Light Mode Toggle**: Persistent theme switching with localStorage
-- **Responsive Design**: Perfect on desktop, tablet, and mobile devices
-- **SEO Optimized**: Meta tags, descriptions, and social media cards
-- **Performance Optimized**: CDN resources, preloading, and caching
-- **Accessibility**: ARIA labels, focus management, and reduced motion support
-- **Interactive Elements**: Smooth animations, hover effects, and FAQ accordions
-- **Professional Branding**: Modern design with dbt-themed styling
-
-### 🎯 Homepage Sections
-1. **Hero Section**: Compelling headline with sample question preview
-2. **Features Grid**: 6 feature cards highlighting key benefits
-3. **Pricing Section**: Free vs Pro plan comparison
-4. **FAQ Section**: Expandable questions with smooth animations
-5. **Professional Footer**: Complete with links and branding
-
-### 🚀 Performance Features
-- **CDN Resources**: Tailwind CSS and Font Awesome from CDN
-- **Preloading**: DNS prefetch and preconnect for faster loading
-- **Caching**: Optimized cache headers for static assets
-- **Error Handling**: Graceful fallbacks for theme and localStorage
-- **Loading States**: Smooth page transitions and loading animations
-
-## 🔐 OAuth Authentication & PRO Features
-
-The application now includes **enterprise-grade authentication** and **PRO plan features**:
-
-### 🌟 Authentication Features
-- **Google OAuth Integration**: Real GCP OAuth 2.0 authentication
-- **Secure Session Management**: Flask session-based authentication
-- **Conditional Redirection**: Smart routing based on authentication status
-- **User State Persistence**: Maintains user authentication across sessions
-
-### 💳 PRO Plan Features
-- **Unlimited Quizzes**: No restrictions on quiz attempts
-- **Correct Answers with Explanations**: Detailed feedback for learning
-- **Practice Tests**: Additional practice modes and features
-- **Advanced Analytics**: Detailed performance tracking (coming soon)
-
-### 🔧 OAuth Setup
-The application includes comprehensive OAuth setup documentation:
-- **GOOGLE_OAUTH_SETUP.md**: Step-by-step GCP OAuth configuration guide
-- **Environment Variables**: Secure configuration management
-- **Production Ready**: Optimized for production deployment
-
-### 🎯 User Flow
-1. **Free Users**: Can take limited quizzes with basic feedback
-2. **PRO Upgrade**: Seamless upgrade flow with OAuth authentication
-3. **Authenticated Users**: Access to PRO features and unlimited content
-
-## 📚 Usage Guide
-
-### Quiz Configuration
-
-1. **Select Number of Questions**: Choose from 5, 10, 15, 20, or enter a custom number (up to 45)
-2. **Choose Difficulty Level**:
-   - **Easy**: Basic dbt concepts and commands
-   - **Medium**: Intermediate scenarios and workflows
-   - **Difficult**: Advanced concepts and edge cases
-   - **Critical**: Complex troubleshooting scenarios
-   - **No Preference**: Random questions from all difficulty levels
-
-### Smart Question Selection
-
-The application intelligently handles question selection:
-- If you request more questions than available in your chosen difficulty, it will:
-  1. Take all available questions from your selected difficulty
-  2. Fill the remaining slots with random questions from other difficulties
-- This ensures you always get the requested number of questions
-
-### Question Format
-
-Questions are stored in Markdown format (`data/questions.md`) with:
-- **Scenario**: Detailed context and setup
-- **Question**: Clear, specific question (no redundant phrasing)
-- **Options**: 5 multiple-choice options
-- **Explanation**: Detailed explanation of the correct answer
-- **ASCII Diagrams**: Visual DAG representations
-- **Code Blocks**: Properly formatted dbt commands and syntax
-
-### 🎯 Latest Quiz Improvements
-
-The quiz interface has been enhanced with:
-- **2-Decimal Percentage Display**: Precise score reporting (e.g., "85.00%")
-- **Improved Question Formatting**: Better handling of bold text, code snippets, and ASCII diagrams
-- **Enhanced Navigation**: "Back to Home" button and improved user flow
-- **PRO Plan Promotion**: Integrated upgrade prompts in results section
-- **Better Error Handling**: Graceful handling of edge cases and loading states
-
-## 🏗️ Complete Project Structure & File Purposes
-
-```
-dbt-certification-quiz/
-├── 📁 data/                          # Data storage directory
-│   └── 📄 questions.md               # 35 dbt certification questions in Markdown format
-│                                      # Contains all quiz questions with scenarios, options, and explanations
-│
-├── 📁 src/                           # Source code directory
-│   └── 📁 quiz_app/                  # Main application package
-│       ├── 📄 __init__.py            # App factory - creates and configures Flask application
-│       ├── 📄 config.py              # Configuration management - environment-specific settings
-│       ├── 📄 routes.py              # Blueprint routes - API endpoints and web routes
-│       ├── 📁 repo/                  # Repository layer - data access
-│       │   ├── 📄 __init__.py        # Repository package initialization
-│       │   └── 📄 markdown_repository.py  # Parses questions.md and provides data access
-│       └── 📁 services/              # Business logic layer
-│           ├── 📄 __init__.py        # Services package initialization
-│           ├── 📄 quiz_service.py    # Quiz business logic - question selection and management
-│           ├── 📄 scoring_service.py # Scoring logic - calculates results and statistics
-│           └── 📄 oauth_service.py   # OAuth authentication service - Google OAuth integration
-│
-├── 📁 tests/                         # Test suite directory
-│   ├── 📄 __init__.py                # Test package initialization
-│   ├── 📄 test_routes.py             # Tests for API endpoints and web routes
-│   └── 📄 test_repo.py               # Tests for repository layer and data parsing
-│
-├── 📁 templates/                     # HTML templates directory
-│   ├── 📄 index.html                 # Main web interface - quiz UI with JavaScript functionality
-│   ├── 📄 homepage.html              # Modern landing page with features and pricing
-│   ├── 📄 signin.html                # OAuth sign-in page with Google authentication
-│   └── 📄 payment.html               # PRO plan payment and upgrade page
-│
-├── 📁 static/                        # Static assets directory
-│   ├── 📄 android-chrome-512x512.png # App favicon - displayed in browser tabs
-│   └── 📄 dbt-bit-standalone.png     # dbt logo for branding and navigation
-│
-├── 📁 docs/                          # Documentation directory
-│   ├── 📄 DEPLOYMENT.md              # Deployment guide - production deployment instructions
-│   └── 📄 TOPICS.md                  # Complete dbt certification topics tracking (80+ topics)
-│
-├── 📄 GOOGLE_OAUTH_SETUP.md          # OAuth setup guide - step-by-step GCP OAuth configuration
-│
-├── 📄 wsgi.py                        # Production entry point - WSGI application for deployment
-├── 📄 main.py                        # Development entry point - CLI interface for local development
-├── 📄 pyproject.toml                 # Project configuration - tooling, packaging, and dependencies
-├── 📄 requirements.txt               # Python dependencies - packages needed to run the application
-├── 📄 render.yaml                    # Render deployment configuration - production deployment settings
-├── 📄 env.example                    # Environment template - example environment variables
-├── 📄 .gitignore                     # Git ignore rules - files to exclude from version control
-├── 📄 LICENSE                        # MIT License - open source license terms
-├── 📄 CONTRIBUTING.md                # Contribution guidelines - how to contribute to the project
-├── 📄 PROJECT_SUMMARY.md             # Project overview - high-level project description
-└── 📄 README.md                      # Main documentation - comprehensive project guide
-```
-
-### 📁 **Directory Purposes**
-
-#### **📁 data/**
-- **Purpose**: Stores all application data
-- **Contents**: Markdown files containing quiz questions
-- **Usage**: Questions are parsed by `markdown_repository.py` to create the quiz database
-
-#### **📁 src/**
-- **Purpose**: Contains all application source code
-- **Architecture**: Follows clean architecture principles with clear separation of concerns
-- **Structure**: Organized into logical packages (quiz_app, repo, services)
-
-#### **📁 src/quiz_app/**
-- **Purpose**: Main application package implementing Flask app factory pattern
-- **Components**: Configuration, routing, and application initialization
-- **Benefits**: Modular, testable, and production-ready architecture
-
-#### **📁 src/quiz_app/repo/**
-- **Purpose**: Data access layer (Repository pattern)
-- **Responsibility**: Parses Markdown files and provides clean data interface
-- **Benefits**: Separates data access from business logic
-
-#### **📁 src/quiz_app/services/**
-- **Purpose**: Business logic layer
-- **Responsibility**: Handles quiz logic, question selection, and scoring
-- **Benefits**: Centralized business rules and reusable logic
-
-#### **📁 tests/**
-- **Purpose**: Comprehensive test suite
-- **Coverage**: Tests routes, repository, and core functionality
-- **Benefits**: Ensures code quality and prevents regressions
-
-#### **📁 templates/**
-- **Purpose**: HTML templates for web interface
-- **Technology**: Uses Flask's Jinja2 templating engine
-- **Features**: Responsive design with modern JavaScript functionality
-
-#### **📁 static/**
-- **Purpose**: Static assets (CSS, JavaScript, images)
-- **Usage**: Served directly by web server for performance
-- **Contents**: Favicon and other static resources
-
-#### **📁 docs/**
-- **Purpose**: Project documentation
-- **Contents**: Deployment guides, topic tracking, and technical documentation
-- **Benefits**: Centralized knowledge base for contributors and users
-
-### 📄 **File Purposes**
-
-#### **📄 Core Application Files**
-
-**`wsgi.py`**
-- **Purpose**: Production entry point
-- **Usage**: Deployed to production servers (Render, Heroku, etc.)
-- **Features**: WSGI-compliant application with proper logging
-
-**`main.py`**
-- **Purpose**: Development entry point with CLI interface
-- **Features**: Interactive menu for running app, tests, and development tasks
-- **Usage**: `python main.py` for local development
-
-**`src/quiz_app/__init__.py`**
-- **Purpose**: App factory - creates and configures Flask application
-- **Features**: Environment-based configuration, blueprint registration
-- **Benefits**: Clean separation of app creation and configuration
-
-**`src/quiz_app/config.py`**
-- **Purpose**: Configuration management
-- **Features**: Environment-specific settings (Development, Production, Testing)
-- **Benefits**: Secure secret management and flexible configuration
-
-**`src/quiz_app/routes.py`**
-- **Purpose**: Web routes and API endpoints
-- **Features**: RESTful API design, error handling, JSON responses
-- **Endpoints**: Quiz configuration, question serving, statistics
-
-#### **📄 Data Layer Files**
-
-**`data/questions.md`**
-- **Purpose**: Question database in Markdown format
-- **Contents**: 35 dbt certification questions with scenarios, options, explanations
-- **Format**: Structured Markdown with consistent formatting
-- **Benefits**: Human-readable, version-controlled, easy to edit
-
-**`src/quiz_app/repo/markdown_repository.py`**
-- **Purpose**: Parses Markdown questions and provides data access
-- **Features**: Question parsing, difficulty filtering, option shuffling
-- **Benefits**: Clean data interface for business logic layer
-
-#### **📄 Business Logic Files**
-
-**`src/quiz_app/services/quiz_service.py`**
-- **Purpose**: Quiz business logic and question management
-- **Features**: Smart question selection, difficulty handling, statistics
-- **Benefits**: Centralized quiz logic and reusable functionality
-
-**`src/quiz_app/services/scoring_service.py`**
-- **Purpose**: Scoring and result calculation
-- **Features**: Score computation, performance analysis, result formatting
-- **Benefits**: Separated scoring logic for maintainability
-
-#### **📄 Frontend Files**
-
-**`templates/index.html`**
-- **Purpose**: Main web interface
-- **Features**: Responsive design, interactive quiz, real-time feedback
-- **Technology**: HTML5, CSS3, JavaScript, Bootstrap
-- **Benefits**: Modern, accessible, and mobile-friendly interface
-
-**`static/android-chrome-512x512.png`**
-- **Purpose**: Application favicon
-- **Usage**: Displayed in browser tabs and bookmarks
-- **Benefits**: Professional branding and user recognition
-
-#### **📄 Testing Files**
-
-**`tests/test_routes.py`**
-- **Purpose**: Tests for web routes and API endpoints
-- **Coverage**: Route functionality, error handling, response formats
-- **Benefits**: Ensures API reliability and prevents breaking changes
-
-**`tests/test_repo.py`**
-- **Purpose**: Tests for repository layer
-- **Coverage**: Markdown parsing, data access, question filtering
-- **Benefits**: Validates data layer functionality and edge cases
-
-#### **📄 Configuration Files**
-
-**`pyproject.toml`**
-- **Purpose**: Project configuration and tooling
-- **Features**: Black formatting, Ruff linting, MyPy type checking
-- **Benefits**: Automated code quality and consistent formatting
-
-**`requirements.txt`**
-- **Purpose**: Python dependencies
-- **Contents**: Flask, Gunicorn, Markdown parser, and other packages
-- **Usage**: `pip install -r requirements.txt` for dependency installation
-
-**`render.yaml`**
-- **Purpose**: Render deployment configuration
-- **Features**: Build commands, environment variables, deployment settings
-- **Benefits**: Automated production deployment
-
-**`env.example`**
-- **Purpose**: Environment variables template
-- **Usage**: Copy to `.env` and configure for local development
-- **Benefits**: Secure configuration management
-
-#### **📄 Documentation Files**
-
-**`README.md`**
-- **Purpose**: Main project documentation
-- **Contents**: Features, setup instructions, usage guide, architecture overview
-- **Benefits**: Comprehensive project introduction and user guide
-
-**`CONTRIBUTING.md`**
-- **Purpose**: Contribution guidelines
-- **Contents**: How to contribute, coding standards, pull request process
-- **Benefits**: Clear guidance for community contributions
-
-**`docs/DEPLOYMENT.md`**
-- **Purpose**: Deployment instructions
-- **Contents**: Production deployment steps, configuration, troubleshooting
-- **Benefits**: Reliable production deployment process
-
-**`docs/TOPICS.md`**
-- **Purpose**: dbt certification topics tracking
-- **Contents**: 80+ topics with coverage status and priority areas
-- **Benefits**: Systematic topic coverage and contribution guidance
-
-**`PROJECT_SUMMARY.md`**
-- **Purpose**: High-level project overview
-- **Contents**: Project goals, architecture summary, key features
-- **Benefits**: Quick project understanding for stakeholders
-
-**`LICENSE`**
-- **Purpose**: MIT open source license
-- **Benefits**: Clear usage rights and contribution terms
-
-**`.gitignore`**
-- **Purpose**: Git ignore rules
-- **Contents**: Files to exclude from version control (cache, logs, etc.)
-- **Benefits**: Clean repository and security
-
-## 🔧 Technical Stack
-
-### Backend
-- **Python 3.7+**: Core application logic
-- **Flask 2.3.3**: Web server framework with app factory pattern
-- **Gunicorn**: Production WSGI server
-- **Markdown**: Question storage format
-- **Python-dotenv**: Environment management
-
-### Frontend
-- **HTML5/CSS3**: Modern, responsive design
-- **JavaScript**: Interactive quiz functionality
-- **Rich Text Formatting**: Custom CSS for code blocks and diagrams
-
-### Development & Testing
-- **Pytest**: Testing framework
-- **Black**: Code formatting
-- **Ruff**: Fast Python linter
-- **MyPy**: Static type checking
-- **Pre-commit**: Git hooks for code quality
-
-### Data Management
-- **Repository Pattern**: Clean data access layer
-- **Service Layer**: Business logic separation
-- **Flexible Selection**: Smart question distribution across difficulties
-- **Self-Contained**: Each question includes full context
-
-## 🎉 Success Metrics
-
-- ✅ **Live Deployment**: Successfully deployed and accessible at https://dbt-certification-quiz.onrender.com
-- ✅ **Production Ready**: App factory pattern, proper configuration, health checks
-- ✅ **Rich Formatting**: ASCII diagrams and code highlighting working
-- ✅ **Smart Selection**: Flexible question selection implemented
-- ✅ **Modern UI**: Professional, responsive interface
-- ✅ **Comprehensive Coverage**: All major dbt certification topics (see [docs/TOPICS.md](docs/TOPICS.md) for complete list)
-- ✅ **Testing**: Comprehensive test coverage for routes and repository
-- ✅ **Code Quality**: Black, Ruff, MyPy tooling configured
-- ✅ **Open Source**: Ready for community contributions
-
-## 🎯 Question Coverage & Topics
-
-### 📊 **Current Status**
-- **Total Questions:** 35
-- **Topics Covered:** 25/80+ (31% complete)
-- **Coverage Status:** 🔄 In Progress
-
-### 🔥 **High Priority Areas (Need Questions)**
-- **dbt Cloud Setup and Configuration** (4 topics)
-- **Advanced Testing** (Custom Tests, Test Configurations - 13 topics)
-- **Advanced Deployment and Job Structures** (9 topics)
-- **Continuous Integration and Orchestration** (8 topics)
-- **Environment Management and Variables** (5 topics)
-
-### ⚡ **Medium Priority Areas**
-- **dbt Mesh and Multi-Project Collaboration** (10 topics)
-- **Model Versions and Governance** (4 topics)
-- **Advanced Jinja and Macros** (3 topics)
-- **Cross-Project References and Orchestration** (9 topics)
-- **Advanced Materialization Strategies** (11 topics)
-
-### ✅ **Well Covered Areas (25 topics)**
-- Models, Sources, Tests, Documentation, Deployment
-- Snapshots, Materializations, Incremental Models
-- State Management, Model Contracts, Packages
-- Seeds, Jinja, Macros, Variables, Hooks, Profiles
-- Exposures, Metrics, Semantic Layer, Audit
-- Performance, Security, Version Control, Monitoring
-
-### 📚 **Complete Topic List**
-For a detailed breakdown of all 80+ dbt certification topics and their coverage status, see [docs/TOPICS.md](docs/TOPICS.md).
-
-### 🎯 **Difficulty Levels**
-- **Easy (Level 1)**: Basic dbt commands, simple model concepts
-- **Medium (Level 2)**: Intermediate commands, model dependencies
-- **Difficult (Level 3)**: Advanced state management, complex scenarios
-- **Critical (Level 4)**: Troubleshooting, production deployment
 
 ## 🚀 Deployment
 
-### ✅ **Successfully Deployed and Live!**
+### Render (Recommended)
 
-Your application is now **live and fully functional** at [https://dbt-certification-quiz.onrender.com](https://dbt-certification-quiz.onrender.com)
+1. **Create Render Account**: Sign up at [render.com](https://render.com)
 
-🎉 **Status: Production Ready & Deployed Successfully**
+2. **Create New Web Service**:
+   - Connect your GitHub repository
+   - Build command: `pip install -r requirements.txt`
+   - Start command: `gunicorn wsgi:app`
 
-### Production Deployment
+3. **Configure Environment Variables**:
+   - Add all variables from `.env` file
+   - Set `FLASK_ENV=production`
 
-The application uses a production-ready deployment configuration:
+4. **Database Setup**:
+   - Create PostgreSQL database on Render
+   - Add `DATABASE_URL` to environment variables
 
-- **WSGI Entry Point**: `wsgi.py` with proper logging
-- **Gunicorn Server**: Production-grade WSGI server
-- **Environment Configuration**: Production settings with proper secret management
-- **Health Checks**: `/healthz` endpoint for monitoring
-- **Structured Logging**: Proper log formatting for production
-- **App Factory Pattern**: Clean, scalable architecture
+5. **Deploy**: Render will automatically deploy on push to main branch
 
-### Deployment Options
-
-#### **Option 1: Render (Current - Free)**
-- **Build Command**: `pip install -r requirements.txt`
-- **Start Command**: `gunicorn wsgi:app`
-- **Environment**: Production with proper configuration
-
-#### **Option 2: Heroku**
+### Environment Variables for Production
 ```bash
-heroku create your-app-name
-git push heroku main
-heroku open
+DATABASE_URL=postgresql://user:pass@host:5432/dbname
+GOOGLE_CLIENT_ID=your-client-id
+GOOGLE_CLIENT_SECRET=your-client-secret
+RAZORPAY_KEY_ID=your-key-id
+RAZORPAY_KEY_SECRET=your-key-secret
+FLASK_ENV=production
+SECRET_KEY=your-secret-key
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
 ```
-
-#### **Option 3: Other Cloud Providers**
-- AWS Elastic Beanstalk
-- Google App Engine
-- Azure App Service
-- DigitalOcean App Platform
 
 ## 🧪 Testing
 
 ### Run Tests
 ```bash
-python main.py
-# Choose option 2 to run tests
-```
-
-Or directly:
-```bash
-pytest tests/ -v
+pytest backend/tests/ -v
 ```
 
 ### Test Coverage
-- **Routes**: API endpoints and UI routes
-- **Repository**: Data access layer
-- **Services**: Business logic
-- **Configuration**: Environment settings
+- Route tests: API endpoints and UI routes
+- Repository tests: Data access layer
+- Service tests: Business logic
+- Integration tests: End-to-end flows
 
 ## 🔧 Development
 
 ### Code Quality
 ```bash
 # Format code
-black src/ tests/
+black backend/ scripts/
 
 # Lint code
-ruff check src/ tests/
+ruff check backend/ scripts/
 
 # Type checking
-mypy src/
+mypy backend/
 ```
 
-### Environment Setup
-1. Copy `env.example` to `.env`
-2. Update environment variables as needed
-3. Set `FLASK_ENV=development` for local development
+### Database Migrations
+For schema changes, create migration scripts in `scripts/` directory.
 
-## 📞 Support
+### Adding Questions
+1. Add questions to `backend/data/questions.md` in Markdown format
+2. Run import script:
+   ```bash
+   python scripts/import_questions.py backend/data/questions.md
+   ```
 
-If you have questions or need help:
-- Open an issue on GitHub
-- Check the documentation in the `docs/` folder
-- Review the question bank in `data/questions.md`
-- Check the test suite for usage examples
+## 📚 Question Format
+
+Questions are stored in Markdown format with the following structure:
+
+```markdown
+# Question 1
+
+**Topic:** dbt Models
+**Difficulty:** 2 (Medium)
+**Is PRO Only:** false
+
+**Scenario:**
+Your project has a model that needs to...
+
+**Question:**
+What command would you use to...
+
+**Options:**
+A. dbt run
+B. dbt compile
+C. dbt test
+D. dbt seed
+
+**Correct Answer:** A
+
+**Explanation:**
+The correct answer is A because...
+```
+
+## 🎯 Features Roadmap
+
+### Completed ✅
+- [x] Admin panel with user and question management
+- [x] Role-based access control (Regular, Pro, Admin)
+- [x] User active/inactive toggle
+- [x] Question active/inactive toggle
+- [x] Question type management (Regular/PRO-only)
+- [x] Question segregation by user type
+- [x] User deletion with cascade
+- [x] Custom confirmation and alert popups
+- [x] Repository restructuring
+
+### Future Enhancements 🚀
+- [ ] Bulk question import/export
+- [ ] Question search and filtering
+- [ ] Advanced analytics dashboard
+- [ ] Email notifications for admin actions
+- [ ] Question versioning
+- [ ] User activity logs
+- [ ] Export quiz results to PDF
+- [ ] API rate limiting
+- [ ] Two-factor authentication
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We welcome contributions! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support
+
+For questions or issues:
+- Open an issue on GitHub
+- Check the documentation
+- Review the question bank in `backend/data/questions.md`
+
+## 🎉 Acknowledgments
+
+- Built with Flask and modern Python practices
+- Uses PostgreSQL for reliable data storage
+- Integrated with Google OAuth and Razorpay
+- Deployed on Render for production hosting
+
+---
+
+**Made with ❤️ for the dbt community**

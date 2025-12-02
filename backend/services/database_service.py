@@ -4,7 +4,7 @@ Database service for managing users and subscriptions
 import logging
 from datetime import datetime, timedelta
 from flask import current_app
-from ..models import db, User, Subscription, QuizAttempt
+from backend.models import db, User, Subscription, QuizAttempt
 
 logger = logging.getLogger(__name__)
 
@@ -88,6 +88,34 @@ class DatabaseService:
             logger.error(f"Error updating user {user_id}: {e}")
             return None
     
+    def delete_user(self, user_id):
+        """Delete a user and all associated data"""
+        try:
+            user = self.get_user_by_id(user_id)
+            if not user:
+                return False
+            
+            user_email = user.email
+            
+            # Delete related quiz attempts and their details
+            from backend.models import QuizAttempt, QuizAttemptDetail
+            quiz_attempts = QuizAttempt.query.filter_by(user_id=user_id).all()
+            for attempt in quiz_attempts:
+                # Delete quiz attempt details first
+                QuizAttemptDetail.query.filter_by(quiz_attempt_id=attempt.id).delete()
+                # Then delete the attempt
+                self.db.session.delete(attempt)
+            
+            # Delete user (cascade will handle subscriptions)
+            self.db.session.delete(user)
+            self.db.session.commit()
+            logger.info(f"User deleted successfully: {user_email} (ID: {user_id})")
+            return True
+        except Exception as e:
+            self.db.session.rollback()
+            logger.error(f"Error deleting user {user_id}: {e}")
+            return False
+    
     def upgrade_to_pro(self, user_id, payment_data):
         """Upgrade user to PRO and create subscription record"""
         try:
@@ -110,6 +138,7 @@ class DatabaseService:
             
             # Update user to PRO
             user.is_pro = True
+            user.role = 'pro'  # Also update role to 'pro' for consistency
             user.updated_at = datetime.utcnow()
             
             self.db.session.add(subscription)
@@ -174,7 +203,7 @@ class DatabaseService:
     def _record_quiz_details(self, quiz_attempt_id, questions_data):
         """Record detailed quiz attempt data using question IDs"""
         try:
-            from ..models import QuizAttemptDetail, Question
+            from backend.models import QuizAttemptDetail, Question
             
             for i, question_data in enumerate(questions_data, 1):
                 question = question_data.get('question', {})
@@ -233,7 +262,7 @@ class DatabaseService:
     def get_quiz_attempt_details(self, attempt_id):
         """Get detailed data for a specific quiz attempt with full question data"""
         try:
-            from ..models import QuizAttemptDetail
+            from backend.models import QuizAttemptDetail
             details = QuizAttemptDetail.query.filter_by(quiz_attempt_id=attempt_id)\
                 .order_by(QuizAttemptDetail.question_number).all()
             return [detail.to_dict_with_question() for detail in details]
@@ -296,7 +325,7 @@ class DatabaseService:
     def get_questions_by_difficulty(self, difficulty_level, limit=None):
         """Get questions by difficulty level"""
         try:
-            from ..models import Question
+            from backend.models import Question
             query = Question.query.filter_by(
                 difficulty_level=difficulty_level,
                 is_active=True
@@ -308,13 +337,28 @@ class DatabaseService:
             logger.error(f"Error getting questions by difficulty {difficulty_level}: {e}")
             return []
     
-    def get_random_questions(self, count, difficulty_level=None, topic_category=None):
-        """Get random questions for quiz generation"""
+    def get_random_questions(self, count, difficulty_level=None, topic_category=None, is_pro_user=False):
+        """Get random questions for quiz generation
+        
+        Args:
+            count: Number of questions to return
+            difficulty_level: Optional difficulty filter (1-4)
+            topic_category: Optional topic filter
+            is_pro_user: If True, includes PRO-only questions. If False, excludes PRO-only questions.
+        """
         try:
-            from ..models import Question
+            from backend.models import Question
             import random
             
             query = Question.query.filter_by(is_active=True)
+            
+            # Filter PRO-only questions based on user status
+            if is_pro_user:
+                # PRO users can see all questions (both regular and PRO-only)
+                pass
+            else:
+                # Non-PRO users can only see regular questions (exclude PRO-only)
+                query = query.filter_by(is_pro_only=False)
             
             if difficulty_level:
                 query = query.filter_by(difficulty_level=difficulty_level)
@@ -333,24 +377,37 @@ class DatabaseService:
             return []
     
     def add_question_to_bank(self, question_text, options, correct_answer, explanation=None, 
-                           difficulty_level=2, topic_category=None):
-        """Add a new question to the question bank"""
+                           difficulty_level=2, topic_category=None, is_pro_only=False, question_id=None):
+        """Add a new question to the question bank
+        
+        Args:
+            question_text: The question text
+            options: List of answer options
+            correct_answer: 0-based index of correct answer
+            explanation: Optional explanation
+            difficulty_level: Difficulty level (1-4)
+            topic_category: Optional topic category
+            is_pro_only: If True, question is only available to PRO users
+            question_id: Optional question ID from markdown file
+        """
         try:
-            from ..models import Question
+            from backend.models import Question
             
             question = Question(
+                question_id=question_id or 0,  # Will be auto-incremented if not provided
                 question_text=question_text,
                 options=options,
                 correct_answer=correct_answer,
                 explanation=explanation,
                 difficulty_level=difficulty_level,
-                topic_category=topic_category
+                topic_category=topic_category,
+                is_pro_only=is_pro_only
             )
             
             self.db.session.add(question)
             self.db.session.commit()
             
-            logger.info(f"Added question {question.id} to question bank")
+            logger.info(f"Added question {question.id} to question bank (PRO-only: {is_pro_only})")
             return question
         except Exception as e:
             self.db.session.rollback()
@@ -360,7 +417,7 @@ class DatabaseService:
     def get_question_by_id(self, question_id):
         """Get a specific question from the bank"""
         try:
-            from ..models import Question
+            from backend.models import Question
             return Question.query.get(question_id)
         except Exception as e:
             logger.error(f"Error getting question {question_id}: {e}")
@@ -369,7 +426,7 @@ class DatabaseService:
     def get_available_topic_categories(self):
         """Get all available topic categories from the question bank"""
         try:
-            from ..models import Question
+            from backend.models import Question
             from sqlalchemy import func
             
             result = self.db.session.query(
@@ -393,7 +450,7 @@ class DatabaseService:
     def get_user_all_topic_performance(self, user_id):
         """Get user's performance across ALL topics (for debugging)"""
         try:
-            from ..models import QuizAttemptDetail, Question
+            from backend.models import QuizAttemptDetail, Question
             from sqlalchemy import func, case
             
             result = self.db.session.query(
@@ -441,7 +498,7 @@ class DatabaseService:
     def get_user_topic_analysis(self, user_id):
         """Get user's topic analysis with weak areas and strengths (last 10 days)"""
         try:
-            from ..models import QuizAttemptDetail, Question
+            from backend.models import QuizAttemptDetail, Question
             from sqlalchemy import func, case
             from datetime import datetime, timedelta
             

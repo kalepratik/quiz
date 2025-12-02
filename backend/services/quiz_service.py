@@ -4,7 +4,7 @@ Quiz service for dbt Certification Quiz Application
 import time
 import logging
 from flask import current_app
-from .scoring_service import ScoringService
+from backend.services.scoring_service import ScoringService
 
 logger = logging.getLogger(__name__)
 
@@ -17,16 +17,27 @@ class QuizService:
         self.scoring_service = ScoringService()
         logger.info("Quiz service initialized")
     
-    def get_quiz_config(self, num_questions, difficulty):
-        """Get quiz configuration with questions from question bank"""
+    def get_quiz_config(self, num_questions, difficulty, is_pro_user=False):
+        """Get quiz configuration with questions from question bank
+        
+        Args:
+            num_questions: Number of questions to include
+            difficulty: Difficulty level (0-4, 0 = mixed)
+            is_pro_user: Whether the user has PRO access
+        """
         try:
             # Get database service
             db_service = current_app.database_service
             
+            # Check if user has PRO access (PRO role, Admin role, or is_pro flag)
+            from backend.services.oauth_service import OAuthService
+            is_pro_user = OAuthService.has_pro_access()
+            
             # Get random questions from question bank
             questions = db_service.get_random_questions(
                 count=num_questions,
-                difficulty_level=difficulty if difficulty > 0 else None
+                difficulty_level=difficulty if difficulty > 0 else None,
+                is_pro_user=is_pro_user
             )
             
             # Convert questions to the expected format
@@ -64,36 +75,69 @@ class QuizService:
             logger.error(f"Error generating quiz config: {e}")
             raise
     
-    def get_question_stats(self):
-        """Get statistics about available questions from question bank"""
+    def get_question_stats(self, is_pro_user=False):
+        """Get statistics about available questions from question bank
+        
+        Args:
+            is_pro_user: If True, includes PRO-only questions in stats
+        """
         try:
-            from ..models import Question, db
+            from backend.models import Question, db
             from sqlalchemy import func
             
-            # Get total questions
-            total_questions = Question.query.filter_by(is_active=True).count()
+            # Base query for active questions
+            base_query = Question.query.filter_by(is_active=True)
+            
+            # Filter PRO-only questions based on user status
+            if not is_pro_user:
+                base_query = base_query.filter_by(is_pro_only=False)
+            
+            # Get total questions (based on user access level)
+            total_questions = base_query.count()
+            
+            # Get PRO-only question count (only for PRO users)
+            pro_only_count = 0
+            if is_pro_user:
+                pro_only_count = Question.query.filter_by(is_active=True, is_pro_only=True).count()
+            
+            # Get regular question count
+            regular_count = Question.query.filter_by(is_active=True, is_pro_only=False).count()
             
             # Get questions by difficulty
-            difficulty_stats = db.session.query(
+            difficulty_query = db.session.query(
                 Question.difficulty_level,
                 func.count(Question.id)
-            ).filter_by(is_active=True).group_by(Question.difficulty_level).all()
+            ).filter_by(is_active=True)
+            
+            if not is_pro_user:
+                difficulty_query = difficulty_query.filter_by(is_pro_only=False)
+            
+            difficulty_stats = difficulty_query.group_by(Question.difficulty_level).all()
             
             # Get questions by topic
-            topic_stats = db.session.query(
+            topic_query = db.session.query(
                 Question.topic_category,
                 func.count(Question.id)
-            ).filter_by(is_active=True).group_by(Question.topic_category).all()
+            ).filter_by(is_active=True)
             
-            return {
+            if not is_pro_user:
+                topic_query = topic_query.filter_by(is_pro_only=False)
+            
+            topic_stats = topic_query.group_by(Question.topic_category).all()
+            
+            stats = {
                 'total_questions': total_questions,
+                'regular_questions': regular_count,
+                'pro_only_questions': pro_only_count if is_pro_user else None,
                 'by_difficulty': {f"Level {d}": c for d, c in difficulty_stats},
                 'by_topic': {t or 'Uncategorized': c for t, c in topic_stats}
             }
             
+            return stats
+            
         except Exception as e:
             logger.error(f"Error getting question stats: {e}")
-            return {'total_questions': 0, 'by_difficulty': {}, 'by_topic': {}}
+            return {'total_questions': 0, 'regular_questions': 0, 'pro_only_questions': None, 'by_difficulty': {}, 'by_topic': {}}
     
     def validate_answer(self, question_id, user_answer, correct_answer):
         """Validate user answer and return score"""

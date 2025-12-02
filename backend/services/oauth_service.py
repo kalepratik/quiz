@@ -137,6 +137,11 @@ class OAuthService:
                 )
                 logger.info(f"Existing user updated: {user_info['email']}")
             
+            # Check if user is active
+            if not user.is_active:
+                logger.warning(f"Inactive user attempted to login: {user_info['email']}")
+                return None
+            
             # Store user data in session (use database user ID)
             session['user_id'] = user.id
             session['user_email'] = user.email
@@ -144,14 +149,17 @@ class OAuthService:
             session['user_picture'] = user.profile_picture
             session['is_authenticated'] = True
             session['is_pro'] = user.is_pro
+            session['role'] = user.role
+            session['is_active'] = user.is_active
             
-            logger.info(f"User authenticated: {user_info['email']} (PRO: {user.is_pro})")
+            logger.info(f"User authenticated: {user_info['email']} (Role: {user.role}, PRO: {user.is_pro})")
             return {
                 'id': user.id,
                 'email': user.email,
                 'name': user.name,
                 'picture': user.profile_picture,
-                'is_pro': user.is_pro
+                'is_pro': user.is_pro,
+                'role': user.role
             }
             
         except Exception as e:
@@ -178,11 +186,39 @@ class OAuthService:
     def get_current_user():
         """Get current user information from session"""
         if OAuthService.is_user_authenticated():
+            # Check if user is still active in database
+            from flask import current_app
+            db_service = current_app.database_service
+            user_id = session.get('user_id')
+            if user_id:
+                user = db_service.get_user_by_id(user_id)
+                if user and not user.is_active:
+                    # User was deactivated, log them out
+                    OAuthService.logout_user()
+                    return None
+            
             return {
                 'id': session.get('user_id'),
                 'email': session.get('user_email'),
                 'name': session.get('user_name'),
                 'picture': session.get('user_picture'),
-                'is_pro': session.get('is_pro', False)
+                'is_pro': session.get('is_pro', False),
+                'role': session.get('role', 'regular'),
+                'is_active': session.get('is_active', True)
             }
         return None
+    
+    @staticmethod
+    def is_admin():
+        """Check if current user is admin"""
+        user = OAuthService.get_current_user()
+        return user and user.get('role') == 'admin'
+    
+    @staticmethod
+    def has_pro_access():
+        """Check if current user has PRO access (PRO role or Admin role)"""
+        user = OAuthService.get_current_user()
+        if not user:
+            return False
+        role = user.get('role', 'regular')
+        return role in ['pro', 'admin'] or user.get('is_pro', False)

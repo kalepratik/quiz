@@ -6,8 +6,8 @@ Main entry point for dbt Certification Quiz Application (Development)
 import sys
 from pathlib import Path
 
-# Add src to path for imports
-sys.path.append(str(Path(__file__).parent / "src"))
+# Add backend to path for imports
+sys.path.insert(0, str(Path(__file__).parent))
 
 def main():
     """Main entry point for development"""
@@ -26,18 +26,18 @@ def main():
             if choice == '1':
                 print("\n🚀 Starting Quiz Server for Local Development...")
                 print("   Live version available at: https://dbt-certification-quiz.onrender.com/")
-                from src.quiz_app import create_app
+                from backend import create_app
                 app = create_app()
                 app.run(host='0.0.0.0', port=8000, debug=True)
                 break
             elif choice == '2':
                 print("\n🧪 Running Tests...")
                 import subprocess
-                subprocess.run([sys.executable, "-m", "pytest", "tests/", "-v"])
+                subprocess.run([sys.executable, "-m", "pytest", "backend/tests/", "-v"])
                 break
             elif choice == '3':
                 print("\n📚 Question Management")
-                print("   Questions are now managed in the Markdown file: data/questions.md")
+                print("   Questions are now managed in the Markdown file: backend/data/questions.md")
                 print("   You can edit this file directly to add or modify questions.")
                 print("   The format follows the structure shown in the existing questions.")
                 input("\nPress Enter to continue...")

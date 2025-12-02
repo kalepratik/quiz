@@ -5,9 +5,9 @@ import json
 import logging
 import time
 from flask import Blueprint, render_template, request, jsonify, current_app, redirect, url_for, session
-from .services.quiz_service import QuizService
-from .services.oauth_service import OAuthService
-from .services.payment_service import PaymentService
+from backend.services.quiz_service import QuizService
+from backend.services.oauth_service import OAuthService
+from backend.services.payment_service import PaymentService
 
 # Create blueprints
 ui_bp = Blueprint('ui', __name__)
@@ -23,7 +23,8 @@ def inject_environment():
     # Get current user info for header
     user = OAuthService.get_current_user()
     is_authenticated = user is not None
-    is_pro_user = user.get('is_pro', False) if user else False
+    is_pro_user = OAuthService.has_pro_access()
+    is_admin = OAuthService.is_admin()
     user_name = user.get('name', '').split(' ')[0] if user and user.get('name') else None
     
     return {
@@ -31,6 +32,7 @@ def inject_environment():
         'is_development': True,
         'is_authenticated': is_authenticated,
         'is_pro_user': is_pro_user,
+        'is_admin': is_admin,
         'user_name': user_name
     }
 
@@ -38,9 +40,9 @@ def inject_environment():
 @ui_bp.route('/')
 def index():
     """Landing page with modern UI - redirects PRO users to PRO homepage"""
-    # Check if user is authenticated and is PRO
+    # Check if user is authenticated and has PRO access
     user = OAuthService.get_current_user()
-    if user and user.get('is_pro', False):
+    if user and OAuthService.has_pro_access():
         # Redirect PRO users to PRO homepage
         return redirect(url_for('ui.pro_homepage'))
     
@@ -54,8 +56,8 @@ def pro_homepage():
     if not user:
         return redirect(url_for('ui.signin'))
     
-    # Check if user is PRO
-    if not user.get('is_pro', False):
+    # Check if user has PRO access (PRO role, Admin role, or is_pro flag)
+    if not OAuthService.has_pro_access():
         return redirect(url_for('ui.payment'))
     
     return render_template('pro-homepage.html', active_page='pro-homepage')
@@ -73,8 +75,8 @@ def quiz_pro():
     if not user:
         return redirect(url_for('ui.signin'))
     
-    # Check if user is PRO
-    if not user.get('is_pro', False):
+    # Check if user has PRO access (PRO role, Admin role, or is_pro flag)
+    if not OAuthService.has_pro_access():
         return redirect(url_for('ui.payment'))
     
     return render_template('quiz-pro.html', active_page='quiz-pro')
@@ -87,8 +89,8 @@ def history():
     if not user:
         return redirect(url_for('ui.signin'))
     
-    # Check if user is PRO
-    if not user.get('is_pro', False):
+    # Check if user has PRO access (PRO role, Admin role, or is_pro flag)
+    if not OAuthService.has_pro_access():
         return redirect(url_for('ui.payment'))
     
     return render_template('history.html', active_page='history')
@@ -101,8 +103,8 @@ def dashboard():
     if not user:
         return redirect(url_for('ui.signin'))
     
-    # Check if user is PRO
-    if not user.get('is_pro', False):
+    # Check if user has PRO access (PRO role, Admin role, or is_pro flag)
+    if not OAuthService.has_pro_access():
         return redirect(url_for('ui.payment'))
     
     return render_template('dashboard.html', active_page='dashboard')
@@ -250,7 +252,7 @@ def contact():
                 return render_template('contact.html', active_page='contact', error='Please enter a valid email address.')
             
             # Import email service
-            from .services.email_service import EmailService
+            from backend.services.email_service import EmailService
             email_service = EmailService()
             
             # Send email to admin
@@ -400,14 +402,22 @@ def configure_quiz():
         
         logger.info(f"Parameters: question_count={question_count}, difficulty={difficulty}")
         
+        # Check if user has PRO access (PRO role, Admin role, or is_pro flag)
+        user = OAuthService.get_current_user()
+        is_pro_user = OAuthService.has_pro_access()
+        
+        # Set max questions based on user type
+        # Regular users: max 10 questions, PRO users: max 45 questions
+        max_questions = current_app.config['MAX_QUESTIONS'] if is_pro_user else 10
+        
         # Validate parameters
-        if not (1 <= question_count <= current_app.config['MAX_QUESTIONS']):
-            question_count = current_app.config['DEFAULT_QUESTIONS']
+        if not (1 <= question_count <= max_questions):
+            question_count = current_app.config['DEFAULT_QUESTIONS'] if not is_pro_user else min(question_count, max_questions)
         
         if not (1 <= difficulty <= 3):
             difficulty = current_app.config['DEFAULT_DIFFICULTY']
         
-        logger.info(f"Validated parameters: question_count={question_count}, difficulty={difficulty}")
+        logger.info(f"Validated parameters: question_count={question_count}, difficulty={difficulty}, is_pro={is_pro_user}, max_allowed={max_questions}")
         
         # Get quiz service
         quiz_service = current_app.quiz_service
@@ -532,8 +542,11 @@ def question_stats():
         # Get quiz service
         quiz_service = current_app.quiz_service
         
-        # Get question statistics
-        stats = quiz_service.get_question_stats()
+        # Check if user has PRO access (PRO role, Admin role, or is_pro flag)
+        is_pro_user = OAuthService.has_pro_access()
+        
+        # Get question statistics (includes PRO-only if user is PRO)
+        stats = quiz_service.get_question_stats(is_pro_user=is_pro_user)
         
         logger.info(f"Question stats requested: {stats}")
         return jsonify(stats)
@@ -754,7 +767,7 @@ def download_attempt_pdf(attempt_id):
         attempt_details = db_service.get_quiz_attempt_details(attempt_id)
         
         # Import PDF service
-        from .services.pdf_service import PDFService
+        from backend.services.pdf_service import PDFService
         pdf_service = PDFService()
         
         # Convert attempt to dict for PDF generation
@@ -773,3 +786,18 @@ def download_attempt_pdf(attempt_id):
     except Exception as e:
         logger.error(f"Error generating PDF for attempt {attempt_id}: {e}")
         return jsonify({'error': 'Failed to generate PDF'}), 500
+
+# Admin Panel UI Route
+@ui_bp.route('/admin')
+def admin_panel():
+    """Admin panel dashboard"""
+    # Check if user is authenticated
+    user = OAuthService.get_current_user()
+    if not user:
+        return redirect(url_for('ui.signin'))
+    
+    # Check if user is admin
+    if not OAuthService.is_admin():
+        return redirect(url_for('ui.index'))
+    
+    return render_template('admin.html', active_page='admin')

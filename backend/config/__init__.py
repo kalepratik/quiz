@@ -29,9 +29,9 @@ class BaseConfig:
     IS_PRODUCTION = os.environ.get('FLASK_ENV') == 'production' or os.environ.get('RENDER') == 'true'
     IS_DEVELOPMENT = not IS_PRODUCTION
     
-    # Application paths
+    # Application paths - updated for new structure
     BASE_DIR = Path(__file__).parent.parent.parent
-    DATA_DIR = BASE_DIR / 'data'
+    DATA_DIR = BASE_DIR / 'backend' / 'data'
     QUESTIONS_FILE = DATA_DIR / 'questions.md'
     
     # Quiz settings
@@ -101,3 +101,4 @@ def config_from_env():
         return TestingConfig
     else:
         return DevelopmentConfig
+

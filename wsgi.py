@@ -4,7 +4,7 @@ WSGI entry point for dbt Certification Quiz Application
 """
 import os
 import logging
-from src.quiz_app import create_app
+from backend import create_app
 
 # Configure logging
 logging.basicConfig(

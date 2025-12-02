@@ -1,0 +1,767 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel - dbt Certification Quiz{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Custom Popup Styles (matching signout popup) */
+    .custom-popup-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(0, 0, 0, 0.6);
+        display: none;
+        place-items: center;
+        padding: 1rem;
+    }
+    
+    .custom-popup {
+        position: relative;
+        width: min(90vw, 500px);
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        box-shadow: 0 20px 80px rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(32px) saturate(150%);
+        -webkit-backdrop-filter: blur(32px) saturate(150%);
+    }
+    
+    /* Rim light & inner glow */
+    .custom-popup::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 
+            inset 0 1px 0 rgba(255, 255, 255, 0.5),
+            inset 0 -80px 140px -120px rgba(255, 255, 255, 0.3);
+        pointer-events: none;
+        z-index: 1;
+    }
+    
+    /* Highlight blob */
+    .custom-popup::after {
+        content: '';
+        position: absolute;
+        left: -96px;
+        top: -96px;
+        width: 256px;
+        height: 256px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        filter: blur(48px);
+        opacity: 0.4;
+        transform: rotate(12deg);
+        pointer-events: none;
+        z-index: 1;
+    }
+    
+    /* Noise texture */
+    .custom-popup .noise-texture {
+        position: absolute;
+        inset: 0;
+        border-radius: 24px;
+        opacity: 0.06;
+        mix-blend-mode: overlay;
+        pointer-events: none;
+        z-index: 2;
+        background-image: 
+            radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
+        background-size: 20px 20px;
+    }
+    
+    .custom-popup-content {
+        position: relative;
+        z-index: 10;
+    }
+    
+    .custom-popup h2 {
+        color: #ffffff;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    
+    .custom-popup p {
+        color: rgba(255, 255, 255, 0.85);
+        margin-bottom: 2rem;
+        text-align: center;
+        line-height: 1.6;
+    }
+    
+    .custom-popup-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+    
+    .custom-popup-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        font-size: 1rem;
+    }
+    
+    .custom-popup-btn-cancel {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .custom-popup-btn-cancel:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .custom-popup-btn-confirm {
+        background: #8b5cf6;
+        color: #ffffff;
+    }
+    
+    .custom-popup-btn-confirm:hover {
+        background: #7c3aed;
+    }
+    
+    .custom-popup-btn-success {
+        background: #10b981;
+        color: #ffffff;
+    }
+    
+    .custom-popup-btn-success:hover {
+        background: #059669;
+    }
+    
+    .custom-popup-btn-error {
+        background: #ef4444;
+        color: #ffffff;
+    }
+    
+    .custom-popup-btn-error:hover {
+        background: #dc2626;
+    }
+    
+    /* Light mode adjustments */
+    .custom-popup {
+        background: rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+    
+    .custom-popup h2 {
+        color: #1f2937;
+    }
+    
+    .custom-popup p {
+        color: rgba(31, 41, 55, 0.85);
+    }
+    
+    .custom-popup-btn-cancel {
+        background: rgba(0, 0, 0, 0.1);
+        color: #1f2937;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+    
+    .custom-popup-btn-cancel:hover {
+        background: rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Dark mode overrides */
+    .dark .custom-popup {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    
+    .dark .custom-popup::before {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            inset 0 -80px 140px -120px rgba(255, 255, 255, 0.15);
+    }
+    
+    .dark .custom-popup::after {
+        background: rgba(255, 255, 255, 0.3);
+        opacity: 0.3;
+    }
+    
+    .dark .custom-popup h2 {
+        color: #ffffff;
+    }
+    
+    .dark .custom-popup p {
+        color: rgba(255, 255, 255, 0.85);
+    }
+    
+    .dark .custom-popup-btn-cancel {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .dark .custom-popup-btn-cancel:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Admin Panel</h1>
+            <p class="text-gray-600 dark:text-gray-400">Manage users and questions</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="mb-6 border-b border-gray-200 dark:border-gray-700">
+            <nav class="-mb-px flex space-x-8">
+                <button onclick="showTab('users')" id="tab-users" class="tab-button active py-4 px-1 border-b-2 font-medium text-sm border-purple-500 text-purple-600 dark:text-purple-400">
+                    <i class="fas fa-users mr-2"></i>Users
+                </button>
+                <button onclick="showTab('questions')" id="tab-questions" class="tab-button py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
+                    <i class="fas fa-question-circle mr-2"></i>Questions
+                </button>
+            </nav>
+        </div>
+
+        <!-- Users Tab -->
+        <div id="users-tab" class="tab-content">
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Users</h2>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">
+                            Total: <span id="users-count" class="font-semibold">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-gray-50 dark:bg-gray-700">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Role</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">PRO</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Quiz Attempts</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            <tr>
+                                <td colspan="9" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions Tab -->
+        <div id="questions-tab" class="tab-content hidden">
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Questions</h2>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">
+                            Total: <span id="questions-total" class="font-semibold">0</span> | 
+                            Regular: <span id="questions-regular" class="font-semibold">0</span> | 
+                            PRO-only: <span id="questions-pro" class="font-semibold">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-gray-50 dark:bg-gray-700">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Question</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Topic</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Difficulty</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Type</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="questions-table-body" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            <tr>
+                                <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Popup -->
+<div class="custom-popup-overlay" id="confirmPopup">
+    <div class="custom-popup">
+        <div class="noise-texture"></div>
+        <div class="custom-popup-content">
+            <h2 id="confirmTitle">Confirm Action</h2>
+            <p id="confirmMessage">Are you sure you want to proceed?</p>
+            <div class="custom-popup-buttons">
+                <button class="custom-popup-btn custom-popup-btn-cancel" onclick="closeConfirmPopup()">
+                    Cancel
+                </button>
+                <button class="custom-popup-btn custom-popup-btn-confirm" id="confirmOkBtn" onclick="confirmOk()">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alert Popup -->
+<div class="custom-popup-overlay" id="alertPopup">
+    <div class="custom-popup">
+        <div class="noise-texture"></div>
+        <div class="custom-popup-content">
+            <h2 id="alertTitle">Notification</h2>
+            <p id="alertMessage"></p>
+            <div class="custom-popup-buttons">
+                <button class="custom-popup-btn custom-popup-btn-success" id="alertOkBtn" onclick="closeAlertPopup()">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentTab = 'users';
+
+function showTab(tab) {
+    currentTab = tab;
+    
+    // Update tab buttons
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active', 'border-purple-500', 'text-purple-600', 'dark:text-purple-400');
+        btn.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+    });
+    
+    const activeBtn = document.getElementById(`tab-${tab}`);
+    activeBtn.classList.add('active', 'border-purple-500', 'text-purple-600', 'dark:text-purple-400');
+    activeBtn.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+    
+    // Update tab content
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+    });
+    document.getElementById(`${tab}-tab`).classList.remove('hidden');
+    
+    // Load data for the tab
+    if (tab === 'users') {
+        loadUsers();
+    } else if (tab === 'questions') {
+        loadQuestions();
+    }
+}
+
+async function loadUsers() {
+    try {
+        const response = await fetch('/api/admin/users');
+        const data = await response.json();
+        
+        if (data.success) {
+            document.getElementById('users-count').textContent = data.total;
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = '';
+            
+            data.users.forEach(user => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 dark:hover:bg-gray-700';
+                
+                const roleBadge = user.role === 'admin' ? 
+                    '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">Admin</span>' :
+                    user.role === 'pro' ?
+                    '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">Pro</span>' :
+                    '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">Regular</span>';
+                
+                const proBadge = user.is_pro ? 
+                    '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Yes</span>' :
+                    '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">No</span>';
+                
+                const toggleButton = user.is_active ?
+                    `<button onclick="toggleUserActive(${user.id}, '${user.name.replace(/'/g, "\\'")}', false)" class="w-10 h-5 flex items-center justify-end px-0.5 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 rounded-full transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer" title="Deactivate user">
+                        <span class="w-4 h-4 bg-white rounded-full shadow-sm transform transition-transform"></span>
+                    </button>` :
+                    `<button onclick="toggleUserActive(${user.id}, '${user.name.replace(/'/g, "\\'")}', true)" class="w-10 h-5 flex items-center justify-start px-0.5 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 rounded-full transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer" title="Activate user">
+                        <span class="w-4 h-4 bg-white rounded-full shadow-sm transform transition-transform"></span>
+                    </button>`;
+                
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${user.id}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${user.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">${user.email}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${roleBadge}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${proBadge}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        ${toggleButton}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">${user.quiz_attempts_count}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <select onchange="updateUserRole(${user.id}, this.value)" class="text-xs border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <option value="regular" ${user.role === 'regular' ? 'selected' : ''}>Regular</option>
+                            <option value="pro" ${user.role === 'pro' ? 'selected' : ''}>Pro</option>
+                            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
+                        </select>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <button onclick="deleteUser(${user.id}, '${user.name.replace(/'/g, "\\'")}', '${user.email.replace(/'/g, "\\'")}')" class="px-3 py-1.5 text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors" title="Delete user">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading users:', error);
+        document.getElementById('users-table-body').innerHTML = 
+            '<tr><td colspan="9" class="px-6 py-4 text-center text-red-500">Error loading users</td></tr>';
+        showAlertPopup('Error', 'Failed to load users. Please refresh the page.', 'error');
+    }
+}
+
+async function loadQuestions() {
+    try {
+        const response = await fetch('/api/admin/questions');
+        const data = await response.json();
+        
+        if (data.success) {
+            document.getElementById('questions-total').textContent = data.total;
+            document.getElementById('questions-regular').textContent = data.regular;
+            document.getElementById('questions-pro').textContent = data.pro_only;
+            
+            const tbody = document.getElementById('questions-table-body');
+            tbody.innerHTML = '';
+            
+            data.questions.forEach(question => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 dark:hover:bg-gray-700';
+                
+                const difficultyMap = {1: 'Easy', 2: 'Medium', 3: 'Difficult', 4: 'Critical'};
+                const difficultyBadge = question.difficulty ? 
+                    `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">${difficultyMap[question.difficulty] || question.difficulty}</span>` :
+                    '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">-</span>';
+                
+                const toggleButton = question.is_active ?
+                    `<button onclick="toggleQuestionActive(${question.id}, false)" class="w-10 h-5 flex items-center justify-end px-0.5 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 rounded-full transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer" title="Deactivate question">
+                        <span class="w-4 h-4 bg-white rounded-full shadow-sm transform transition-transform"></span>
+                    </button>` :
+                    `<button onclick="toggleQuestionActive(${question.id}, true)" class="w-10 h-5 flex items-center justify-start px-0.5 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 rounded-full transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer" title="Activate question">
+                        <span class="w-4 h-4 bg-white rounded-full shadow-sm transform transition-transform"></span>
+                    </button>`;
+                
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${question.id}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-white max-w-md truncate">${question.question_text}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">${question.topic || '-'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">${difficultyBadge}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <select onchange="updateQuestionType(${question.id}, this.value)" class="text-xs border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <option value="false" ${!question.is_pro_only ? 'selected' : ''}>Regular</option>
+                            <option value="true" ${question.is_pro_only ? 'selected' : ''}>PRO-only</option>
+                        </select>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        ${toggleButton}
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading questions:', error);
+        document.getElementById('questions-table-body').innerHTML = 
+            '<tr><td colspan="6" class="px-6 py-4 text-center text-red-500">Error loading questions</td></tr>';
+        showAlertPopup('Error', 'Failed to load questions. Please refresh the page.', 'error');
+    }
+}
+
+// Popup management variables
+let confirmCallback = null;
+let pendingUserId = null;
+let pendingNewRole = null;
+
+// Confirmation popup functions
+function showConfirmPopup(title, message, onConfirm) {
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmMessage').textContent = message;
+    confirmCallback = onConfirm;
+    document.getElementById('confirmPopup').style.display = 'grid';
+}
+
+function closeConfirmPopup() {
+    document.getElementById('confirmPopup').style.display = 'none';
+    confirmCallback = null;
+    pendingUserId = null;
+    pendingNewRole = null;
+}
+
+function confirmOk() {
+    if (confirmCallback) {
+        confirmCallback();
+    }
+    closeConfirmPopup();
+}
+
+// Alert popup functions
+function showAlertPopup(title, message, type = 'success') {
+    document.getElementById('alertTitle').textContent = title;
+    document.getElementById('alertMessage').textContent = message;
+    const okBtn = document.getElementById('alertOkBtn');
+    
+    // Update button style based on type
+    okBtn.className = 'custom-popup-btn';
+    if (type === 'success') {
+        okBtn.classList.add('custom-popup-btn-success');
+    } else if (type === 'error') {
+        okBtn.classList.add('custom-popup-btn-error');
+    } else {
+        okBtn.classList.add('custom-popup-btn-confirm');
+    }
+    
+    document.getElementById('alertPopup').style.display = 'grid';
+}
+
+function closeAlertPopup() {
+    document.getElementById('alertPopup').style.display = 'none';
+}
+
+// Close popups when clicking outside
+document.getElementById('confirmPopup').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeConfirmPopup();
+    }
+});
+
+document.getElementById('alertPopup').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeAlertPopup();
+    }
+});
+
+async function updateUserRole(userId, newRole) {
+    // Store pending values
+    pendingUserId = userId;
+    pendingNewRole = newRole;
+    
+    // Show confirmation popup
+    showConfirmPopup(
+        'Change User Role',
+        `Are you sure you want to change this user's role to ${newRole}?`,
+        async () => {
+            try {
+                const response = await fetch(`/api/admin/user/${pendingUserId}/update-role`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ role: pendingNewRole })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlertPopup('Success', 'User role updated successfully!', 'success');
+                    loadUsers();
+                } else {
+                    showAlertPopup('Error', data.error || 'Failed to update role', 'error');
+                    loadUsers();
+                }
+            } catch (error) {
+                console.error('Error updating role:', error);
+                showAlertPopup('Error', 'Error updating user role', 'error');
+                loadUsers();
+            }
+        }
+    );
+}
+
+// Delete user function
+let pendingDeleteUserId = null;
+
+// Toggle user active/inactive function
+let pendingToggleUserId = null;
+let pendingToggleActive = null;
+
+function toggleUserActive(userId, userName, makeActive) {
+    pendingToggleUserId = userId;
+    pendingToggleActive = makeActive;
+    
+    const action = makeActive ? 'activate' : 'deactivate';
+    const message = makeActive 
+        ? `Are you sure you want to activate user "${userName}"? They will regain access to the application.`
+        : `Are you sure you want to deactivate user "${userName}"? They will lose access but all their data will be preserved.`;
+    
+    // Show confirmation popup
+    showConfirmPopup(
+        `${makeActive ? 'Activate' : 'Deactivate'} User`,
+        message,
+        async () => {
+            try {
+                const response = await fetch(`/api/admin/user/${pendingToggleUserId}/toggle-active`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const status = data.is_active ? 'activated' : 'deactivated';
+                    showAlertPopup('Success', `User ${status} successfully!`, 'success');
+                    loadUsers();
+                } else {
+                    showAlertPopup('Error', data.error || `Failed to ${action} user`, 'error');
+                    loadUsers();
+                }
+            } catch (error) {
+                console.error('Error toggling user status:', error);
+                showAlertPopup('Error', `Error ${action}ing user`, 'error');
+                loadUsers();
+            }
+        }
+    );
+}
+
+function deleteUser(userId, userName, userEmail) {
+    pendingDeleteUserId = userId;
+    
+    // Show confirmation popup
+    showConfirmPopup(
+        'Delete User',
+        `Are you sure you want to permanently delete user "${userName}" (${userEmail})? This action cannot be undone and will permanently delete ALL associated data including quiz attempts, subscriptions, and all records.`,
+        async () => {
+            try {
+                const response = await fetch(`/api/admin/user/${pendingDeleteUserId}/delete`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlertPopup('Success', 'User and all associated records deleted successfully!', 'success');
+                    loadUsers();
+                } else {
+                    showAlertPopup('Error', data.error || 'Failed to delete user', 'error');
+                    loadUsers();
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                showAlertPopup('Error', 'Error deleting user', 'error');
+                loadUsers();
+            }
+        }
+    );
+}
+
+// Toggle question active/inactive function
+let pendingToggleQuestionId = null;
+let pendingToggleQuestionActive = null;
+
+function toggleQuestionActive(questionId, makeActive) {
+    pendingToggleQuestionId = questionId;
+    pendingToggleQuestionActive = makeActive;
+    
+    const action = makeActive ? 'activate' : 'deactivate';
+    const message = makeActive 
+        ? `Are you sure you want to activate this question? It will be available in quizzes.`
+        : `Are you sure you want to deactivate this question? It will be hidden from quizzes.`;
+    
+    // Show confirmation popup
+    showConfirmPopup(
+        `${makeActive ? 'Activate' : 'Deactivate'} Question`,
+        message,
+        async () => {
+            try {
+                const response = await fetch(`/api/admin/question/${pendingToggleQuestionId}/toggle-active`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const status = data.is_active ? 'activated' : 'deactivated';
+                    showAlertPopup('Success', `Question ${status} successfully!`, 'success');
+                    loadQuestions();
+                } else {
+                    showAlertPopup('Error', data.error || `Failed to ${action} question`, 'error');
+                    loadQuestions();
+                }
+            } catch (error) {
+                console.error('Error toggling question status:', error);
+                showAlertPopup('Error', `Error ${action}ing question`, 'error');
+                loadQuestions();
+            }
+        }
+    );
+}
+
+// Update question type function
+let pendingQuestionId = null;
+let pendingQuestionType = null;
+
+function updateQuestionType(questionId, newType) {
+    pendingQuestionId = questionId;
+    pendingQuestionType = newType === 'true';
+    
+    const typeName = pendingQuestionType ? 'PRO-only' : 'Regular';
+    
+    // Show confirmation popup
+    showConfirmPopup(
+        'Change Question Type',
+        `Are you sure you want to change this question's type to ${typeName}?`,
+        async () => {
+            try {
+                const response = await fetch(`/api/admin/question/${pendingQuestionId}/update-type`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ is_pro_only: pendingQuestionType })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlertPopup('Success', data.message || 'Question type updated successfully!', 'success');
+                    loadQuestions();
+                } else {
+                    showAlertPopup('Error', data.error || 'Failed to update question type', 'error');
+                    loadQuestions();
+                }
+            } catch (error) {
+                console.error('Error updating question type:', error);
+                showAlertPopup('Error', 'Error updating question type', 'error');
+                loadQuestions();
+            }
+        },
+        () => { loadQuestions(); } // On cancel, reload to reset dropdown
+    );
+}
+
+// Load initial data
+document.addEventListener('DOMContentLoaded', () => {
+    loadUsers();
+});
+</script>
+{% endblock %}
+
